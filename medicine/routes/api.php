@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddressApiController;
 use App\Http\Controllers\CartsApiController;
 use App\Http\Controllers\ProductsApiController;
 use App\Http\Controllers\UsersApiController;
@@ -31,7 +32,15 @@ Route::group(['prefix'=> 'users'], function () {
     Route::get('verify-account/{email}', [UsersApiController::class, 'verify_account'])->name('users.verify-account');
     Route::group(['middleware' => 'auth:sanctum'], function() {
         Route::post('logout', [UsersApiController::class, 'logout']);
+        Route::post('delete-all-tokens', [UsersApiController::class, 'delete_all_tokens']);
+
         Route::get('profile', [UsersApiController::class, 'profile']);
+        Route::put('change-profile', [UsersApiController::class, 'change_profile']);
+        
+        Route::get('address', [AddressApiController::class, 'address']);
+        Route::put('add-address', [AddressApiController::class, 'add_address']);
+        Route::post('delete-address/{address}', [AddressApiController::class, 'delete_address']);
+        Route::post('delete-all-address', [AddressApiController::class, 'delete_all_address']);
     });
 });
 

@@ -34,7 +34,7 @@
             <tbody>
                 {{-- Người dùng --}}
                 <tr>
-                    <td rowspan="7"><h2>Users</h2></td>
+                    <td rowspan="9"><h2>Users</h2></td>
                     <td>Đăng ký (POST)</td>
                     <td>/api/users/register</td>
                     <td>OK</td>
@@ -53,20 +53,32 @@
                 </tr>
 
                 <tr>
-                    <td>Đăng xuất (?)</td>
-                    <td>/api/users/....</td>
-                    <td>Unknown</td>
+                    <td>Đăng xuất (POST)</td>
+                    <td>/api/users/logout</td>
+                    <td>OK</td>
+                </tr>
+
+                <tr>
+                    <td>Xóa tất cả tokens (POST)</td>
+                    <td>/api/users/delete-all-tokens</td>
+                    <td>OK</td>
+                </tr>
+
+                <tr>
+                    <td>Hiển thị thông tin (GET)</td>
+                    <td>/api/users/profile</td>
+                    <td>OK</td>
+                </tr>
+
+                <tr>
+                    <td>Thay đổi thông tin (PUT)</td>
+                    <td>/api/users/change-profile</td>
+                    <td>OK</td>
                 </tr>
 
                 <tr>
                     <td>Quên mật khẩu (?)</td>
                     <td>/api/users/....</td>
-                    <td>Unknown</td>
-                </tr>
-
-                <tr>
-                    <td>Thay đổi thông tin (?)</td>
-                    <td>/api/users/...</td>
                     <td>Unknown</td>
                 </tr>
 

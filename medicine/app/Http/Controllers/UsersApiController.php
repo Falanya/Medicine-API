@@ -7,17 +7,18 @@ use App\Mail\VerifyAccountApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class UsersApiController extends Controller
 {
     public function check_register(Request $request) {
         $validator = Validator::make($request->all(), [
-            'fullname' => 'required|min:5',
+            'fullname' => 'required|string|min:6',
             'email' => 'required|email|unique:users',
             'gender' => 'required',
             'password' => 'required|min:6',
-            'password_confirm' => 'required|same:password'
+            'confirm_password' => 'required|same:password'
         ]);
 
         if ($validator->fails()) {
@@ -97,6 +98,12 @@ class UsersApiController extends Controller
                 'token' => $token,
                 'status_code' => 200
             ]);
+        } else {
+            return response()->json([
+                'data' => null,
+                'status_code' => 404,
+                'message' => 'Your password is incorrect, please check again'
+            ]);
         }
     }
 
@@ -114,14 +121,71 @@ class UsersApiController extends Controller
         ]);
     }
 
-    public function profile() {
-        $user = auth()->user();
-        $data = User::find($user->id);
-        if ($data_check = $data->addresses) {
+    public function delete_all_tokens() {
+        $auth = auth()->user();
+        if($auth) {
+            $auth->tokens()->delete();
             return response()->json([
-                'data' => $data_check,
+                'message' => 'Tokens deleted successfully',
                 'status_code' => 200
             ]);
         }
+        return response()->json([
+            'message' => 'Not find user, please check again',
+            'status_code' => 404
+        ]);
+    }
+
+    public function profile() {
+        $user = auth()->user();
+        if(!$user) {
+            return response()->json([
+                'data' => null,
+                'status_code' => 404,
+                'message' => 'Something errors, please check again'
+            ]);
+        }
+        return response()->json([
+            'data' => $user,
+            'status_code' => 200,
+            'message' => 'Success'
+        ]);
+    }
+
+    public function change_profile(Request $request) {
+        $auth = auth()->user();
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:users,email,'.$auth->id,
+            'fullname' => 'required|string|min:6',
+            'gender' => 'required',
+            'confirm_password' => ['required', function($attr,$value,$fail) use($auth) {
+                if(!Hash::check($value, $auth->password)) {
+                    $fail('Your password is incorrect, please try again');
+                }
+            }],
+        ]);
+
+        if($validator->fails()) {
+            return response()->json([
+                'message' => $validator->errors()->all(),
+                'status_code' => 404
+            ]);
+        }
+
+        $data = $request->only('fullname','gender');
+        $user = User::where('email', $auth->email)->first();
+        $check = $user->update($data);
+        if($check) {
+            return response()->json([
+                'data' => $auth,
+                'status_code' => 200,
+                'message' => 'Your profile updated successfully'
+            ]);
+        }
+        return response()->json([
+            'data' => null,
+            'status_code' => 404,
+            'message' => 'Something errors, please check again'
+        ]);
     }
 }

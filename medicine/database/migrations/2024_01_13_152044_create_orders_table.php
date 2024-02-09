@@ -15,7 +15,7 @@ return new class extends Migration
             $table->increments('id');
             $table->unsignedInteger('address_id');
             $table->foreign('address_id')->references('id')->on('addresses');
-            $table->string('note', 255);
+            $table->string('note', 255)->nullable();
             $table->boolean('status')->default(0);
             $table->bigInteger('created_by')->nullable();
             $table->bigInteger('updated_by')->nullable();

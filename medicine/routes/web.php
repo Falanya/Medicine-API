@@ -21,6 +21,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/create-storage-link', function () {
+    Artisan::call('storage:link');
+    return 'Storage link created';
+});
+
 Route::group(['prefix' => ''], function() {
     Route::get('/', [HomeController::class, 'index'])->name('home.index');
     Route::get('product/{product}', [HomeController::class, 'product'])->name('home.product');
