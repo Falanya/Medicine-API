@@ -1,0 +1,57 @@
+<?php
+
+use App\Http\Controllers\CartsApiController;
+use App\Http\Controllers\ProductsApiController;
+use App\Http\Controllers\UsersApiController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "api" middleware group. Make something great!
+|
+*/
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+Route::get('apis', function() {
+    return view('apis');
+});
+
+Route::group(['prefix'=> 'users'], function () {
+    Route::post('register', [UsersApiController::class, 'check_register']);
+    Route::post('login', [UsersApiController::class, 'check_login']);
+    Route::get('verify-account/{email}', [UsersApiController::class, 'verify_account'])->name('users.verify-account');
+    Route::group(['middleware' => 'auth:sanctum'], function() {
+        Route::post('logout', [UsersApiController::class, 'logout']);
+        Route::get('profile', [UsersApiController::class, 'profile']);
+    });
+});
+
+Route::group(['prefix'=> 'prods'], function () {
+    Route::get('products', [ProductsApiController::class, 'product'])->name('api.product');
+    Route::post('product', [ProductsApiController::class, 'addProduct'])->name('api.addProduct');
+    Route::delete('delProduct/{id}', [ProductsApiController::class, 'delete_product']);
+    Route::get('productsByType/{id}', [ProductsApiController::class, 'prods_by_type'])->name('api.productsByType');
+});
+
+Route::group(['prefix'=> 'prodTypes'], function () {
+    Route::get('productType', [ProductsApiController::class, 'productType'])->name('api.productType');
+    Route::post('productType', [ProductsApiController::class, 'addProductType'])->name('api.addProductType');
+    Route::delete('delProductType/{id}', [ProductsApiController::class, 'delete_prodType']);
+});
+
+Route::group(['prefix'=> 'carts', 'middleware'=> ['auth']], function () {
+    Route::get('/', [CartsApiController::class, 'index'])->name('home.cart');
+    Route::get('/add/{product}', [CartsApiController::class, 'add_cart'])->name('cart.add');
+    Route::get('/delete/{product}', [CartsApiController::class, 'delete_cart'])->name('cart.delete');
+    Route::get('/update/{product}', [CartsApiController::class,'update_cart'])->name('cart.update');
+    Route::get('/clear', [CartsApiController::class,'clear_cart'])->name('cart.clear');
+});
