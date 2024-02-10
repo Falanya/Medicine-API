@@ -18,8 +18,6 @@ return new class extends Migration
             $table->string('address', 255);
             $table->string('phone', 12);
             $table->string('receiver_name', 255);
-            $table->bigInteger('created_by')->nullable();
-            $table->bigInteger('updated_by')->nullable();
             $table->tinyInteger('object_status')->default(1);
             $table->timestamps();
         });

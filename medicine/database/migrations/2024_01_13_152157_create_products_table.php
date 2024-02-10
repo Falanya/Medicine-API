@@ -21,8 +21,6 @@ return new class extends Migration
             $table->double('price');
             $table->string('img', 255);
             $table->boolean('status')->default(1);
-            $table->bigInteger('created_by')->nullable();
-            $table->bigInteger('updated_by')->nullable();
             $table->timestamps();
         });
     }

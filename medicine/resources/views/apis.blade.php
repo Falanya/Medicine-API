@@ -125,6 +125,51 @@
                     <td></td>
                 </tr>
 
+                {{-- Giỏ hàng --}}
+                <tr>
+                    <td rowspan="6"><h2>Cart</h2></td>
+                    <td>Hiển thị giỏ hàng (GET)</td>
+                    <td>/api/carts/cart</td>
+                    <td>OK</td>
+                </tr>
+
+                <tr>
+                    <td>Thêm sản phẩm vào giỏ hàng (GET)</td>
+                    <td>/api/carts/add/{id}</td>
+                    <td>OK</td>
+                </tr>
+
+                <tr>
+                    <td>Thêm 1 sản phẩm trong giỏ hàng (GET)</td>
+                    <td>/api/carts/plus-1/{id}</td>
+                    <td>OK</td>
+                </tr>
+
+                <tr>
+                    <td>Trừ 1 sản phẩm trong giỏ hàng (GET)</td>
+                    <td>/api/carts/minus-1/{id}</td>
+                    <td>OK</td>
+                </tr>
+
+                <tr>
+                    <td>Xóa 1 sản phẩm trong giỏ hàng (GET)</td>
+                    <td>/api/carts/delete/{id}</td>
+                    <td>OK</td>
+                </tr>
+
+                <tr>
+                    <td>Xóa tất cả sản phẩm trong giỏ hàng (GET)</td>
+                    <td>/api/carts/clear</td>
+                    <td>OK</td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
                 {{-- Sản phẩm --}}
                 <tr>
                     <td rowspan="7"><h2>Products</h2></td>

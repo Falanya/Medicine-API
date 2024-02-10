@@ -19,9 +19,6 @@ return new class extends Migration
             $table->foreign('product_id')->references('id')->on('products');
             $table->integer('quantity');
             $table->double('price');
-            $table->bigInteger('created_by')->nullable();
-            $table->bigInteger('updated_by')->nullable();
-            $table->tinyInteger('object_status')->default(1);
             $table->timestamps();
         });
     }

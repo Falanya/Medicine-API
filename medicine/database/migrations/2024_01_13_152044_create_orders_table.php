@@ -17,8 +17,6 @@ return new class extends Migration
             $table->foreign('address_id')->references('id')->on('addresses');
             $table->string('note', 255)->nullable();
             $table->boolean('status')->default(0);
-            $table->bigInteger('created_by')->nullable();
-            $table->bigInteger('updated_by')->nullable();
             $table->bigInteger('object_status')->default(1);
             $table->timestamps();
         });

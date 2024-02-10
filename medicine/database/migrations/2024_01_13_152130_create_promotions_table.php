@@ -19,8 +19,6 @@ return new class extends Migration
             $table->boolean('enableStatus')->default(0);
             $table->char('discountType');
             $table->double('value');
-            $table->bigInteger('created_by')->nullable();
-            $table->bigInteger('updated_by')->nullable();
             $table->tinyInteger('object_status')->default(1);
             $table->timestamps();
         });

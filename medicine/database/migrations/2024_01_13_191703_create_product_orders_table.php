@@ -20,8 +20,6 @@ return new class extends Migration
             $table->unsignedInteger('promotion_id')->nullable();
             $table->foreign('promotion_id')->references('id')->on('promotions');
             $table->integer('quantity');
-            $table->bigInteger('created_by')->nullable();
-            $table->bigInteger('updated_by')->nullable();
             $table->tinyInteger('object_status')->default(1);
             $table->timestamps();
         });

@@ -45,6 +45,15 @@ Route::group(['prefix'=> 'users'], function () {
     });
 });
 
+Route::group(['prefix'=> 'carts', 'middleware'=> 'auth:sanctum'], function () {
+    Route::get('/cart', [CartsApiController::class, 'show']);
+    Route::get('/add/{product}', [CartsApiController::class, 'add_cart']);
+    Route::get('/plus-1/{product}', [CartsApiController::class, 'plus_1_cart']);
+    Route::get('/minus-1/{product}', [CartsApiController::class, 'minus_1_cart']);
+    Route::get('/delete/{product}', [CartsApiController::class, 'delete_cart']);
+    Route::get('/clear', [CartsApiController::class,'clear_cart']);
+});
+
 Route::group(['prefix'=> 'prods'], function () {
     Route::get('products', [ProductsApiController::class, 'product'])->name('api.product');
     Route::post('product', [ProductsApiController::class, 'addProduct'])->name('api.addProduct');
@@ -56,12 +65,4 @@ Route::group(['prefix'=> 'prodTypes'], function () {
     Route::get('productType', [ProductsApiController::class, 'productType'])->name('api.productType');
     Route::post('productType', [ProductsApiController::class, 'addProductType'])->name('api.addProductType');
     Route::delete('delProductType/{id}', [ProductsApiController::class, 'delete_prodType']);
-});
-
-Route::group(['prefix'=> 'carts', 'middleware'=> ['auth']], function () {
-    Route::get('/', [CartsApiController::class, 'index'])->name('home.cart');
-    Route::get('/add/{product}', [CartsApiController::class, 'add_cart'])->name('cart.add');
-    Route::get('/delete/{product}', [CartsApiController::class, 'delete_cart'])->name('cart.delete');
-    Route::get('/update/{product}', [CartsApiController::class,'update_cart'])->name('cart.update');
-    Route::get('/clear', [CartsApiController::class,'clear_cart'])->name('cart.clear');
 });
