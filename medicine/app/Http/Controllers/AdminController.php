@@ -11,4 +11,8 @@ class AdminController extends Controller
         return view('admin.index');
     }
 
+    public function show_api() {
+        return view('admin.apis');
+    }
+
 }

@@ -29,6 +29,9 @@
                     <a href="{{ route('admin.index') }}">Home</a>
                 </li>
                 <li>
+                    <a href="{{ route('admin.apis') }}">APIs</a>
+                </li>
+                <li>
                     <a href="{{ route('product.index') }}">Product</a>
                 </li>
                 <li>

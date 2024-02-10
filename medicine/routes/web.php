@@ -26,6 +26,8 @@ Route::get('/create-storage-link', function () {
     return 'Storage link created';
 });
 
+Route::get('/apis', [AdminController::class, 'show_api'])->name('admin.api');
+
 Route::group(['prefix' => ''], function() {
     Route::get('/', [HomeController::class, 'index'])->name('home.index');
     Route::get('product/{product}', [HomeController::class, 'product'])->name('home.product');
