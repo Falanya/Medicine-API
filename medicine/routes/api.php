@@ -38,7 +38,8 @@ Route::group(['prefix'=> 'users'], function () {
         Route::put('change-profile', [UsersApiController::class, 'change_profile']);
         
         Route::get('address', [AddressApiController::class, 'address']);
-        Route::put('add-address', [AddressApiController::class, 'add_address']);
+        Route::post('add-address', [AddressApiController::class, 'add_address']);
+        Route::put('edit-address/{address}', [AddressApiController::class, 'edit_address']);
         Route::post('delete-address/{address}', [AddressApiController::class, 'delete_address']);
         Route::post('delete-all-address', [AddressApiController::class, 'delete_all_address']);
     });

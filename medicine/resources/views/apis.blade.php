@@ -34,7 +34,7 @@
             <tbody>
                 {{-- Người dùng --}}
                 <tr>
-                    <td rowspan="9"><h2>Users</h2></td>
+                    <td rowspan="14"><h2>Users</h2></td>
                     <td>Đăng ký (POST)</td>
                     <td>/api/users/register</td>
                     <td>OK</td>
@@ -73,6 +73,36 @@
                 <tr>
                     <td>Thay đổi thông tin (PUT)</td>
                     <td>/api/users/change-profile</td>
+                    <td>OK</td>
+                </tr>
+
+                <tr>
+                    <td>Hiển thị địa chỉ (GET)</td>
+                    <td>/api/users/address</td>
+                    <td>OK</td>
+                </tr>
+
+                <tr>
+                    <td>Thêm mới địa chỉ (POST)</td>
+                    <td>/api/users/address</td>
+                    <td>OK</td>
+                </tr>
+
+                <tr>
+                    <td>Sửa địa chỉ (PUT)</td>
+                    <td>/api/users/edit-address/{id}</td>
+                    <td>OK</td>
+                </tr>
+
+                <tr>
+                    <td>Xóa 1 địa chỉ (POST)</td>
+                    <td>/api/users/delete-address/{id}</td>
+                    <td>OK</td>
+                </tr>
+
+                <tr>
+                    <td>Xóa tất cả địa chỉ (POST)</td>
+                    <td>/api/users/delete-all-address</td>
                     <td>OK</td>
                 </tr>
 

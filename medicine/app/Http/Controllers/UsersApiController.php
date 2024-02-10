@@ -14,11 +14,11 @@ class UsersApiController extends Controller
 {
     public function check_register(Request $request) {
         $validator = Validator::make($request->all(), [
-            'fullname' => 'required|string|min:6',
-            'email' => 'required|email|unique:users',
-            'gender' => 'required',
-            'password' => 'required|min:6',
-            'confirm_password' => 'required|same:password'
+            'fullname' => 'bail|required|string|min:6',
+            'email' => 'bail|required|email|unique:users',
+            'gender' => 'bail|required',
+            'password' => 'bail|required|min:6',
+            'confirm_password' => 'bail|required|same:password'
         ]);
 
         if ($validator->fails()) {
@@ -66,7 +66,7 @@ class UsersApiController extends Controller
 
     public function check_login(Request $request) {
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'email' => 'bail|required|email',
             'password' => 'required'
         ]);
 
@@ -155,10 +155,10 @@ class UsersApiController extends Controller
     public function change_profile(Request $request) {
         $auth = auth()->user();
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email|unique:users,email,'.$auth->id,
-            'fullname' => 'required|string|min:6',
-            'gender' => 'required',
-            'confirm_password' => ['required', function($attr,$value,$fail) use($auth) {
+            'email' => 'bail|required|email|unique:users,email,'.$auth->id,
+            'fullname' => 'bail|required|string|min:6',
+            'gender' => 'bail|required',
+            'confirm_password' => ['bail', 'required', function($attr,$value,$fail) use($auth) {
                 if(!Hash::check($value, $auth->password)) {
                     $fail('Your password is incorrect, please try again');
                 }

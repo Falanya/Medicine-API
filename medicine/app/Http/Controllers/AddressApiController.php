@@ -34,11 +34,11 @@ class AddressApiController extends Controller
         $auth = auth()->user();
 
         $validator = Validator::make($request->all(), [
-            'receiver_name' => 'required|string|min:6',
-            'address' => 'required|string',
-            'phone' => ['required','numeric', function($attr,$value,$fail) {
-                $check_phone = is_numeric($value) && strlen((string)$value) >= 9;
-                if(!$check_phone) {
+            'receiver_name' => 'bail|required|string|min:6',
+            'address' => 'bail|required|string',
+            'phone' => ['bail','required','numeric', function($attr,$value,$fail) {
+                $check_num = is_numeric($value) && strlen((string)$value) >= 9;
+                if(!$check_num) {
                     $fail('Your phone number must be at least 9 numbers');
                 }
             }],
@@ -83,6 +83,60 @@ class AddressApiController extends Controller
             'data' => null,
             'status_code' => 404,
             'message' => 'Something errors, please check again'
+        ]);
+        
+    }
+
+    public function edit_address(Address $address, Request $request) {
+        $auth = auth()->user();
+        $validator = Validator::make($request->all(), [
+            'receiver_name' => 'bail|required|min:6',
+            'address' => 'bail|required|string',
+            'phone' => ['bail', 'required', 'numeric', function($attr,$value,$fail) {
+                $check_num = is_numeric($value) && strlen((string)$value) >= 9;
+                if(!$check_num) {
+                    $fail('Your phone number must be at least 9 numbers');
+                }
+            }]
+        ]);
+
+        $data = $request->only('receiver_name','address','phone');
+
+        if($validator->fails()) {
+            return response()->json([
+                'message' => $validator->errors()->all(),
+                'status_code' => 404
+            ]);
+        }
+
+        $addUser = Address::where([
+            'id' => $address->id,
+            'user_id' => $auth->id,
+            'object_status' => 1
+        ])->first();
+
+        if(!$addUser) {
+            return response()->json([
+                'data' => null,
+                'message' => 'Not find user address, please try again',
+                'status_code' => 404
+            ]);
+        }
+
+        $check = $addUser->update($data);
+
+        if(!$check) {
+            return response()->json([
+                'data' => null,
+                'status_code' => 404,
+                'message' => 'Unable to update, please check again'
+            ]);
+        }
+
+        return response()->json([
+            'data' => $addUser,
+            'status_code' => 200,
+            'message' => 'Success'
         ]);
         
     }
