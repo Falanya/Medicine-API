@@ -15,7 +15,7 @@
 
                         <div class="form-group select-wrap">
                             <label for="">Address</label>
-                            <select name="address" id="input" class="form-control" required="required">
+                            <select name="address_id" id="input" class="form-control" required="required">
                                 @foreach ($address as $item)
                                 <option value="{{ $item->id }}">
                                     {{ $item->receiver_name }}-{{ $item->phone }}-{{ $item->address }}
@@ -25,11 +25,21 @@
                             @error('address') <small> {{ $message }} </small> @enderror
                         </div>
 
-                        <button type="submit" onclick="return confirm('Would you like to confirm this order?')" class="btn btn-sm btn-primary">Cofirm your order</button>
+                        <hr>
+
+                        <div class="form-group">
+                            <label for="textarea" class="control-label">Note</label>
+                            <textarea name="note" id="textarea" class="form-control" rows="3"></textarea>
+                            @error('note') <small> {{ $message }} </small> @enderror
+                        </div>
+
+                        <button type="submit" onclick="return confirm('Would you like to confirm this order?')"
+                            class="btn btn-sm btn-primary">Cofirm your order</button>
                     </form>
                 </div>
             </div>
         </div>
+
         <div class="col-md-5">
             <table class="table table-hover">
                 <thead>
@@ -58,6 +68,7 @@
             </table>
         </div>
     </div>
+</div>
 
 </div>
 

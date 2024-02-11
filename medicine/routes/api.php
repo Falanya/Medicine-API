@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddressApiController;
 use App\Http\Controllers\CartsApiController;
+use App\Http\Controllers\OrderApiController;
 use App\Http\Controllers\ProductsApiController;
 use App\Http\Controllers\UsersApiController;
 use Illuminate\Http\Request;
@@ -48,6 +49,10 @@ Route::group(['prefix'=> 'carts', 'middleware'=> 'auth:sanctum'], function () {
     Route::get('/minus-1/{product}', [CartsApiController::class, 'minus_1_cart']);
     Route::get('/delete/{product}', [CartsApiController::class, 'delete_cart']);
     Route::get('/clear', [CartsApiController::class,'clear_cart']);
+});
+
+Route::group(['prefix' => 'orders', 'middleware' => 'auth:sanctum'], function() {
+    Route::get('/checkout', [OrderApiController::class, 'show_checkout']);
 });
 
 Route::group(['prefix'=> 'prods'], function () {
