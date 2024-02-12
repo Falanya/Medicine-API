@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/create-storage-link', function () {
     Artisan::call('storage:link');
     return 'Storage link created';
-});
+})->name('admin.storage-link');
 
 Route::get('/apis', [AdminController::class, 'show_api'])->name('admin.apis');
 
@@ -81,6 +81,9 @@ Route::group(['prefix' => 'cart', 'middleware' => 'auth'], function() {
 Route::group(['prefix' => 'order', 'middleware' => 'auth'], function() {
     Route::get('/checkout', [OrderController::class, 'checkout'])->name('order.checkout');
     Route::post('/checkout', [OrderController::class, 'post_checkout']);
+    Route::get('/verify/{token}', [OrderController::class, 'verify'])->name('order.verify');
+    Route::get('/history', [OrderController::class, 'history'])->name('order.history');
+    Route::get('/detail/{order}', [OrderController::class, 'detail'])->name('order.detail');
 
 });
 
@@ -88,6 +91,7 @@ Route::post('/comment/{product_id}', [HomeController::class, 'post_comment'])->n
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
     Route::get('/', [AdminController::class, 'index'])->name('admin.index');
+    Route::get('/setting', [AdminController::class, 'setting'])->name('admin.setting');
 
     Route::resources([
         'product' => ProductController::class,

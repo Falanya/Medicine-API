@@ -15,4 +15,8 @@ class AdminController extends Controller
         return view('admin.apis');
     }
 
+    public function setting() {
+        return view('admin.setting');
+    }
+
 }

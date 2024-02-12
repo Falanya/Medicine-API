@@ -14,7 +14,7 @@
             <a href="{{ route('account.change_password') }}">Password</a>
         </li>
         <li>
-            <a href="">Orders</a>
+            <a href="{{ route('order.history') }}">Orders</a>
         </li>
     </ul>
 </nav>
