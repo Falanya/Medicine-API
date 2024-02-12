@@ -26,7 +26,13 @@ Route::get('/create-storage-link', function () {
     return 'Storage link created';
 })->name('admin.storage-link');
 
+Route::get('/seed-db', function() {
+    Artisan::call('db:seed');
+    return 'Seeding completed';
+})->name('admin.seed-db');
+
 Route::get('/apis', [AdminController::class, 'show_api'])->name('admin.apis');
+Route::get('/setting', [AdminController::class, 'setting'])->name('admin.setting');
 
 Route::group(['prefix' => ''], function() {
     Route::get('/', [HomeController::class, 'index'])->name('home.index');
@@ -91,7 +97,6 @@ Route::post('/comment/{product_id}', [HomeController::class, 'post_comment'])->n
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
     Route::get('/', [AdminController::class, 'index'])->name('admin.index');
-    Route::get('/setting', [AdminController::class, 'setting'])->name('admin.setting');
 
     Route::resources([
         'product' => ProductController::class,

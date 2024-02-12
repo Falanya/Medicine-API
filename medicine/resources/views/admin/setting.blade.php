@@ -20,7 +20,7 @@
                 </td>
             </tr>
             <tr>
-                <td><a href="#">2. Updating...</a></td>
+                <td><a href="{{ route('admin.seed-db') }}">2. Seed your database (If the database doesn't have data yet)</a></td>
             </tr>
         </tbody>
 
