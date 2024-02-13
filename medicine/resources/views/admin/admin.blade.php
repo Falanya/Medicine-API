@@ -38,6 +38,9 @@
                     <a href="{{ route('productType.index') }}">Product Tpye</a>
                 </li>
                 <li>
+                    <a href="{{ route('admin.order_index') }}">Order List</a>
+                </li>
+                <li>
                     <a href="{{ route('admin.setting') }}">Setting</a>
                 </li>
             </ul>

@@ -97,6 +97,9 @@ Route::post('/comment/{product_id}', [HomeController::class, 'post_comment'])->n
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
     Route::get('/', [AdminController::class, 'index'])->name('admin.index');
+    Route::get('/order', [AdminController::class, 'order_index'])->name('admin.order_index');
+    Route::get('/order-detail/{order}', [AdminController::class, 'order_detail'])->name('admin.order_detail');
+    Route::get('/order-update-status/{order}', [AdminController::class, 'order_update_status'])->name('admin.order_update');
 
     Route::resources([
         'product' => ProductController::class,
