@@ -58,8 +58,8 @@ class OrderController extends Controller
                     'price' => $cart->price 
                 ];
                 ProductOrder::create($data_order);
-                Cart::where('user_id', $auth->id)->delete();
             }
+            //$auth->carts()->delete();
             $order->token = $token;
             $order->save();
             Mail::to($auth->email)->send(new OrderMail($order, $token));
