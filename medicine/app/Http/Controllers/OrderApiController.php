@@ -37,17 +37,28 @@ class OrderApiController extends Controller
     public function detail(Order $order) {
         $auth = auth()->user();
         if ($auth->id == $order->user_id) {
-            $cusInfo = $order->user;
-            $reInfo = $order->address;
+            $user = $order->user;
+            $cusInfo = [
+                'fullname' => $user->fullname,
+                'email' => $user->email,
+            ];
+            $address = $order->address;
+            $reInfo = [
+                'receiver_name' => $address->receiver_name,
+                'phone' => $address->phone,
+                'address' => $address->address
+            ];
             $orderInfo = [
                 'totalPrice' => number_format($order->totalPrice),
                 'note' => $order->note,
+                'status' => $order->status,
                 'created_at' => $order->created_at->format('d/m/Y')
             ];
             $products = [];
 
-            foreach($order->details as $item) {
+            foreach($order->details as $key => $item) {
                 $product = [
+                    'STT' => $key + 1,
                     'name' => $item->product->name,
                     'img' => $item->product->img,
                     'quantity' => $item->quantity,
@@ -60,7 +71,8 @@ class OrderApiController extends Controller
                 'cusInfo' => $cusInfo,
                 'reInfo' => $reInfo,
                 'orderInfo' => $orderInfo,
-                'products' => $products
+                'products' => $products,
+                'status_code' => 200
             ]);
         } else {
             return response()->json([

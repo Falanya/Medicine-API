@@ -156,6 +156,41 @@
                 <td></td>
             </tr>
 
+            {{-- Đặt hàng và quản lý đơn hàng của người dùng --}}
+            <tr>
+                <td rowspan="4">
+                    <h2>Order</h2>
+                </td>
+                <td>Hiển thị lịch sử đơn hàng (GET)</td>
+                <td>/api/orders/history</td>
+                <td>OK</td>
+            </tr>
+
+            <tr>
+                <td>Checkout (GET)</td>
+                <td>/api/orders/checkout</td>
+                <td>OK</td>
+            </tr>
+
+            <tr>
+                <td>Tiến hành đặt hàng (POST)</td>
+                <td>/api/orders/post-checkout</td>
+                <td>OK</td>
+            </tr>
+
+            <tr>
+                <td>Xem chi tiết đơn hàng (GET)</td>
+                <td>/api/orders/detail/{id}</td>
+                <td>OK</td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
             {{-- Sản phẩm --}}
             <tr>
                 <td rowspan="7">
