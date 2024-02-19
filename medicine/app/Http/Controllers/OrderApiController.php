@@ -24,6 +24,52 @@ class OrderApiController extends Controller
         ]);
     }
 
+    public function history() {
+        $auth = auth()->user();
+        $order_list = $auth->orders;
+        return response()->json([
+            'data' => $order_list,
+            'status_code' => 200,
+            'message' => 'Success'
+        ]);
+    }
+
+    public function detail(Order $order) {
+        $auth = auth()->user();
+        if ($auth->id == $order->user_id) {
+            $cusInfo = $order->user;
+            $reInfo = $order->address;
+            $orderInfo = [
+                'totalPrice' => number_format($order->totalPrice),
+                'note' => $order->note,
+                'created_at' => $order->created_at->format('d/m/Y')
+            ];
+            $products = [];
+
+            foreach($order->details as $item) {
+                $product = [
+                    'name' => $item->product->name,
+                    'img' => $item->product->img,
+                    'quantity' => $item->quantity,
+                    'price' => number_format($item->price)
+                ];
+                $products[] = $product;
+            }
+            
+            return response()->json([
+                'cusInfo' => $cusInfo,
+                'reInfo' => $reInfo,
+                'orderInfo' => $orderInfo,
+                'products' => $products
+            ]);
+        } else {
+            return response()->json([
+                'message' => "Your order cannot be found"
+            ]);
+        }
+        
+    }
+
     public function post_checkout(Request $request) {
         $auth = auth()->user();
         $validator = Validator::make($request->all(), [

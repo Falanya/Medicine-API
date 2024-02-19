@@ -59,7 +59,7 @@ class OrderController extends Controller
                 ];
                 ProductOrder::create($data_order);
             }
-            //$auth->carts()->delete();
+            $auth->carts()->delete();
             $order->token = $token;
             $order->save();
             Mail::to($auth->email)->send(new OrderMail($order, $token));
