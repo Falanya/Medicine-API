@@ -25,7 +25,7 @@ class User extends Authenticatable
     }
 
     public function addresses() {
-        return $this->hasMany(Address::class,'user_id','id');
+        return $this->hasMany(Address::class,'user_id','id')->where('object_status', 1);
     }
 
     public function orders() {

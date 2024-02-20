@@ -16,11 +16,35 @@ class OrderApiController extends Controller
 {
     public function show_checkout() {
         $auth = auth()->user();
-        $address = $auth->addresses;
-        $cart = $auth->carts;
+        $auth_address = $auth->addresses;
+        $addresses = [];
+        foreach($auth_address as $item) {
+            $address = [
+                'id' => $item->id,
+                'receiver_name' => $item->receiver_name,
+                'phone' => $item->phone,
+                'address' => $item->address,
+                'object_status' => $item->object_status,
+            ];
+            $addresses[] = $address;
+        }
+
+        $auth_cart = $auth->carts;
+        $carts = [];
+        foreach($auth_cart as $key => $item) {
+            $cart = [
+                'STT' => $key + 1,
+                'name' => $item->product->name,
+                'img' => $item->product->img,
+                'quantity' => $item->quantity,
+                'price' => $item->price
+            ];
+            $carts[] = $cart;
+        }
+
         return response()->json([
-            'addresses' => $address,
-            'cart' => $cart,
+            'addresses' => $addresses,
+            'carts' => $carts,
         ]);
     }
 
