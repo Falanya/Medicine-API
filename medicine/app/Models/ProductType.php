@@ -9,10 +9,10 @@ class ProductType extends Model
 {
     use HasFactory;
     protected $table = 'product_types';
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'object_status'];
     protected $hidden = ['created_at', 'updated_at', 'created_by', 'updated_by'];
 
-    public function prods() {
+    public function products() {
         return $this->hasMany(Product::class, 'type_id', 'id')->where('status',1);
 
     }

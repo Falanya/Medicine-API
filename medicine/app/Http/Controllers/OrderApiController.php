@@ -50,7 +50,24 @@ class OrderApiController extends Controller
 
     public function history() {
         $auth = auth()->user();
-        $order_list = $auth->orders;
+        $auth_order = $auth->orders;
+        $order_list = [];
+        $statusOrder = [
+            0 => 'Not verified',
+            1 => 'Verified',
+            2 => 'Shipping',
+            3 => 'Completed',
+            4 => 'Cancelled',
+        ];
+        foreach($auth_order as $item) {
+            $order = [
+                'id' => $item->id,
+                'order_date' => $item->created_at->format('d/m/Y'),
+                'status' => $statusOrder[$item->status] ?? '',
+                'totalPrice' => $item->totalPrice
+            ];
+            $order_list[] = $order;
+        }
         return response()->json([
             'data' => $order_list,
             'status_code' => 200,
@@ -72,10 +89,17 @@ class OrderApiController extends Controller
                 'phone' => $address->phone,
                 'address' => $address->address
             ];
+            $statusOrder = [
+                0 => 'Not Verified',
+                1 => 'Verified',
+                2 => 'Shipping',
+                3 => 'Completed',
+                4 => 'Cancelled'
+            ];
             $orderInfo = [
                 'totalPrice' => number_format($order->totalPrice),
                 'note' => $order->note,
-                'status' => $order->status,
+                'status' => $statusOrder[$order->status] ?? '',
                 'created_at' => $order->created_at->format('d/m/Y')
             ];
             $products = [];

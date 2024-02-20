@@ -12,13 +12,28 @@ class ProductsApiController extends Controller
 {
     public function product(Product $product) {
         $products = Product::orderBy('id', 'DESC')->where('status',1)->get();
+        $products_list = [];
+        $statusProduct = [
+            0 => 'Sold out',
+            1 => 'In stock'
+        ];
 
-        foreach ($products as $product) {
-            $product->price = number_format($product->price, 0, ',', '.');
+        foreach ($products as $item) {
+            $product = [
+                'id' => $item->id,
+                'name' => $item->name,
+                'type_id' => $item->type_id,
+                'describe' => $item->describe,
+                'info' => $item->info,
+                'price' => number_format($item->price),
+                'img' => $item->img,
+                'status' => $statusProduct[$item->status] ?? '',
+            ];
+            $products_list[] = $product;
         }
 
         return response()->json([
-            'data' => $products,
+            'data' => $products_list,
             'status_code' => 200,
             'message' => 'ok'
         ]);
@@ -71,33 +86,53 @@ class ProductsApiController extends Controller
         ]);
     }
 
-    public function delete_product($id) {
-        // $prod = Product::find($id);
-        // if($prod->delete()){
-        //     return response()->json([
-        //         'data' => $prod,
-        //         'status_code' => 200,
-        //         'message'=> 'Xóa thành công'
-        //     ]);
-        // }
-        // return response()->json([
-        //     'data' => null,
-        //     'status_code' => 404,
-        //     'message'=> 'Xóa không thành công'
-        // ]);
+    public function show_hidden_product(Product $product) {
+        if($product->status == 0) {
+            return response()->json([
+                'message' => 'This product has been hidden before',
+                'status_code' => 401,
+            ]);
+        } else{
+            $product->status = 0;
+            $check = $product->save();
+            if($check) {
+                return response()->json([
+                    'message' => 'This product has been successfully hidden',
+                    'status_code' => 200
+                ]);
+            }
+        }
+        
+        return response()->json([
+            'message' => 'Something errors, please try again',
+            'status_code' => 404
+        ]);
     }
 
-    public function prods_by_type($id) {
+    public function prods_by_type(ProductType $productType) {
 
-        $productType = ProductType::find($id);
-        if($products = $productType->prods) {
-
-            foreach ($products as $product) {
-                $product->price = number_format($product->price, 0, ',', '.');
+        $nameType = ProductType::find($productType)->first();
+        $data = $productType->products;
+        $products = [];
+        $statusProduct = [
+            0 => 'Sold out',
+            1 => 'In stock'
+        ];
+        if($data) {
+            foreach($data as $item) {
+                $product = [
+                    'id' => $item->id,
+                    'type_id' => $item->type_id,
+                    'name' => $item->name,
+                    'img' => $item->img,
+                    'price' => number_format($item->price),
+                    'status' => $statusProduct[$item->status] ?? '',
+                ];
+                $products[] = $product;
             }
-
             return response()->json([
-                'data'=> $products,
+                'type' => $nameType,
+                'products'=> $products,
                 'status_code' => 200,
                 'message'=> 'ok'
             ]);
@@ -109,69 +144,52 @@ class ProductsApiController extends Controller
         ]);
     }
 
-    public function productType(ProductType $productType) {
-        $proTypes = ProductType::orderBy('name','ASC')->where('object_status',1)->get();
-
-        return response()->json([
-            'data' => $proTypes,
-            'status_code' => 200,
-            'message' => 'ok'
-        ]);
-    }
-
-    public function addProductType(Request $request) {
-        $validator = Validator::make($request->all(),[
-            'name' => 'required'
+    public function edit_product(Product $product, Request $request) {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'type_id' => 'required|numeric',
+            'describe' => 'required',
+            'info' => 'required',
+            'price' => 'required|numeric',
+            // 'img' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            'status' => 'required|numeric'
         ]);
 
         if($validator->fails()) {
             return response()->json([
-                'data' => $validator->errors()->all(),
-                'status_code' => 422,
-                'message' => 'Không thể thêm loại sản phẩm'
+                'errors' => $validator->errors()->all(),
+                'message' => 'Something errors, please check again',
+                'status_code' => 401
             ]);
         }
 
-        $data_check = $request->only('name');
-        
-        if($data=ProductType::create($data_check)) {
+        if(!$request->hasFile('img')) {
             return response()->json([
-                'data' => $data,
-                'status_code' => 200,
-                'message' => 'Thêm loại sản phẩm thành công'
+                'message' => 'Cannot found the picture, please check again',
+                'status_code' => 401,
             ]);
         }
-        return response()->json([
-            'data' => null,
-            'status_code' => 404,
-            'message' => 'Không thể thêm sản phẩm'
-        ]);
+
+        $img_name = Str::random(32).".".$request->img->getClientOriginalExtension();
+        $request->img->storeAs('images/products', $img_name, 'public');
+
+        $data = $request->only('name','type_id','describe','info','price','status');
+        $data['img'] = $img_name;
+
+        $check = $product->update($data);
+        if ($check) {
+            $product_data = Product::find($product)->first();
+            return response()->json([
+                'data' => $product_data,
+                'message' => 'Success',
+                'status_code' => 200
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Something errors, please check again',
+                'status_code' => 401
+            ]);
+        }
     }
 
-    public function delete_prodType($id) {
-        $proType = ProductType::find($id);
-
-        if(!$proType) {
-            return response()->json([
-                'data' => null,
-                'status_code' => 404,
-                'message' => 'Không tìm thấy loại sản phẩm'
-            ]);
-        }
-
-        $data = $proType->prods->count();
-
-        if($data == 0 && $proType->delete()) {
-            return response()->json([
-                'data' => $proType,
-                'status_code' => 200,
-                'message' => 'Xóa thành công'
-            ]);
-        }
-        return response()->json([
-            'data' => 'Không thể xóa vì loại này đang có ' . $data . ' sản phẩm',
-            'status_code' => 404,
-            'message'=> 'Xóa không thành công'
-        ]);
-    }
 }

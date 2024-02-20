@@ -4,6 +4,7 @@ use App\Http\Controllers\AddressApiController;
 use App\Http\Controllers\CartsApiController;
 use App\Http\Controllers\OrderApiController;
 use App\Http\Controllers\ProductsApiController;
+use App\Http\Controllers\ProductTypesApiController;
 use App\Http\Controllers\UsersApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -58,15 +59,17 @@ Route::group(['prefix' => 'orders', 'middleware' => 'auth:sanctum'], function() 
     Route::get('/detail/{order}', [OrderApiController::class, 'detail']);
 });
 
-Route::group(['prefix'=> 'prods'], function () {
-    Route::get('products', [ProductsApiController::class, 'product'])->name('api.product');
-    Route::post('product', [ProductsApiController::class, 'addProduct'])->name('api.addProduct');
-    Route::delete('delProduct/{id}', [ProductsApiController::class, 'delete_product']);
-    Route::get('productsByType/{id}', [ProductsApiController::class, 'prods_by_type'])->name('api.productsByType');
+Route::group(['prefix'=> 'products'], function () {
+    Route::get('show', [ProductsApiController::class, 'product']);
+    Route::post('product', [ProductsApiController::class, 'addProduct']);
+    Route::post('/show-hidden-product/{product}', [ProductsApiController::class, 'show_hidden_product']);
+    Route::get('products-by-type/{productType}', [ProductsApiController::class, 'prods_by_type']);
+    Route::post('edit-product/{product}', [ProductsApiController::class, 'edit_product']);
 });
 
-Route::group(['prefix'=> 'prodTypes'], function () {
-    Route::get('productType', [ProductsApiController::class, 'productType'])->name('api.productType');
-    Route::post('productType', [ProductsApiController::class, 'addProductType'])->name('api.addProductType');
-    Route::delete('delProductType/{id}', [ProductsApiController::class, 'delete_prodType']);
+Route::group(['prefix'=> 'product-types'], function () {
+    Route::get('show', [ProductTypesApiController::class, 'show']);
+    Route::post('add-product-type', [ProductTypesApiController::class, 'addProductType']);
+    Route::post('edit-product-type/{productType}', [ProductTypesApiController::class, 'edit_product_type']);
+    Route::post('delete-product-type/{productType}', [ProductTypesApiController::class, 'delete_prodType']);
 });
