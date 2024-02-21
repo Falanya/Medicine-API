@@ -17,6 +17,6 @@ class Product extends Model
     }
 
     public function img_details() {
-        return $this->hasMany(ImgProduct::class, 'product_id', 'id');
+        return $this->hasMany(ImgProduct::class, 'product_id', 'id')->where('status', 1);
     }
 }

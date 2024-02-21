@@ -60,11 +60,12 @@ Route::group(['prefix' => 'orders', 'middleware' => 'auth:sanctum'], function() 
 });
 
 Route::group(['prefix'=> 'products'], function () {
-    Route::get('show', [ProductsApiController::class, 'product']);
-    Route::post('product', [ProductsApiController::class, 'addProduct']);
+    Route::get('/show', [ProductsApiController::class, 'product']);
+    Route::post('/add-product', [ProductsApiController::class, 'addProduct']);
     Route::post('/show-hidden-product/{product}', [ProductsApiController::class, 'show_hidden_product']);
-    Route::get('products-by-type/{productType}', [ProductsApiController::class, 'prods_by_type']);
-    Route::post('edit-product/{product}', [ProductsApiController::class, 'edit_product']);
+    Route::get('/products-by-type/{productType}', [ProductsApiController::class, 'prods_by_type']);
+    Route::post('/edit-product/{product}', [ProductsApiController::class, 'edit_product']);
+    Route::get('/details/{slug}', [ProductsApiController::class, 'details']);
 });
 
 Route::group(['prefix'=> 'product-types'], function () {
@@ -72,10 +73,9 @@ Route::group(['prefix'=> 'product-types'], function () {
     Route::post('add-product-type', [ProductTypesApiController::class, 'addProductType']);
     Route::post('edit-product-type/{productType}', [ProductTypesApiController::class, 'edit_product_type']);
     Route::post('delete-product-type/{productType}', [ProductTypesApiController::class, 'delete_prodType']);
+    
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth:sanctum'], function() {
-    Route::group(['prefix' => 'orders'], function() {
-        Route::get('');
-    });
+    
 });

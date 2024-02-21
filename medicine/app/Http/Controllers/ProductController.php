@@ -15,7 +15,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $pros = Product::orderBy('id', 'DESC')->paginate(50);
+        $pros = Product::orderBy('id', 'DESC')->paginate(10);
+        if($key = request('search')) {
+            $pros = Product::orderBy('id', 'DESC')->where('name', 'like', '%'.$key.'%')->paginate(10);
+        }
 
         return view('admin.product.index', compact('pros'));
     }

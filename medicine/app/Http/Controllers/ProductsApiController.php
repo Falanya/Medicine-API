@@ -11,8 +11,11 @@ use Illuminate\Support\Str;
 
 class ProductsApiController extends Controller
 {
-    public function product(Product $product) {
+    public function product(Product $product, Request $request) {
         $products = Product::orderBy('id', 'DESC')->where('status',1)->get();
+        if($key = $request->search) {
+            $products = Product::orderBy('id', 'DESC')->where('name','like','%'.$key.'%')->where('status',1)->get();
+        }
         $products_list = [];
         $statusProduct = [
             0 => 'Sold out',
@@ -81,6 +84,7 @@ class ProductsApiController extends Controller
         $request->img->storeAs('images/products', $img_name, 'public');
 
         $data_check = $request->only('name','type_id','describe','info','price','status');
+        $data_check['slug'] = Str::slug(request('name', '-'));
         $data_check['img'] = $img_name;
         $data = Product::create($data_check);
 
@@ -241,6 +245,16 @@ class ProductsApiController extends Controller
                 'status_code' => 401
             ]);
         }
+    }
+
+    public function details($slug) {
+        $product = Product::where('slug', $slug)->first();
+        $img_details = $product->img_details()->get();
+        return response()->json([
+            'data' => $product,
+            'img_details' => $img_details,
+            'status_code' => 200,
+        ]);
     }
 
 }
