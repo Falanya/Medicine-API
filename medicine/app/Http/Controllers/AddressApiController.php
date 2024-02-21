@@ -180,8 +180,5 @@ class AddressApiController extends Controller
             'status_code' => 200
         ]);
 
-        // return response()->json([
-        //     'data' => $address
-        // ]);
     }
 }

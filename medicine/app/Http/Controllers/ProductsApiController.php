@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ImgProduct;
 use App\Models\Product;
 use App\Models\ProductType;
 use Illuminate\Http\Request;
@@ -42,11 +43,14 @@ class ProductsApiController extends Controller
     public function addProduct(Request $request) {
         $validator = Validator::make($request->all(),[
             'name' => 'required',
-            'type_id' => 'required',
+            'type_id' => 'required|numeric',
             'describe' => 'required',
             'info' => 'required',
-            'price' => 'required',
-            'img' => 'required|image|mimes:jpeg,png,jpg,gif,svg'
+            'price' => 'required|numeric',
+            'img' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            'imgs' => 'required|array',
+            'imgs.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            'status' => 'required|numeric'
         ]);
 
         if($validator->fails()) {
@@ -65,13 +69,30 @@ class ProductsApiController extends Controller
             ]);
         }
 
+        if(!$request->hasFile('imgs')) {
+            return response()->json([
+                'data' => null,
+                'status_code' => 422,
+                'message' => 'Các hình ảnh mô tả không tồn tại'
+            ]);
+        }
+
         $img_name = Str::random(32).".".$request->img->getClientOriginalExtension();
         $request->img->storeAs('images/products', $img_name, 'public');
 
         $data_check = $request->only('name','type_id','describe','info','price','status');
         $data_check['img'] = $img_name;
+        $data = Product::create($data_check);
 
-        if ($data=Product::create($data_check)) {
+        if ($data && $request->hasFile('imgs')) {
+            foreach($request->imgs as $key => $item) {
+                $img_names = Str::random(32).".".$item->getClientOriginalExtension();
+                $item->storeAs('public/images/products', $img_names);
+                ImgProduct::create([
+                    'product_id' => $data->id,
+                    'img' => $img_names,
+                ]);
+            }
             return response()->json([
                 'data' => $data,
                 'status_code' => 200,
@@ -86,26 +107,56 @@ class ProductsApiController extends Controller
         ]);
     }
 
-    public function show_hidden_product(Product $product) {
-        if($product->status == 0) {
+    public function show_hidden_product(Product $product, Request $request) {
+        // if($product->status == 0) {
+        //     return response()->json([
+        //         'message' => 'This product has been hidden before',
+        //         'status_code' => 401,
+        //     ]);
+        // } else{
+        //     $product->status = 0;
+        //     $check = $product->save();
+        //     if($check) {
+        //         return response()->json([
+        //             'message' => 'This product has been successfully hidden',
+        //             'status_code' => 200
+        //         ]);
+        //     }
+        // }
+        
+        // return response()->json([
+        //     'message' => 'Something errors, please try again',
+        //     'status_code' => 404
+        // ]);
+
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|numeric',
+        ]);
+
+        if ($validator->fails()) {
             return response()->json([
-                'message' => 'This product has been hidden before',
-                'status_code' => 401,
+                'errors' => $validator->errors()->all(),
+                'message' => 'Something errors, please check again',
+                'status_code' => 401
             ]);
-        } else{
-            $product->status = 0;
-            $check = $product->save();
-            if($check) {
-                return response()->json([
-                    'message' => 'This product has been successfully hidden',
-                    'status_code' => 200
-                ]);
-            }
+        }
+        $data = $request->only('status');
+        $check = $product->update($data);
+        $statusProduct = [
+            0 => 'Hidde',
+            1 => 'Present',
+        ];
+        if($check) {
+            $data_product = Product::find($product)->first();
+            return response()->json([
+                'message' => 'Changed the product status to '. $statusProduct[$data_product->status],
+                'status_code' => 200,
+            ]);
         }
         
         return response()->json([
-            'message' => 'Something errors, please try again',
-            'status_code' => 404
+            'message' => 'Something errors, please check again',
+            'status_code' => 404,
         ]);
     }
 

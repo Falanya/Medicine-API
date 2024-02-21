@@ -73,3 +73,9 @@ Route::group(['prefix'=> 'product-types'], function () {
     Route::post('edit-product-type/{productType}', [ProductTypesApiController::class, 'edit_product_type']);
     Route::post('delete-product-type/{productType}', [ProductTypesApiController::class, 'delete_prodType']);
 });
+
+Route::group(['prefix' => 'admin', 'middleware' => 'auth:sanctum'], function() {
+    Route::group(['prefix' => 'orders'], function() {
+        Route::get('');
+    });
+});

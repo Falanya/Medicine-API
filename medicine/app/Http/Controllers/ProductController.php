@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ImgProduct;
 use App\Models\Product;
+use App\Models\ProductType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -22,7 +25,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('admin.product.create');
+        $proTypes = ProductType::orderBy('name','ASC')->get();
+        return view('admin.product.create', compact('proTypes'));
     }
 
     /**
@@ -32,19 +36,35 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required|unique:products',
+            'slug' => 'required',
             'type_id' => 'required',
             'describe' => 'required',
             'info' => 'required',
-            'price' => 'required',
-            'img' => 'required',
+            'price' => 'required|numeric',
+            'img' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            'imgs' => 'required|array',
+            'imgs.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
             'status' => 'required'
         ]);
 
-        $data = $request->all('name', 'type_id', 'describe', 'info', 'price', 'img', 'status');
+        //dd($request->all());
 
-        Product::create($data);
+        $fileName = Str::random(32). "." .$request->img->getClientOriginalExtension();
+        $request->img->storeAs('public/images/products', $fileName);
+        $data = $request->only('name', 'slug', 'type_id', 'describe', 'info', 'price', 'status');
+        $data['img'] = $fileName;
 
-        return redirect()->route('product.index');
+        $product = Product::create($data);
+        if($product && $request->hasFile('imgs')) {
+            foreach($request->imgs as $key => $item) {
+                $fileNames = Str::random(32). "." .$item->getClientOriginalExtension();
+                $item->storeAs('public/images/products', $fileNames);
+                ImgProduct::create([
+                    'product_id' => $product->id,
+                    'img' => $fileNames,
+                ]);
+            }
+        }
     }
 
     /**

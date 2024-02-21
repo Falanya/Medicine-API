@@ -28,7 +28,9 @@
             <td>{{ $pro -> describe }}</td>
             <td>{{ $pro -> info }}</td>
             <td>{{ $pro -> price }}</td>
-            <td>{{ $pro -> img }}</td>
+            <td>
+                <img src="{{ asset('storage/images/products/'.$pro->img) }}" alt="" width="150px">
+            </td>
             <td>{{ $pro -> status == 0 ? 'Tạm ẩn' : 'Hiển thị' }}</td>
             <td>
                 <form action="{{ route('product.destroy', $pro->id) }}" method="post">
