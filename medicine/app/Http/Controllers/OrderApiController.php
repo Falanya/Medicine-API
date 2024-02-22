@@ -63,7 +63,8 @@ class OrderApiController extends Controller
             $order = [
                 'id' => $item->id,
                 'order_date' => $item->created_at->format('d/m/Y'),
-                'status' => $statusOrder[$item->status] ?? '',
+                'status_content' => $statusOrder[$item->status] ?? '',
+                'status' => $item->status,
                 'totalPrice' => $item->totalPrice
             ];
             $order_list[] = $order;
@@ -99,7 +100,8 @@ class OrderApiController extends Controller
             $orderInfo = [
                 'totalPrice' => number_format($order->totalPrice),
                 'note' => $order->note,
-                'status' => $statusOrder[$order->status] ?? '',
+                'status_content' => $statusOrder[$order->status] ?? '',
+                'status' => $order->status,
                 'created_at' => $order->created_at->format('d/m/Y')
             ];
             $products = [];

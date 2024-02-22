@@ -6,6 +6,7 @@ use App\Models\ImgProduct;
 use App\Models\Product;
 use App\Models\ProductType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -201,12 +202,14 @@ class ProductsApiController extends Controller
 
     public function edit_product(Product $product, Request $request) {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'required|unique:products,name,'.$product->id,
             'type_id' => 'required|numeric',
             'describe' => 'required',
             'info' => 'required',
             'price' => 'required|numeric',
-            // 'img' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            'img' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
+            'imgs' => 'nullable|array',
+            'imgs.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
             'status' => 'required|numeric'
         ]);
 
@@ -218,22 +221,34 @@ class ProductsApiController extends Controller
             ]);
         }
 
-        if(!$request->hasFile('img')) {
-            return response()->json([
-                'message' => 'Cannot found the picture, please check again',
-                'status_code' => 401,
-            ]);
-        }
-
-        $img_name = Str::random(32).".".$request->img->getClientOriginalExtension();
-        $request->img->storeAs('images/products', $img_name, 'public');
-
         $data = $request->only('name','type_id','describe','info','price','status');
-        $data['img'] = $img_name;
+        $data['slug'] = Str::slug($request->name, '-');
 
+        if($request->hasFile('img')) {
+            Storage::disk('public')->delete('images/products/'.$product->img);
+            $img_name = Str::random(32).".".$request->img->getClientOriginalExtension();
+            $request->img->storeAs('images/products', $img_name, 'public');
+            $data['img'] = $img_name;
+        }
+        
         $check = $product->update($data);
         if ($check) {
-            $product_data = Product::find($product)->first();
+            if($request->hasFile('imgs')) {
+                foreach($product->img_details as $key => $item) {
+                    Storage::disk('public')->delete('images/products/'.$item->img);
+                }
+                $product->img_details()->delete();
+                foreach($request->imgs as $key => $item) {
+                    $img_names = Str::random(32).".".$item->getClientOriginalExtension();
+                    $item->storeAs('images/products', $img_names, 'public');
+                    ImgProduct::create([
+                        'img' => $img_names,
+                        'product_id' => $product->id,
+                    ]);
+                }
+            }
+            
+            $product_data = $product->fresh();
             return response()->json([
                 'data' => $product_data,
                 'message' => 'Success',
