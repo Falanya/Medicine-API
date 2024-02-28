@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ProductType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class ProductTypesApiController extends Controller
 {
@@ -33,6 +34,7 @@ class ProductTypesApiController extends Controller
         }
 
         $data_check = $request->only('name');
+        $data_check['slug'] = Str::slug(request('name'), '-');
         
         if($data=ProductType::create($data_check)) {
             return response()->json([
@@ -63,6 +65,7 @@ class ProductTypesApiController extends Controller
         }
 
         $data = $request->only('name','object_status');
+        $data['slug'] = Str::slug(request('name'), '-');
         $check = $productType->update($data);
         if ($check) {
             $data_type = ProductType::find($productType)->first();

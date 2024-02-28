@@ -15,21 +15,21 @@ class ProductTypesTableSeeder extends Seeder
     public function run(): void
     {
         DB::table('product_types')->insert([
-            array('name'=>'Chăm sóc cá nhân', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
+            array('name'=>'Chăm sóc cá nhân', 'slug'=>'cham-soc-ca-nhan', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
             'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh')),
-            array('name'=>'Chăm sóc sắc đẹp', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
+            array('name'=>'Chăm sóc sắc đẹp', 'slug'=>'cham-soc-sac-dep', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
             'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh')),
-            array('name'=>'Chăm sóc sức khỏe', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
+            array('name'=>'Chăm sóc sức khỏe', 'slug'=>'cham-soc-suc-khoe', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
             'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh')),
-            array('name'=>'Dược phẩm', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
+            array('name'=>'Dược phẩm', 'slug'=>'duoc-pham', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
             'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh')),
-            array('name'=>'Mẹ và bé', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
+            array('name'=>'Mẹ và bé', 'slug'=>'me-va-be', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
             'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh')),
-            array('name'=>'Thiết bị y tế', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
+            array('name'=>'Thiết bị y tế', 'slug'=>'thiet-bi-y-te', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
             'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh')),
-            array('name'=>'Thực phẩm chức năng', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
+            array('name'=>'Thực phẩm chức năng', 'slug'=>'thuc-pham-chuc-nang', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
             'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh')),
-            array('name'=>'Sản phẩm tiện lợi', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
+            array('name'=>'Sản phẩm tiện lợi', 'slug'=>'san-pham-tien-loi', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
             'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh'))
         ]);
     }

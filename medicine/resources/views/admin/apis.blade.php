@@ -197,43 +197,43 @@
                     <h2>Products</h2>
                 </td>
                 <td>Hiển thị sản phẩm (GET)</td>
-                <td>/api/prods/products</td>
+                <td>/api/products/show</td>
                 <td>OK</td>
             </tr>
 
             <tr>
                 <td>Hiển thị sản phẩm theo loại (GET)</td>
-                <td>/api/prods/productsByType/{id}</td>
+                <td>/api/products/products-by-type/{slug}</td>
                 <td>OK</td>
             </tr>
 
             <tr>
                 <td>Thêm sản phẩm (POST)</td>
-                <td>/api/prods/product</td>
+                <td>/api/products/add-product</td>
                 <td>OK</td>
             </tr>
 
             <tr>
-                <td>Xóa sản phẩm (DELETE)</td>
-                <td>/api/prods/delProduct/{id}</td>
-                <td>DIED</td>
+                <td>Ẩn/Hiện sản phẩm (DELETE)</td>
+                <td>/api/products/show-hidden-product/{id}</td>
+                <td>OK</td>
             </tr>
 
             <tr>
                 <td>Hiển thị loại sản phẩm (GET)</td>
-                <td>/api/prodTypes/productType</td>
+                <td>/api/product-types/show</td>
                 <td>OK</td>
             </tr>
 
             <tr>
                 <td>Thêm loại sản phẩm (POST)</td>
-                <td>/api/prodTypes/productType</td>
+                <td>/api/product-types/add-product-type</td>
                 <td>OK</td>
             </tr>
 
             <tr>
                 <td>Xóa loại sản phẩm (DELETE)</td>
-                <td>/api/prodTypes/delProductType/{id}</td>
+                <td>/api/product-types/delete-product-type/{id}</td>
                 <td>OK</td>
             </tr>
 

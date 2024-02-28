@@ -15,6 +15,7 @@ return new class extends Migration
             $table->increments('id');
             $table->string('name', 255);
             $table->tinyInteger('object_status')->default(1);
+            $table->string('slug', 255)->unique();
             $table->timestamps();
         });
     }

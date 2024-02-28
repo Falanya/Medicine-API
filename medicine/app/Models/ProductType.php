@@ -9,7 +9,7 @@ class ProductType extends Model
 {
     use HasFactory;
     protected $table = 'product_types';
-    protected $fillable = ['name', 'object_status'];
+    protected $fillable = ['name', 'slug', 'object_status'];
     protected $hidden = ['created_at', 'updated_at', 'created_by', 'updated_by'];
 
     public function products() {

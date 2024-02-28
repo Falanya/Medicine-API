@@ -63,10 +63,10 @@ Route::group(['prefix' => 'orders', 'middleware' => 'auth:sanctum'], function() 
 Route::group(['prefix'=> 'products'], function () {
     Route::get('/show', [ProductsApiController::class, 'product']);
     Route::get('/details/{slug}', [ProductsApiController::class, 'details']);
+    Route::get('/products-by-type/{slug}', [ProductsApiController::class, 'prods_by_type']);
     Route::group(['middleware' => 'auth:sanctum'], function() {
         Route::post('/add-product', [ProductsApiController::class, 'addProduct']);
         Route::post('/show-hidden-product/{product}', [ProductsApiController::class, 'show_hidden_product']);
-        Route::get('/products-by-type/{productType}', [ProductsApiController::class, 'prods_by_type']);
         Route::post('/edit-product/{product}', [ProductsApiController::class, 'edit_product']);
     });
 });

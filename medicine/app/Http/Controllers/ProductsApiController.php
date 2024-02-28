@@ -33,6 +33,7 @@ class ProductsApiController extends Controller
                 'price' => number_format($item->price),
                 'img' => $item->img,
                 'status' => $statusProduct[$item->status] ?? '',
+                'slug' => $item->slug
             ];
             $products_list[] = $product;
         }
@@ -51,9 +52,9 @@ class ProductsApiController extends Controller
             'describe' => 'required',
             'info' => 'required',
             'price' => 'required|numeric',
-            'img' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
-            'imgs' => 'required|array',
-            'imgs.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
+            'img' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
+            'imgs' => 'nullable|array',
+            'imgs.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
             'status' => 'required|numeric'
         ]);
 
@@ -73,19 +74,11 @@ class ProductsApiController extends Controller
             ]);
         }
 
-        if(!$request->hasFile('imgs')) {
-            return response()->json([
-                'data' => null,
-                'status_code' => 422,
-                'message' => 'Các hình ảnh mô tả không tồn tại'
-            ]);
-        }
-
         $img_name = Str::random(32).".".$request->img->getClientOriginalExtension();
         $request->img->storeAs('images/products', $img_name, 'public');
 
         $data_check = $request->only('name','type_id','describe','info','price','status');
-        $data_check['slug'] = Str::slug(request('name', '-'));
+        $data_check['slug'] = Str::slug(request('name'), '-');
         $data_check['img'] = $img_name;
         $data = Product::create($data_check);
 
@@ -165,10 +158,10 @@ class ProductsApiController extends Controller
         ]);
     }
 
-    public function prods_by_type(ProductType $productType) {
+    public function prods_by_type($slug) {
 
-        $nameType = ProductType::find($productType)->first();
-        $data = $productType->products;
+        $nameType = ProductType::where('slug', $slug)->first();
+        $data = $nameType->products;
         $products = [];
         $statusProduct = [
             0 => 'Sold out',
@@ -187,7 +180,7 @@ class ProductsApiController extends Controller
                 $products[] = $product;
             }
             return response()->json([
-                'type' => $nameType,
+                'type' => $nameType->name,
                 'products'=> $products,
                 'status_code' => 200,
                 'message'=> 'ok'
