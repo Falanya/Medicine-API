@@ -214,7 +214,7 @@
             </tr>
 
             <tr>
-                <td>Ẩn/Hiện sản phẩm (DELETE)</td>
+                <td>Ẩn/Hiện sản phẩm (POST)</td>
                 <td>/api/products/show-hidden-product/{id}</td>
                 <td>OK</td>
             </tr>
@@ -232,7 +232,7 @@
             </tr>
 
             <tr>
-                <td>Xóa loại sản phẩm (DELETE)</td>
+                <td>Xóa loại sản phẩm (POST)</td>
                 <td>/api/product-types/delete-product-type/{id}</td>
                 <td>OK</td>
             </tr>
