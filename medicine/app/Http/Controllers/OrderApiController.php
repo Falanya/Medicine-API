@@ -31,13 +31,16 @@ class OrderApiController extends Controller
 
         $auth_cart = $auth->carts;
         $carts = [];
+        $total = 0;
         foreach($auth_cart as $key => $item) {
+            $price = $item->product->discount > 0 && $item->product->discount < $item->product->price ? $item->product->discount : $item->product->price;
+            $total += $price*$item->quantity;
             $cart = [
                 'STT' => $key + 1,
                 'name' => $item->product->name,
                 'img' => $item->product->img,
                 'quantity' => $item->quantity,
-                'price' => $item->price
+                'price' => $price
             ];
             $carts[] = $cart;
         }
@@ -45,6 +48,7 @@ class OrderApiController extends Controller
         return response()->json([
             'addresses' => $addresses,
             'carts' => $carts,
+            'total' => $total,
         ]);
     }
 
@@ -163,12 +167,13 @@ class OrderApiController extends Controller
             if($creOrder) {
                 $token = Str::random(40);
 
-                foreach($auth->carts as $cart) {
+                foreach($auth->carts as $key => $cart) {
+                    $price = $cart->product->discount > 0 && $cart->product->discount < $cart->product->price ? $cart->product->discount : $cart->product->price;
                     $data_order = [
                         'order_id' => $creOrder->id,
                         'product_id' => $cart->product_id,
                         'quantity' => $cart->quantity,
-                        'price' => $cart->price
+                        'price' => $price
                     ];
                     ProductOrder::create($data_order);
                 };

@@ -30,14 +30,13 @@ class CartController extends Controller
         if ($cartExists) {
             Cart::where([
                 'user_id' => $user_id,
-                'product_id' => $product->id
+                'product_id' => $product->id,
             ])->increment('quantity', $quantity);
         } else {
             $data = [
                 'user_id' => auth()->user()->id,
                 'product_id' => $product->id,
                 'quantity' => $quantity,
-                'price' => $product->price,
             ];
             if(Cart::create($data)) {
                 return redirect()->back();

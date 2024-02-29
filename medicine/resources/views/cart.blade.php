@@ -18,14 +18,21 @@
                 </tr>
             </thead>
             <tbody>
+                @php
+                    $totalAmount = 0;
+                @endphp
                 @foreach ($carts as $item)
+                @php
+                    $price = $item->product->discount > 0 && $item->product->discount < $item->product->price ? $item->product->discount : $item->product->price;
+                    $totalAmount += $price * $item->quantity;
+                @endphp
                 <tr>
                     <td scope="row">{{ $loop->index + 1 }}</td>
                     <td>
                         <img src="{{ asset('storage/images/products/' . $item->product->img) }}" alt="" width="100">
                     </td>
                     <td>{{ $item->product->name }}</td>
-                    <td>{{ $item->price }}</td>
+                    <td>{{ $price }}</td>
                     <td>
                         <a href="{{ route('cart.minus', $item->product_id) }}"><i class="far fa-minus-square"></i></a>
                         {{ $item->quantity }}
@@ -44,13 +51,7 @@
             </tbody>
         </table>
         <div>
-            @php
-            $totalAmount = 0;
-            foreach($carts as $item) {
-                $totalAmount += $item->price * $item->quantity;
-            }
-            @endphp
-            <h3>Total amount: {{ $totalAmount }}</h3>
+            <h3>Total amount: {{ number_format($totalAmount) }}</h3>
             
             <form action="{{ route('cart.clear') }}" method="POST" role="form">
                 @csrf @method('DELETE')

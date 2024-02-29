@@ -37,7 +37,6 @@ class CartsApiController extends Controller
             'user_id' => $auth->id,
             'product_id' => $product->id,
             'quantity' => $quantity,
-            'price' => $product->price,
         ];
 
         $creCart = Cart::create($data);

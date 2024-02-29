@@ -6,6 +6,7 @@ use App\Http\Controllers\OrderAdminApiController;
 use App\Http\Controllers\OrderApiController;
 use App\Http\Controllers\ProductsApiController;
 use App\Http\Controllers\ProductTypesApiController;
+use App\Http\Controllers\PromotionApiController;
 use App\Http\Controllers\UsersApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -62,6 +63,7 @@ Route::group(['prefix' => 'orders', 'middleware' => 'auth:sanctum'], function() 
 
 Route::group(['prefix'=> 'products'], function () {
     Route::get('/show', [ProductsApiController::class, 'product']);
+    Route::get('/search', [ProductsApiController::class, 'search']);
     Route::get('/details/{slug}', [ProductsApiController::class, 'details']);
     Route::get('/products-by-type/{slug}', [ProductsApiController::class, 'prods_by_type']);
     Route::group(['middleware' => 'auth:sanctum'], function() {
@@ -85,5 +87,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:sanctum'], function() {
         Route::get('show', [OrderAdminApiController::class, 'show']);
         Route::get('details/{order}', [OrderAdminApiController::class, 'details']);
         Route::get('update-status/{order}', [OrderAdminApiController::class, 'update_status']);
+    });
+
+    Route::group(['prefix' => 'promotions'], function() {
+        Route::get('show', [PromotionApiController::class, 'show']);
+        Route::post('promotions/create', [PromotionApiController::class, 'create']);
+        Route::post('edit/{promotion}', [PromotionApiController::class, 'edit']);
+        Route::post('hidden-show/{promotion}', [PromotionApiController::class, 'hidden_show']);
     });
 });

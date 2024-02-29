@@ -17,8 +17,6 @@ return new class extends Migration
             $table->foreign('order_id')->references('id')->on('orders');
             $table->unsignedInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
-            $table->unsignedInteger('promotion_id')->nullable();
-            $table->foreign('promotion_id')->references('id')->on('promotions');
             $table->integer('quantity');
             $table->double('price');
             $table->tinyInteger('object_status')->default(1);

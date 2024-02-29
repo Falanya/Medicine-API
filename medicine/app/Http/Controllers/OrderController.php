@@ -45,17 +45,18 @@ class OrderController extends Controller
             'note' => 'max:255'
         ]);
         $data = $request->only('address_id', 'note');
-        $data['user_id'] = auth()->id();
+        $data['user_id'] = $auth->id;
         $order = Order::create($data);
         if ($order) {
             $token = Str::random(40);
 
             foreach($auth->carts as $cart) {
+                $price = $cart->product->discount > 0 && $cart->product->discount < $cart->product->price ? $cart->product->discount : $cart->product->price;
                 $data_order = [
                     'order_id' => $order->id,
                     'product_id' => $cart->product_id,
                     'quantity' => $cart->quantity,
-                    'price' => $cart->price 
+                    'price' => $price,
                 ];
                 ProductOrder::create($data_order);
             }

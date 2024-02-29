@@ -52,13 +52,20 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $totalAmount = 0;
+                    @endphp
                     @foreach ($carts as $item)
+                    @php
+                        $price = $item->product->discount > 0 && $item->product->discount < $item->product->price ? $item->product->discount : $item->product->price;
+                        $totalAmount += $price*$item->quantity;
+                    @endphp
                     <tr>
                         <td>
                             <img src="{{ asset('storage/images/products/' . $item->product->img) }}" alt="" width="100">
                         </td>
                         <td>{{ $item->product->name }}</td>
-                        <td>{{ $item->price }}</td>
+                        <td>{{ number_format($price) }}</td>
                         <td>
                             {{ $item->quantity }}
                         </td>
@@ -66,6 +73,7 @@
                     @endforeach
                 </tbody>
             </table>
+            <h3>Total Price: {{ number_format($totalAmount) }}</h3>
         </div>
     </div>
 </div>

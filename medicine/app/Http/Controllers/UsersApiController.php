@@ -35,7 +35,6 @@ class UsersApiController extends Controller
         if ($data=User::create($data_check)) {
             Mail::to($data->email)->send(new VerifyAccountApi($data));
             return response()->json([
-                'data' => $data,
                 'status_code' => 200,
                 'message' => 'User created successfully, please check your mail to verify account'
             ]);
@@ -46,7 +45,6 @@ class UsersApiController extends Controller
         if ($user = User::where('email', $email)->whereNull('email_verified_at')->firstOrFail()) {
             if (User::where('email', $email)->update(['email_verified_at' => now()])) {
                 return response()->json([
-                    'data' => $user,
                     'status_code' => 200,
                     'message' => 'Verify account successfully, Now you can login again',
                 ]);
@@ -94,7 +92,6 @@ class UsersApiController extends Controller
             $user = User::Where('email',$data['email'])->first();
             $token = $user->createToken('LOGIN TOKEN', ['*'], now()->addWeek())->plainTextToken;
             return response()->json([
-                'data' => $data,
                 'token' => $token,
                 'status_code' => 200
             ]);

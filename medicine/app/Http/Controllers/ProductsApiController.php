@@ -14,9 +14,6 @@ class ProductsApiController extends Controller
 {
     public function product(Product $product, Request $request) {
         $products = Product::orderBy('id', 'DESC')->where('status',1)->get();
-        if($key = $request->search) {
-            $products = Product::orderBy('id', 'DESC')->where('name','like','%'.$key.'%')->where('status',1)->get();
-        }
         $products_list = [];
         $statusProduct = [
             0 => 'Sold out',
@@ -31,6 +28,7 @@ class ProductsApiController extends Controller
                 'describe' => $item->describe,
                 'info' => $item->info,
                 'price' => number_format($item->price),
+                'discount' => $item->discount,
                 'img' => $item->img,
                 'status' => $statusProduct[$item->status] ?? '',
                 'slug' => $item->slug
@@ -45,6 +43,40 @@ class ProductsApiController extends Controller
         ]);
     }
 
+    public function search(Request $request) {
+        $key = $request->search;
+        if ($key) {
+            $data = Product::orderBy('id', 'DESC')->where('name','like','%'.$key.'%')->where('status', 1)->get();
+            $products = [];
+            $status_content = [
+                0 => "hidden",
+                1 => "show"
+            ];
+            foreach($data as $key => $item) {
+                $product = [
+                    "id" => $item->id,
+                    "name" => $item->name,
+                    "price" => $item->price,
+                    "discount" => $item->discount,
+                    "img" => $item->img,
+                    "slug" => $item->slug,
+                    "status" => $item->status,
+                    "status_content" => $status_content[$item->status] ?? '',
+                ];
+                $products[] = $product;
+            }
+            return response()->json([
+                'data' => $products,
+                'message' => 'Success',
+                'status_code' => 200,
+            ]);
+        }
+        return response()->json([
+            'message' => 'Something errors, please check again',
+            'status_code' => 401
+        ]);
+    }
+
     public function addProduct(Request $request) {
         $validator = Validator::make($request->all(),[
             'name' => 'required',
@@ -52,6 +84,7 @@ class ProductsApiController extends Controller
             'describe' => 'required',
             'info' => 'required',
             'price' => 'required|numeric',
+            'discount' => 'nullable|numeric',
             'img' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
             'imgs' => 'nullable|array',
             'imgs.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
@@ -200,6 +233,7 @@ class ProductsApiController extends Controller
             'describe' => 'required',
             'info' => 'required',
             'price' => 'required|numeric',
+            'discount' => 'nullable|numeric',
             'img' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
             'imgs' => 'nullable|array',
             'imgs.*' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
@@ -257,7 +291,7 @@ class ProductsApiController extends Controller
 
     public function details($slug) {
         $product = Product::where('slug', $slug)->first();
-        $img_details = $product->img_details()->get();
+        $img_details = $product->img_details();
         return response()->json([
             'data' => $product,
             'img_details' => $img_details,

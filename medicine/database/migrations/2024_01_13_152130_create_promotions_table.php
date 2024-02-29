@@ -14,12 +14,15 @@ return new class extends Migration
         Schema::create('promotions', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code', 255);
-            $table->dateTime('fromTime', 6);
-            $table->dateTime('toTime', 6);
-            $table->boolean('enableStatus')->default(0);
-            $table->char('discountType');
-            $table->double('value');
-            $table->tinyInteger('object_status')->default(1);
+            $table->string('name')->nullable();
+            $table->integer('max_users')->nullable();
+            $table->integer('max_users_user')->nullable();
+            $table->string('description')->nullable();
+            $table->double('discount_amount');
+            $table->double('min_amount')->nullable();
+            $table->integer('status')->default(1);
+            $table->timestamp('starts_at')->nullable();
+            $table->timestamp('expires_at')->nullable();
             $table->timestamps();
         });
     }
