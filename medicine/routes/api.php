@@ -59,6 +59,7 @@ Route::group(['prefix' => 'orders', 'middleware' => 'auth:sanctum'], function() 
     Route::post('/post-checkout', [OrderApiController::class, 'post_checkout']);
     Route::get('/history', [OrderApiController::class, 'history']);
     Route::get('/detail/{order}', [OrderApiController::class, 'detail']);
+    Route::post('/apply-promotion', [OrderApiController::class, 'apply-promotion']);
 });
 
 Route::group(['prefix'=> 'products'], function () {

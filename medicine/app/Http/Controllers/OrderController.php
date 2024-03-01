@@ -10,7 +10,9 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Models\ProductOrder;
 use App\Models\ProductType;
+use App\Models\Promotion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -42,9 +44,32 @@ class OrderController extends Controller
         $auth = auth()->user();
         $request->validate([
             'address_id' => 'bail|required',
-            'note' => 'max:255'
+            'note' => 'max:255',
+            'promotion_code' => ['nullable','exists:promotions,code', function($attr,$value,$fail) {
+                $promotion = Promotion::where('code', $value)->first();
+
+                if ($promotion) {
+                    if ($promotion->status == 0) {
+                        return $fail('Voucher is not active');
+                    }
+    
+                    $now = Carbon::now('Asia/Ho_Chi_Minh');
+                    $nowF = Carbon::createFromFormat('Y-m-d H:i:s', $now);
+                    $startsAt = Carbon::createFromFormat('Y-m-d H:i:s', $promotion->starts_at);
+                    $expiresAt = Carbon::createFromFormat('Y-m-d H:i:s', $promotion->expires_at);
+    
+                    if ($nowF->lt($startsAt)) {
+                        return $fail('Voucher can only be used from ' . $startsAt->format('d/m/Y H:i:s'));
+                    }
+    
+                    if ($expiresAt->lt($nowF)) {
+                        return $fail('Voucher has expired');
+                    }
+                }
+            }],
         ]);
-        $data = $request->only('address_id', 'note');
+
+        $data = $request->only('address_id', 'note', 'promotion_code');
         $data['user_id'] = $auth->id;
         $order = Order::create($data);
         if ($order) {

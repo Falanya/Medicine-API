@@ -224,6 +224,7 @@ class ProductsApiController extends Controller
                     'name' => $item->name,
                     'img' => $item->img,
                     'price' => number_format($item->price),
+                    'slug' => $item->slug,
                     'discount' => number_format($item->discount),
                     'status' => $statusProduct[$item->status] ?? '',
                 ];

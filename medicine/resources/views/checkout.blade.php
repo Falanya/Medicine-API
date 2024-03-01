@@ -39,6 +39,15 @@ foreach ($carts as $key => $item) {
                             @error('note') <small> {{ $message }} </small> @enderror
                         </div>
 
+                        <hr>
+
+                        <div class="form-group">
+                            <label for="discount_code">Voucher</label>
+                            <input type="text" class="form-control" name="promotion_code" id="discount_code" placeholder="Input field">
+                            @error('promotion_code') <small> {{ $message }} </small> @enderror
+                            
+                        </div>
+
                         <button type="submit" onclick="return confirm('Would you like to confirm this order?')"
                             class="btn btn-sm btn-primary">Cofirm your order</button>
                     </form>
@@ -47,15 +56,6 @@ foreach ($carts as $key => $item) {
         </div>
 
         <div class="col-md-5">
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    <div class="form-group">
-                        <label for="">Voucher</label>
-                        <input type="text" class="form-control" name="discount_code" id="discount_code" placeholder="Input field">
-                    </div>
-                    <button type="submit" class="btn btn-primary" id="apply-discount">Apply</button>
-                </div>
-            </div>
             <div class="panel panel-info">
                 <div class="panel-body">
                     <p style="font-size: 16px">Subtotal: {{ number_format($totalAmount) }}</p>
@@ -100,6 +100,5 @@ foreach ($carts as $key => $item) {
 </div>
 
 </div>
-
 
 @stop

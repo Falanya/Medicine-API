@@ -10,7 +10,7 @@ class Order extends Model
     use HasFactory;
     protected $appends = ['totalPrice'];
     protected $table = 'orders';
-    protected $fillable = ['user_id','address_id','note','status', 'token','object_status'];
+    protected $fillable = ['user_id','address_id','note', 'promotion_code','status', 'token','object_status'];
 
     public function address() {
         return $this->hasOne(Address::class,'id','address_id');
@@ -26,11 +26,27 @@ class Order extends Model
 
     public function getTotalPriceAttribute() {
         $total = 0;
+        $discount = 0;
         foreach($this->details as $item) {
             $total += $item->price * $item->quantity;
         }
 
-        return $total;
+        if(!empty($this->promotion_code)) {
+            $promotion = Promotion::where('code', $this->promotion_code)->first();
+            if($promotion) {
+                if($promotion->type == "percent") {
+                    $discount = ($promotion->discount_amount / 100) * $total;
+                } elseif ($promotion->type == "fixed") {
+                    $discount = $promotion->discount_amount;
+                } else {
+                    $discount = 0;
+                }
+            }
+        }
+
+        $totalPrice = $total - $discount;
+
+        return $totalPrice;
     }
 
 }

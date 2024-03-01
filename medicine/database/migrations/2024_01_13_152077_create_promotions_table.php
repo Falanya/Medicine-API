@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('promotions', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('code', 255);
+            $table->string('code', 255)->unique();
             $table->string('name')->nullable();
             $table->integer('max_users')->nullable();
             $table->integer('max_users_user')->nullable();

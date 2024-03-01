@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\ProductOrder;
+use App\Models\Promotion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
@@ -141,11 +142,27 @@ class OrderApiController extends Controller
         $validator = Validator::make($request->all(), [
             'address_id' => 'bail|required|exists:addresses,id',
             'note' => 'max:255',
-            'confirm_password' => ['bail', 'required', function($attr,$value,$fail) use($auth) {
-                if(!Hash::check($value, $auth->password)) {
-                    $fail('Your password is incorrect, please try again');
+            'promotion_code' => ['nullable', 'exists:promotions,code', function($attr,$value,$fail) {
+                $promotion = Promotion::where('code', $value)->first();
+                if($promotion) {
+                    $now = Carbon::now('Asia/Ho_Chi_Minh');
+                    $nowF = Carbon::createFromFormat('Y-m-d H:i:s', $now);
+                    $startsAt = Carbon::createFromFormat('Y-m-d H:i:s', $promotion->starts_at);
+                    $expiresAt = Carbon::createFromFormat('Y-m-d H:i:s', $promotion->expires_at);
+
+                    if($promotion->status == 0) {
+                        $fail('Voucher is not active');
+                    }
+
+                    if($nowF->lt($startsAt)) {
+                        $fail('Voucher can only used from '. $startsAt->format('d/m/Y H:i:s'));
+                    }
+
+                    if($expiresAt->lt($nowF)) {
+                        $fail('Voucher had expired');
+                    }
                 }
-            }]
+            }],
         ], [
             'address_id.exists' => "The address you selected doesn't invalid"
         ]);
@@ -157,7 +174,7 @@ class OrderApiController extends Controller
             ]);
         }
 
-        $data = $request->only('address_id','note');
+        $data = $request->only('address_id','note','promotion_code');
         $data['user_id'] = $auth->id;
 
         if ($auth->carts()->count() > 0) {

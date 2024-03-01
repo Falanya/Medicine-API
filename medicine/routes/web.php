@@ -90,6 +90,7 @@ Route::group(['prefix' => 'order', 'middleware' => 'auth'], function() {
     Route::get('/verify/{token}', [OrderController::class, 'verify'])->name('order.verify');
     Route::get('/history', [OrderController::class, 'history'])->name('order.history');
     Route::get('/detail/{order}', [OrderController::class, 'detail'])->name('order.detail');
+    Route::post('apply-promotion', [OrderController::class, 'apply_promotion'])->name('order.apply_promotion');
 
 });
 

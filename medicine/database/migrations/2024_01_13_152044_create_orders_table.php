@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedInteger('address_id');
             $table->foreign('address_id')->references('id')->on('addresses');
             $table->string('note', 255)->nullable();
+            $table->string('promotion_code',255)->nullable();
             $table->boolean('status')->default(0);
             $table->string('token', 50)->nullable();
             $table->bigInteger('object_status')->default(1);
