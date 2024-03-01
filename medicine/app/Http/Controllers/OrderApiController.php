@@ -40,7 +40,7 @@ class OrderApiController extends Controller
                 'name' => $item->product->name,
                 'img' => $item->product->img,
                 'quantity' => $item->quantity,
-                'price' => $price
+                'price' => number_format($price)
             ];
             $carts[] = $cart;
         }

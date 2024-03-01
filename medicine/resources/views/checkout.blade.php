@@ -1,7 +1,13 @@
 @extends('main')
 
 @section('main')
-
+@php
+$totalAmount = 0;
+foreach ($carts as $key => $item) {
+    $price = $item->product->discount > 0 && $item->product->discount < $item->product->price ? $item->product->discount : $item->product->price;
+    $totalAmount += $price*$item->quantity;
+}
+@endphp
 <h2>Order checkout</h2>
 <div class="container">
 
@@ -41,6 +47,23 @@
         </div>
 
         <div class="col-md-5">
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label for="">Voucher</label>
+                        <input type="text" class="form-control" name="discount_code" id="discount_code" placeholder="Input field">
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="apply-discount">Apply</button>
+                </div>
+            </div>
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    <p style="font-size: 16px">Subtotal: {{ number_format($totalAmount) }}</p>
+                    <p style="font-size: 16px">Discount:</p>
+                    <hr>
+                    <p style="font-size: 16px">Total:</p>
+                </div>
+            </div>
             <table class="table table-hover">
                 <thead>
                     <tr>
@@ -48,17 +71,13 @@
                         <th>Name</th>
                         <th>Price</th>
                         <th>Quantity</th>
-                        <th></th>
+                        <th>Subtotal</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @php
-                        $totalAmount = 0;
-                    @endphp
                     @foreach ($carts as $item)
                     @php
                         $price = $item->product->discount > 0 && $item->product->discount < $item->product->price ? $item->product->discount : $item->product->price;
-                        $totalAmount += $price*$item->quantity;
                     @endphp
                     <tr>
                         <td>
@@ -69,11 +88,13 @@
                         <td>
                             {{ $item->quantity }}
                         </td>
+                        <td>
+                            {{ number_format($price * $item->quantity) }}
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
-            <h3>Total Price: {{ number_format($totalAmount) }}</h3>
         </div>
     </div>
 </div>

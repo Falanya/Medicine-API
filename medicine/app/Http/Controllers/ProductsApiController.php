@@ -21,6 +21,13 @@ class ProductsApiController extends Controller
         ];
 
         foreach ($products as $item) {
+            if ($item->discount < $item->price && $item->discount > 0) {
+                $discount = $item->discount;
+                $percen_sale = ($item->price - $item->discount) / $item->price * 100;
+            } else {
+                $discount = 0;
+                $percen_sale = 0;
+            }
             $product = [
                 'id' => $item->id,
                 'name' => $item->name,
@@ -28,7 +35,8 @@ class ProductsApiController extends Controller
                 'describe' => $item->describe,
                 'info' => $item->info,
                 'price' => number_format($item->price),
-                'discount' => $item->discount,
+                'discount' => number_format($discount),
+                'percen_sale' => floor($percen_sale).'%',
                 'img' => $item->img,
                 'status' => $statusProduct[$item->status] ?? '',
                 'slug' => $item->slug
@@ -53,11 +61,19 @@ class ProductsApiController extends Controller
                 1 => "show"
             ];
             foreach($data as $key => $item) {
+                if ($item->discount > 0 && $item->discount < $item->price) {
+                    $discount = $item->discount;
+                    $percen_sale = ($item->price - $item->discount) / $item->price * 100;
+                } else {
+                    $discount = 0;
+                    $percen_sale = 0;
+                }
                 $product = [
                     "id" => $item->id,
                     "name" => $item->name,
-                    "price" => $item->price,
-                    "discount" => $item->discount,
+                    "price" => number_format($item->price),
+                    "discount" => number_format($discount),
+                    "percen_sale" => floor($percen_sale)."%",
                     "img" => $item->img,
                     "slug" => $item->slug,
                     "status" => $item->status,
@@ -110,7 +126,7 @@ class ProductsApiController extends Controller
         $img_name = Str::random(32).".".$request->img->getClientOriginalExtension();
         $request->img->storeAs('images/products', $img_name, 'public');
 
-        $data_check = $request->only('name','type_id','describe','info','price','status');
+        $data_check = $request->only('name','type_id','describe','info','price','discount','status');
         $data_check['slug'] = Str::slug(request('name'), '-');
         $data_check['img'] = $img_name;
         $data = Product::create($data_check);
@@ -208,6 +224,7 @@ class ProductsApiController extends Controller
                     'name' => $item->name,
                     'img' => $item->img,
                     'price' => number_format($item->price),
+                    'discount' => number_format($item->discount),
                     'status' => $statusProduct[$item->status] ?? '',
                 ];
                 $products[] = $product;
@@ -248,7 +265,7 @@ class ProductsApiController extends Controller
             ]);
         }
 
-        $data = $request->only('name','type_id','describe','info','price','status');
+        $data = $request->only('name','type_id','describe','info','price','discount','status');
         $data['slug'] = Str::slug($request->name, '-');
 
         if($request->hasFile('img')) {

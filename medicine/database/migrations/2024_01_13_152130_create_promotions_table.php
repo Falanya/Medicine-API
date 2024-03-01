@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->double('discount_amount');
             $table->double('min_amount')->nullable();
+            $table->enum('type',['percent','fixed'])->default('fixed');
             $table->integer('status')->default(1);
             $table->timestamp('starts_at')->nullable();
             $table->timestamp('expires_at')->nullable();
