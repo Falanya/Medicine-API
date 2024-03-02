@@ -45,7 +45,7 @@ class OrderController extends Controller
         $request->validate([
             'address_id' => 'bail|required',
             'note' => 'max:255',
-            'promotion_code' => ['nullable','exists:promotions,code', function($attr,$value,$fail) {
+            'promotion_code' => ['nullable','exists:promotions,code', function($attr,$value,$fail) use($auth) {
                 $promotion = Promotion::where('code', $value)->first();
 
                 if ($promotion) {
@@ -64,6 +64,23 @@ class OrderController extends Controller
     
                     if ($expiresAt->lt($nowF)) {
                         return $fail('Voucher has expired');
+                    }
+
+                    if(empty($promotion->max_users)) {
+                        return $fail('Voucher has expiredd');
+                    }
+
+                    if($promotion->min_amount != null) {
+                        $totalCart = 0;
+                        if($auth->carts->count() > 0) {
+                            foreach($auth->carts as $key => $item) {
+                                $price = $item->product->discount > 0 && $item->product->discount < $item->product->price ? $item->product->discount : $item->product->price;
+                                $totalCart += $price * $item->quantity;
+                            }
+                        }
+                        if($totalCart < $promotion->min_amount) {
+                            $fail('Order has not reached minimum amount, missing '. number_format($promotion->min_amount - $totalCart));
+                        }
                     }
                 }
             }],
@@ -88,6 +105,12 @@ class OrderController extends Controller
             $auth->carts()->delete();
             $order->token = $token;
             $order->save();
+
+            $promotion = Promotion::where('code', $order->promotion_code)->first();
+            if($promotion) {
+                $promotion->max_users -= 1;
+                $promotion->save();
+            }
             Mail::to($auth->email)->send(new OrderMail($order, $token));
 
             return redirect()->route('home.index');

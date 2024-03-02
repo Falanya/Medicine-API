@@ -82,6 +82,7 @@
                 @endforeach
             </tbody>
         </table>
+        <h3>Discount: {{ number_format($order->discountPrice) }}</h3>
         <h3>Total price: {{ number_format($order->totalPrice) }}</h3>
     </div>
 </div>

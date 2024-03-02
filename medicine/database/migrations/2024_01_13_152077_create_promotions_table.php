@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('code', 255)->unique();
             $table->string('name')->nullable();
             $table->integer('max_users')->nullable();
-            $table->integer('max_users_user')->nullable();
             $table->string('description')->nullable();
             $table->double('discount_amount');
             $table->double('min_amount')->nullable();

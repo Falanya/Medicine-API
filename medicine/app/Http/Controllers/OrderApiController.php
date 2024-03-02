@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderMailApi;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\ProductOrder;
@@ -10,6 +11,7 @@ use App\Models\Promotion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -103,6 +105,7 @@ class OrderApiController extends Controller
                 4 => 'Cancelled'
             ];
             $orderInfo = [
+                'discount' => number_format($order->discountPrice),
                 'totalPrice' => number_format($order->totalPrice),
                 'note' => $order->note,
                 'status_content' => $statusOrder[$order->status] ?? '',
@@ -142,11 +145,10 @@ class OrderApiController extends Controller
         $validator = Validator::make($request->all(), [
             'address_id' => 'bail|required|exists:addresses,id',
             'note' => 'max:255',
-            'promotion_code' => ['nullable', 'exists:promotions,code', function($attr,$value,$fail) {
+            'promotion_code' => ['nullable', 'exists:promotions,code', function($attr,$value,$fail) use($auth) {
                 $promotion = Promotion::where('code', $value)->first();
                 if($promotion) {
                     $now = Carbon::now('Asia/Ho_Chi_Minh');
-                    $nowF = Carbon::createFromFormat('Y-m-d H:i:s', $now);
                     $startsAt = Carbon::createFromFormat('Y-m-d H:i:s', $promotion->starts_at);
                     $expiresAt = Carbon::createFromFormat('Y-m-d H:i:s', $promotion->expires_at);
 
@@ -154,12 +156,29 @@ class OrderApiController extends Controller
                         $fail('Voucher is not active');
                     }
 
-                    if($nowF->lt($startsAt)) {
-                        $fail('Voucher can only used from '. $startsAt->format('d/m/Y H:i:s'));
+                    if($now->lt($startsAt)) {
+                        $fail('Voucher can only used from '. $startsAt);
                     }
 
-                    if($expiresAt->lt($nowF)) {
+                    if($expiresAt->lt($now)) {
                         $fail('Voucher had expired');
+                    }
+
+                    if(empty($promotion->max_users)) {
+                        $fail('Voucher had expirdd');
+                    }
+
+                    if($promotion->min_amount != null) {
+                        if($auth->carts->count() > 0) {
+                            $totalCart = 0;
+                            foreach($auth->carts as $item) {
+                                $price = $item->product->discount > 0 && $item->product->discount < $item->product->price ? $item->product->discount : $item->product->price;
+                                $totalCart += $price * $item->quantity;
+                            }
+                            if($totalCart < $promotion->min_amount) {
+                                $fail('Order has not reached minumum amount, missing '. number_format($promotion->min_amount - $totalCart));
+                            }
+                        }
                     }
                 }
             }],
@@ -179,15 +198,15 @@ class OrderApiController extends Controller
 
         if ($auth->carts()->count() > 0) {
         
-            $creOrder = Order::create($data);
+            $order = Order::create($data);
 
-            if($creOrder) {
+            if($order) {
                 $token = Str::random(40);
 
                 foreach($auth->carts as $key => $cart) {
                     $price = $cart->product->discount > 0 && $cart->product->discount < $cart->product->price ? $cart->product->discount : $cart->product->price;
                     $data_order = [
-                        'order_id' => $creOrder->id,
+                        'order_id' => $order->id,
                         'product_id' => $cart->product_id,
                         'quantity' => $cart->quantity,
                         'price' => $price
@@ -197,13 +216,23 @@ class OrderApiController extends Controller
 
                 $auth->carts()->delete();
 
-                $creOrder->token = $token;
-                $creOrder->created_at = Carbon::now('Asia/Ho_Chi_Minh');
-                $creOrder->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
-                $creOrder->save();
+                $order->token = $token;
+                $order->created_at = Carbon::now('Asia/Ho_Chi_Minh');
+                $order->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
+                $order->save();
+
+                $promotion = Promotion::where('code', $order->promotion_code)->first();
+                if($promotion) {
+                    if(!empty($promotion->max_users)) {
+                        $promotion->max_users -= 1;
+                        $promotion->save();
+                    }
+                }
+
+                Mail::to($auth->email)->send(new OrderMailApi($order,$token));
 
                 return response()->json([
-                    'message' => 'The order created succressfully',
+                    'message' => 'The order created succressfully, please check mail to verify',
                     'status_code' => 200,
                 ]);
             }
@@ -218,5 +247,23 @@ class OrderApiController extends Controller
                 'status_code' => 404
             ]);
         }
+    }
+
+    public function verify($token) {
+        $order = Order::where('token', $token)->firstOrFail();
+        if($order) {
+            $order->token = null;
+            $order->status = 1;
+            $order->save();
+
+            return response()->json([
+                'message' => 'Verify your order successfully',
+                'status_code' => 200,
+            ]);
+        }
+        return response()->json([
+            'message' => 'Cannot found order, please check again',
+            'status_code' => 401,
+        ]);
     }
 }
