@@ -156,7 +156,7 @@
                 <td></td>
             </tr>
 
-            {{-- Đặt hàng và quản lý đơn hàng của người dùng --}}
+            {{-- Đặt hàng và quản lý đơn hàng --}}
             <tr>
                 <td rowspan="4">
                     <h2>Order</h2>
@@ -244,8 +244,65 @@
                 <td></td>
             </tr>
 
-            {{-- Carts --}}
+            {{-- ADMIN --}}
+            <tr>
+                <td rowspan="8">
+                    <h2>Admin</h2>
+                </td>
+                <td>Hiển thị đơn hàng (GET)</td>
+                <td>/api/admin/orders/show</td>
+                <td>OK</td>
+            </tr>
 
+            <tr>
+                <td>Hiển thị chi tiết đơn hàng (GET)</td>
+                <td>/api/admin/orders/details/{id}</td>
+                <td>OK</td>
+            </tr>
+
+            <tr>
+                <td>Cập nhật trạng thái đơn hàng (GET)</td>
+                <td>/api/admin/orders/update-status/{id}</td>
+                <td>OK</td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+
+            <tr>
+                <td>Hiển thị loại voucher (GET)</td>
+                <td>/api/admin/promotions/show</td>
+                <td>OK</td>
+            </tr>
+
+            <tr>
+                <td>Hiển thị chi tiết voucher (GET)</td>
+                <td>/api/admin/promotions/details/{id}</td>
+                <td>OK</td>
+            </tr>
+
+            <tr>
+                <td>Thêm voucher (POST)</td>
+                <td>/api/admin/promotions/create</td>
+                <td>OK</td>
+            </tr>
+
+            <tr>
+                <td>Sửa voucher (POST)</td>
+                <td>/api/admin/promotions/{id}</td>
+                <td>OK</td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
 
             {{-- Orders --}}
         </tbody>

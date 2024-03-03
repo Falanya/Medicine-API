@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\ImgProduct;
 use App\Models\Product;
 use App\Models\ProductType;
@@ -314,6 +315,40 @@ class ProductsApiController extends Controller
             'data' => $product,
             'img_details' => $img_details,
             'status_code' => 200,
+        ]);
+    }
+
+    public function post_comment(Product $product, Request $request) {
+        $auth = auth()->user();
+        if ($auth) {
+            $validator = Validator::make($request->all(), [
+                'comment' => 'required|string|min:10|max:255',
+            ]);
+            if ($validator->fails()) {
+                return response()->json([
+                    'errors' => $validator->errors()->all(),
+                    'status_code' => 401,
+                ]);
+            }
+    
+            $data = $request->only('comment');
+            $data['user_id'] = $auth->id;
+            $data['product_id'] = $product->id;
+            $check = Comment::create($data);
+            if($check) {
+                return response()->json([
+                    'message' => 'Comment created successfully',
+                    'status_code' => 200,
+                ]);
+            }
+            return response()->json([
+                'message' => 'Something errors, please try again',
+                'status_code' => 401,
+            ]);
+        }
+        return response()->json([
+            'message' => 'User not login',
+            'status_code' => 401,
         ]);
     }
 

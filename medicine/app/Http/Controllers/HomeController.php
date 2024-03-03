@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Product;
 use App\Models\ProductType;
 use App\Models\User;
@@ -21,7 +22,8 @@ class HomeController extends Controller
 
     public function product(Product $product) {
         $proTypes = ProductType::orderBy('name','ASC')->get();
-        return view('product', compact('product','proTypes'));
+        $comments = Comment::where('product_id', $product->id)->orderBy('id','DESC')->get();
+        return view('product', compact('product','proTypes', 'comments'));
     }
 
     public function productType(ProductType $productType) {
@@ -30,7 +32,17 @@ class HomeController extends Controller
         return view('productType', compact('productType', 'proTypes', 'products'));
     }
 
-    public function post_comment() {
-        
+    public function post_comment($product, Request $request) {
+        $request->validate([
+            'comment' => 'required|string|min:10|max:255',
+        ]);
+        $data = $request->only('comment');
+        $data['user_id'] = auth()->user()->id;
+        $data['product_id'] = $product;
+        $check = Comment::create($data);
+        if($check) {
+            return redirect()->back();
+        }
+        return redirect()->back();
     }
 }

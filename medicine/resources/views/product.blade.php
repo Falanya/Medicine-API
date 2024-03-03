@@ -29,9 +29,11 @@
 <h3>Comments</h3>
 
 @if (auth()->check())
-<form action="" method="POST" role="form">
+<form action="{{ route('home.post_comment', $product->id) }}" method="POST" role="form">
+    @csrf
     <div class="form-group">
         <textarea name="comment" class="form-control" rows="3" placeholder="Nội dung bình luận"></textarea>
+        @error('comment') <small>{{ $message }}</small> @enderror
     </div>
 
     <button type="submit" class="btn btn-primary">Submit</button>
@@ -44,33 +46,22 @@
 @endif
 <hr>
 
-<div class="media">
-    <a class="pull-left" href="#">
-        <img width="50" class="media-object" src="#" alt="Image">
-    </a>
-    <div class="media-body">
-        <h4 class="media-heading">Nguyễn Văn A</h4>
-        <p>Text goes here...</p>
-        <p>
-            <a href="" class="btn btn-primary btn-sm">Sửa</a>
-            <a href="" class="btn btn-primary btn-sm">Xóa</a>
-        </p>
-    </div>
-</div>
+@foreach ($comments as $key => $item)
 
 <div class="media">
-    <a class="pull-left" href="#">
-        <img width="50" class="media-object" src="#" alt="Image">
-    </a>
     <div class="media-body">
-        <h4 class="media-heading">Nguyễn Văn A</h4>
-        <p>Text goes here...</p>
-        <p>
-            <a href="" class="btn btn-primary btn-sm">Sửa</a>
-            <a href="" class="btn btn-primary btn-sm">Xóa</a>
+        <h4 class="media-heading" style="font-weight: bold">{{ $item->user->fullname }} <small>{{ $item->created_at->format('d/m/Y') }}</small></h4>
+        <p>{{ $item->comment }}</p>
+        @if (auth()->id() == $item->user_id)
+        <p class="text-right">
+            <a href="" class="btn btn-primary btn-sm">Edit</a>
+            <a href="" class="btn btn-primary btn-sm">Remove</a>
         </p>
+        @endif
     </div>
+    <hr>
 </div>
 
+@endforeach
 
 @stop

@@ -9,6 +9,38 @@ use App\Models\Product;
 
 class CartsApiController extends Controller
 {
+    public function show() {
+        $auth = auth()->user();
+        if ($auth) {
+            $cart = $auth->carts;
+            $products = [];
+            $total = 0;
+            foreach($cart as $key => $item) {
+                $price = $item->product->discount > 0 && $item->product->discount < $item->product->price ? $item->product->discount : $item->product->price;
+                $product = [
+                    'STT' => $key + 1,
+                    'img' => $item->product->img,
+                    'name' => $item->product->name,
+                    'price' => number_format($price),
+                    'quantity' => $item->quantity,
+                ];
+                $products[] = $product;
+                $total += $price*$item->quantity;
+            }
+            return response()->json([
+                'data' => $products,
+                'total' => number_format($total),
+                'status_code' => 200,
+                'message' => 'Success'
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'User not login',
+                'status_code' => 401,
+            ]);
+        }
+    }
+
     public function add_cart(Product $product, Request $request) {
         $quantity = $request->quantity ? floor($request->quantity) : 1;
         $auth = auth()->user();

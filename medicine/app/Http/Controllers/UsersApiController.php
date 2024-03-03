@@ -36,7 +36,7 @@ class UsersApiController extends Controller
             Mail::to($data->email)->send(new VerifyAccountApi($data));
             return response()->json([
                 'status_code' => 200,
-                'message' => 'User created successfully, please check your mail to verify account'
+                'message' => 'Please check your mail to verify account!!!'
             ]);
         }
     }

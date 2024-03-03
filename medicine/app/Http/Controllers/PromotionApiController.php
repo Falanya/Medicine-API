@@ -174,4 +174,39 @@ class PromotionApiController extends Controller
             ]);
         }
     }
+
+    public function details(Promotion $promotion) {
+        $auth = auth()->user();
+        if ($auth->role_id == 2) {
+            $discount_amount = 0;
+            if($promotion->type == "percent") {
+                $discount_amount = $promotion->discount_amount.'%';
+            } elseif ($promotion->type == "fixed") {
+                $discount_amount = number_format($promotion->discount_amount);
+            } else {
+                $discount_amount = 0;
+            }
+            $details = [
+                'id' => $promotion->id,
+                'name' => $promotion->name,
+                'code' => $promotion->code,
+                'max_users' => $promotion->max_users,
+                'description' => $promotion->description,
+                'discount_amount' => $discount_amount,
+                'min_amount' => number_format($promotion->min_amount),
+                'type' => $promotion->type,
+                'starts_at' => $promotion->starts_at,
+                'expires_at' => $promotion->expires_at,
+            ];
+            return response()->json([
+                'data' => $details,
+                'status_code' => 200,
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Cannot verify role user',
+                'status_code' => 401,
+            ]);
+        }
+    }
 }

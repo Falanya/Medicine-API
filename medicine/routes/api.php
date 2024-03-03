@@ -71,6 +71,7 @@ Route::group(['prefix'=> 'products'], function () {
         Route::post('/add-product', [ProductsApiController::class, 'addProduct']);
         Route::post('/show-hidden-product/{product}', [ProductsApiController::class, 'show_hidden_product']);
         Route::post('/edit-product/{product}', [ProductsApiController::class, 'edit_product']);
+        Route::post('/comment/{product}', [ProductsApiController::class, 'post_comment']);
     });
 });
 
@@ -93,7 +94,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:sanctum'], function() {
     Route::group(['prefix' => 'promotions'], function() {
         Route::get('show', [PromotionApiController::class, 'show']);
         Route::post('create', [PromotionApiController::class, 'create']);
+        Route::get('details/{promotion}', [PromotionApiController::class, 'details']);
         Route::post('edit/{promotion}', [PromotionApiController::class, 'edit']);
-        Route::post('hidden-show/{promotion}', [PromotionApiController::class, 'hidden_show']);
     });
 });

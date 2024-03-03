@@ -39,6 +39,7 @@ Route::group(['prefix' => ''], function() {
     Route::get('product/{product}', [HomeController::class, 'product'])->name('home.product');
     Route::get('productType/{productType}', [HomeController::class, 'productType'])->name('home.productType');
     Route::get('about', [HomeController::class, 'about'])->name('home.about');
+    Route::post('comment/{product}', [HomeController::class, 'post_comment'])->name('home.post_comment');
 });
 
 Route::group(['prefix'=> 'account'], function() {
@@ -93,8 +94,6 @@ Route::group(['prefix' => 'order', 'middleware' => 'auth'], function() {
     Route::post('apply-promotion', [OrderController::class, 'apply_promotion'])->name('order.apply_promotion');
 
 });
-
-Route::post('/comment/{product_id}', [HomeController::class, 'post_comment'])->name('home.comment');
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
     Route::get('/', [AdminController::class, 'index'])->name('admin.index');
