@@ -13,10 +13,10 @@
         <li>
             <a href="{{ route('account.change_password') }}">Password</a>
         </li>
-        <li class="active">
+        <li>
             <a href="{{ route('order.history') }}">Orders</a>
         </li>
-        <li>
+        <li class="active">
             <a href="{{ route('account.promotions') }}">Voucher</a>
         </li>
     </ul>

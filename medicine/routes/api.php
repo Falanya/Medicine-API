@@ -42,6 +42,8 @@ Route::group(['prefix'=> 'users'], function () {
         Route::put('edit-address/{address}', [AddressApiController::class, 'edit_address']);
         Route::post('delete-address/{address}', [AddressApiController::class, 'delete_address']);
         Route::post('delete-all-address', [AddressApiController::class, 'delete_all_address']);
+
+        Route::get('promotions', [PromotionApiController::class, 'show_user']);
     });
 });
 

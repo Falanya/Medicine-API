@@ -44,7 +44,7 @@ Route::group(['prefix' => ''], function() {
 
 Route::group(['prefix'=> 'account'], function() {
     Route::get('/login', [AccountController::class, 'login'])->name('account.login');
-    Route::post('/login', [AccountController::class, 'check_login']);
+    Route::post('/login', [AccountController::class, 'check_login'])->name('account.post_login');
 
     Route::get('/register', [AccountController::class, 'register'])->name('account.register');
     Route::post('/register', [AccountController::class, 'check_register']);
@@ -64,13 +64,14 @@ Route::group(['prefix'=> 'account'], function() {
         Route::post('/edit-address/{address}', [AddressController::class, 'check_edit_address'])->name('account.check_edit_address');
         Route::delete('/delete-address/{address}', [AddressController::class, 'delete_address'])->name('account.delete_address');
         Route::delete('/delete-all-address', [AddressController::class, 'delete_all_address'])->name('account.delete_all_address');
+
+        Route::get('/promotions', [AccountController::class, 'show_promotions'])->name('account.promotions');
     });
 
     Route::get('/forgot-password', [AccountController::class, 'forgot_password'])->name('account.forgot_password');
-    Route::post('/forgot-password', [AccountController::class, 'check_forgot_password']);
-
-    Route::get('/reset-password', [AccountController::class, 'reset_password'])->name('account.reset_password');
-    Route::post('/reset-password', [AccountController::class, 'check_reset_password']);
+    Route::post('/process-forgot-password', [AccountController::class, 'process_forgot_password'])->name('account.process_forgot_password');
+    Route::get('/reset-password/{token}', [AccountController::class, 'reset_password'])->name('account.reset_password');
+    Route::post('/process-reset-password', [AccountController::class, 'process_reset_password'])->name('account.process_reset_password');
 
     Route::get('/logout', [AccountController::class, 'check_logout'])->name('account.logout');
 });

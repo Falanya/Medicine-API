@@ -16,6 +16,9 @@
         <li>
             <a href="{{ route('order.history') }}">Orders</a>
         </li>
+        <li>
+            <a href="{{ route('account.promotions') }}">Voucher</a>
+        </li>
     </ul>
 </nav>
 

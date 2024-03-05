@@ -10,7 +10,6 @@
                     <form action="" method="POST" role="form">
                         @csrf
                         <legend>Form login</legend>
-
                         <div class="form-group">
                             <label for="">Email</label>
                             <input type="text" class="form-control" name="email" placeholder="Input email">
@@ -20,11 +19,11 @@
                         <div class="form-group">
                             <label for="">Password</label>
                             <input type="password" class="form-control" name="password" placeholder="Input password">
-                            @error('password') <small> {{ $message }} </small> @enderror
                         </div>
 
                         <button type="submit" class="btn btn-sm btn-primary">Login now</button>
                         <a href="{{ route('account.register') }}">Sign up</a>
+                        <a style="margin-left: 20%" href="{{ route('account.forgot_password') }}">Forgot password?</a>
                     </form>
                 </div>
             </div>
