@@ -25,11 +25,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 Route::get('/order/verify/{token}', [OrderApiController::class, 'verify'])->name('orders.verify');
 Route::group(['prefix'=> 'users'], function () {
     Route::post('register', [UsersApiController::class, 'check_register']);
     Route::post('login', [UsersApiController::class, 'check_login']);
     Route::get('verify-account/{email}', [UsersApiController::class, 'verify_account'])->name('users.verify-account');
+
     Route::group(['middleware' => 'auth:sanctum'], function() {
         Route::post('logout', [UsersApiController::class, 'logout']);
         Route::post('delete-all-tokens', [UsersApiController::class, 'delete_all_tokens']);

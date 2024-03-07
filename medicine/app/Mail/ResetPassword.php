@@ -13,10 +13,10 @@ class ResetPassword extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $formData;
     /**
      * Create a new message instance.
      */
+    public $formData;
     public function __construct($formData)
     {
         $this->formData = $formData;
@@ -28,7 +28,7 @@ class ResetPassword extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: $this->formData['mailSubject'],
+            subject: 'You have requested to reset password',
         );
     }
 
@@ -38,7 +38,7 @@ class ResetPassword extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'email.reset-password',
+            view: 'email.forgot-password',
         );
     }
 

@@ -50,6 +50,11 @@ Route::group(['prefix'=> 'account'], function() {
     Route::post('/register', [AccountController::class, 'check_register']);
     Route::get('/verify-account/{email}', [AccountController::class,'verify_account'])->name('account.verify_account');
 
+    Route::get('/forgot-password', [AccountController::class, 'forgot_password'])->name('account.forgot_password');
+    Route::post('/process-forgot-password', [AccountController::class, 'process_forgot_password'])->name('account.process_forgot_password');
+    Route::get('/reset-password/{token}', [AccountController::class, 'reset_password'])->name('account.reset_password');
+    Route::post('/process-reset-password', [AccountController::class, 'process_reset_password'])->name('account.process_reset_password');
+
     Route::group(['middleware' => 'auth'], function() {
         Route::get('/profile', [AccountController::class, 'profile'])->name('account.profile');
         Route::post('/profile', [AccountController::class,'check_profile']);
@@ -67,12 +72,7 @@ Route::group(['prefix'=> 'account'], function() {
 
         Route::get('/promotions', [AccountController::class, 'show_promotions'])->name('account.promotions');
     });
-
-    Route::get('/forgot-password', [AccountController::class, 'forgot_password'])->name('account.forgot_password');
-    Route::post('/process-forgot-password', [AccountController::class, 'process_forgot_password'])->name('account.process_forgot_password');
-    Route::get('/reset-password/{token}', [AccountController::class, 'reset_password'])->name('account.reset_password');
-    Route::post('/process-reset-password', [AccountController::class, 'process_reset_password'])->name('account.process_reset_password');
-
+    
     Route::get('/logout', [AccountController::class, 'check_logout'])->name('account.logout');
 });
 

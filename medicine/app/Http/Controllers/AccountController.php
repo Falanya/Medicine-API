@@ -103,68 +103,6 @@ class AccountController extends Controller
         }
     }
 
-    public function forgot_password() {
-        $proTypes = ProductType::orderBy('name','ASC')->get();
-        return view('account.forgot-password', compact('proTypes'));
-    }
-
-    public function process_forgot_password(Request $request) {
-        $request->validate([
-            'email' => 'required|email|exists:users,email',
-        ]);
-
-        $token = Str::random(60);
-
-        $existsEmail = DB::table('password_reset_tokens')->where('email', $request->email)->first();
-        if($existsEmail) {
-            DB::table('password_reset_tokens')->where('email', $request->email)->delete();
-        }
-
-        DB::table('password_reset_tokens')->insert([
-            'email' => $request->email,
-            'token' => $token,
-            'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
-        ]);
-
-        $user = User::where('email', $request->email)->first();
-
-        $formData = [
-            'token' => $token,
-            'user' => $user,
-            'mailSubject' => 'You have requested to reset your password.'
-        ];
-        Mail::to($request->email)->send(new ResetPassword($formData));
-
-        return redirect()->route('account.login')->with('ok','Please check email to reset password');
-    }
-
-    public function reset_password($token) {
-        $proTypes = DB::table('product_types')->orderBy('name','ASC')->get();
-        $tokenExists = DB::table('password_reset_tokens')->where('token', $token)->first();
-        if($tokenExists == null) {
-            return redirect()->route('account.forgot_password')->with('no','Invalid request');
-        }
-        return view('account.reset-password', compact('proTypes','token'));
-    }
-
-    public function process_reset_password(Request $request) {
-        $token = $request->token;
-        $tokenExists = DB::table('password_reset_tokens')->where('token',$token)->first();
-        if($tokenExists == null) {
-            return redirect()->route('account.forgot_password')->with('no','Invalid request');
-        }
-        $user = User::where('email',$tokenExists->email)->first();
-        $request->validate([
-            'password' => 'required|min:6',
-            'confirm_password' => 'required|same:password',
-        ]);
-
-        User::where('id', $user->id)->update([
-            'password' => Hash::make($request->password),
-        ]);
-        return redirect()->route('account.login')->with('ok','Reset password successfully');
-    }
-
     public function profile() {
         $proTypes = ProductType::orderBy('name','ASC')->get();
         $auth = auth()->user();
@@ -193,12 +131,65 @@ class AccountController extends Controller
 
     }
 
+    public function forgot_password() {
+        return view('medicine.forgot-password');
+    }
+
+    public function process_forgot_password(Request $request) {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        $existEmail = DB::table('password_reset_tokens')->where('email', $request->email)->first();
+        if($existEmail) {
+            DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+        }
+        $token = Str::random(60);
+        $user = User::where('email', $request->email)->first();
+        DB::table('password_reset_tokens')->insert([
+            'email' => $user->email,
+            'token' => $token,
+            'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
+        ]);
+
+        $formData = [
+            'user' => $user,
+            'token' => $token,
+        ];
+
+        Mail::to($request->email)->send(new ResetPassword($formData));
+
+        return redirect()->route('account.login');
+    }
+
+    public function reset_password($token) {
+        $tokenExists = DB::table('password_reset_tokens')->where('token', $token)->first();
+        if($tokenExists == null) {
+            return redirect()->route('account.forgot_password')->with('no','Invalid request');
+        }
+        return view('medicine.reset-password', compact('token'));
+    }
+
+    public function process_reset_password(Request $request) {
+        $request->validate([
+            'token' => 'required|exists:password_reset_tokens,token',
+            'password' => 'required|min:6',
+            'confirm_password' => 'required|same:password',
+        ]);
+        $token = $request->token;
+        $tokenExists = DB::table('password_reset_tokens')->where('token',$token)->first();
+        $user = User::where('email',$tokenExists->email)->first();
+        if($tokenExists == null) {
+            return redirect()->route('account.forgot_password')->with('no','Invalid request');
+        }
+        User::where('id', $user->id)->update([
+            'password' => Hash::make($request->password),
+        ]);
+        return redirect()->route('account.login')->with('ok','Reset password successfully');
+    }
+
     public function show_promotions() {
         
     }
-
-    
-
-    
 
 }

@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ResetPasswordApi;
 use App\Mail\VerifyAccountApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class UsersApiController extends Controller
 {
@@ -184,5 +187,44 @@ class UsersApiController extends Controller
             'status_code' => 404,
             'message' => 'Something errors, please check again'
         ]);
+    }
+
+    public function forgot_password() {
+        return view('medicine.forgot-password');
+    }
+
+    public function process_forgot_password(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $token = Str::random(60);
+        $user = User::where('email', $request->email)->first();
+        $existsEmail = DB::table('password_reset_tokens')->where('email', $request->email)->first();
+        if($existsEmail) {
+            DB::table('password_reset_tokens')->where('email', $request->email)->delete(); 
+        }
+        DB::table('password_reset_tokens')->insert([
+            'email' => $user->email,
+            'token' => $token,
+        ]);
+
+        $check = Mail::to($request->email)->send(new ResetPasswordApi($token,$user));
+        if($check) {
+            return response()->json([
+                'message' => 'Please check mail to reset your password',
+                'status_code' => 200
+            ]);
+        } else{
+            return response()->json([
+                'message' => 'Something errors, please try again',
+                'status_code' => 401,
+            ]);
+        }
+
     }
 }

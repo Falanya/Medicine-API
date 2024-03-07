@@ -23,7 +23,6 @@
 
                         <button type="submit" class="btn btn-sm btn-primary">Login now</button>
                         <a href="{{ route('account.register') }}">Sign up</a>
-                        <a style="margin-left: 20%" href="{{ route('account.forgot_password') }}">Forgot password?</a>
                     </form>
                 </div>
             </div>
