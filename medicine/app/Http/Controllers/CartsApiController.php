@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Illuminate\Support\Facades\Validator;
 
 class CartsApiController extends Controller
 {
@@ -85,87 +86,50 @@ class CartsApiController extends Controller
         ]);
     }
 
-    public function plus_1_cart(Product $product, Request $request) {
+    public function edit_quantity(Product $product ,Request $request) {
         $auth = auth()->user();
+        $validator = Validator::make($request->all(), [
+            'quantity' => ['required','numeric', function($attr,$value,$fail) {
+                if($value < 1) {
+                    $fail('Quantity must greater than 1');
+                }
+            }],
+        ]);
+        if($validator->fails()) {
+            return response()->json([
+                'message' => $validator->errors()->all(),
+                'status_code' => 401,
+            ]);
+        }
         $quantity = $request->quantity ? floor($request->quantity) : 1;
-        $cartExist = Cart::where([
+        $cart = Cart::where([
             'user_id' => $auth->id,
-            'product_id' => $product->id
+            'product_id' => $product->id,
         ])->first();
-
-        if(!$cartExist) {
-            return response()->json([
-                'data' => $cartExist,
-                'status_code' => 404,
-                'message' => 'Unable to find product from your cart, please check again'
+        if($cart) {
+            $check = Cart::where([
+                'user_id' => $auth->id,
+                'product_id' => $product->id,
+            ])->update([
+                'quantity' => $quantity,
             ]);
-        }
-
-        $cartUser = Cart::where([
-            'user_id' => $auth->id,
-            'product_id' => $product->id
-        ]);
-
-        $addCart = $cartUser->increment('quantity', $quantity);
-        if($addCart) {
-            return response()->json([
-                'data' => Cart::where(['user_id' => $auth->id, 'product_id' => $product->id])->first(),
-                'status_code' => 200,
-                'message' => 'This product has been successfully added to your cart'
-            ]);
-        }
-
-        return response()->json([
-            'data' => null,
-            'status_code' => 404,
-            'message' => 'Unable to add product to your cart, please try again'
-        ]);
-    }
-
-    public function minus_1_cart(Product $product, Request $request) {
-        $quantity = $request->quantity ? floor($request->quantity) : 1;
-        $auth = auth()->user();
-        $cartExist = Cart::where([
-            'user_id' => $auth->id,
-            'product_id' => $product->id
-        ])->first();
-
-        if(!$cartExist) {
-            return response()->json([
-                'data' => $cartExist,
-                'status_code' => 404,
-                'message' => 'Unable find product from your cart, please check again'
-            ]);
-        }
-
-        $cartUser = Cart::where([
-            'user_id' => $auth->id,
-            'product_id' => $product->id
-        ]);
-        
-        if($cartExist->quantity > 1) {
-            $minusCart = $cartUser->decrement('quantity', $quantity);
-
-            if($minusCart) {
+            if($check) {
                 return response()->json([
-                    'data' => Cart::where(['user_id' => $auth->id, 'product_id' => $product->id])->first(),
+                    'message' => 'Success',
                     'status_code' => 200,
-                    'message' => 'This product has been successfully removed from you cart'
                 ]);
             }
-
             return response()->json([
-                'data' => null,
-                'status_code' => 404,
-                'message' => 'Unable to add this product to your cart, please try again'
+                'message' => 'Something errors, please check again',
+                'status_code' => 401,
             ]);
         } else {
             return response()->json([
-                'data' => null,
-                'status_code' => 404,
-                'message' => 'The number of product must be at least 1'
+                'message' => 'Cannot find product from you cart',
+                'status_code' => 401,
             ]);
         }
+        
     }
 
     public function delete_cart(Product $product) {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ProductTypeResource;
 use App\Models\ProductType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -18,6 +19,11 @@ class ProductTypesApiController extends Controller
             'status_code' => 200,
             'message' => 'ok'
         ]);
+    }
+
+    public function show_for_app() {
+        $proTypes = ProductType::orderBy('name','ASC')->where('object_status',1)->get();
+        return ProductTypeResource::collection($proTypes);
     }
 
     public function addProductType(Request $request) {

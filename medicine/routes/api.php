@@ -52,8 +52,7 @@ Route::group(['prefix'=> 'users'], function () {
 Route::group(['prefix'=> 'carts', 'middleware'=> 'auth:sanctum'], function () {
     Route::get('/cart', [CartsApiController::class, 'show']);
     Route::get('/add/{product}', [CartsApiController::class, 'add_cart']);
-    Route::get('/plus-1/{product}', [CartsApiController::class, 'plus_1_cart']);
-    Route::get('/minus-1/{product}', [CartsApiController::class, 'minus_1_cart']);
+    Route::post('/edit-quantity/{product}', [CartsApiController::class, 'edit_quantity']);
     Route::get('/delete/{product}', [CartsApiController::class, 'delete_cart']);
     Route::get('/clear', [CartsApiController::class,'clear_cart']);
 });
@@ -68,6 +67,7 @@ Route::group(['prefix' => 'orders', 'middleware' => 'auth:sanctum'], function() 
 
 Route::group(['prefix'=> 'products'], function () {
     Route::get('/show', [ProductsApiController::class, 'product']);
+    Route::get('/show-for-app',[ProductsApiController::class, 'product_for_app']);
     Route::get('/search', [ProductsApiController::class, 'search']);
     Route::get('/details/{slug}', [ProductsApiController::class, 'details']);
     Route::get('/products-by-type/{slug}', [ProductsApiController::class, 'prods_by_type']);
@@ -81,6 +81,7 @@ Route::group(['prefix'=> 'products'], function () {
 
 Route::group(['prefix'=> 'product-types'], function () {
     Route::get('show', [ProductTypesApiController::class, 'show']);
+    Route::get('show-for-app', [ProductTypesApiController::class, 'show_for_app']);
     Route::group(['middleware' => 'auth:sanctum'], function() {
         Route::post('add-product-type', [ProductTypesApiController::class, 'addProductType']);
         Route::post('edit-product-type/{productType}', [ProductTypesApiController::class, 'edit_product_type']);

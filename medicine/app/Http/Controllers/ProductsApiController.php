@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProductResource;
 use App\Models\Comment;
 use App\Models\ImgProduct;
 use App\Models\Product;
@@ -50,6 +51,11 @@ class ProductsApiController extends Controller
             'status_code' => 200,
             'message' => 'ok'
         ]);
+    }
+
+    public function product_for_app() {
+        $products = Product::orderBy('id', 'DESC')->where('status', 1)->get();
+        return ProductResource::collection($products);
     }
 
     public function search(Request $request) {

@@ -20,9 +20,12 @@
                             <label for="">Password</label>
                             <input type="password" class="form-control" name="password" placeholder="Input password">
                         </div>
-
-                        <button type="submit" class="btn btn-sm btn-primary">Login now</button>
-                        <a href="{{ route('account.register') }}">Sign up</a>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-sm btn-primary">Login now</button>
+                        </div>
+                        <hr>
+                        <a href="{{ route('account.register') }}">Sign up |</a>
+                        <a href="{{ route('account.forgot_password') }}">Forgot password?</a>
                     </form>
                 </div>
             </div>
