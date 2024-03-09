@@ -12,6 +12,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $append = ['totalPriceCart'];
     protected $table = "users";
     protected $fillable = ['fullname', 'email', 'password', 'gender'];
     protected $hidden = ['password', 'created_at', 'updated_at', 'created_by', 'updated_by','email_verified_at'];
@@ -34,6 +35,15 @@ class User extends Authenticatable
 
     public function comment() {
         return $this->hasMany(Comment::class,'user_id','id');
+    }
+
+    public function getTotalPriceCartAttribute() {
+        $total = 0;
+        foreach($this->carts as $item) {
+            $price = $item->product->discount > 0 && $item->product->discount < $item->product->price ? $item->product->discount : $item->product->price;
+            $total += $price * $item->quantity;
+        }
+        return number_format($total);
     }
 
 }

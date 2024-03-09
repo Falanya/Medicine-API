@@ -37,9 +37,11 @@ Route::group(['prefix'=> 'users'], function () {
         Route::post('delete-all-tokens', [UsersApiController::class, 'delete_all_tokens']);
 
         Route::get('profile', [UsersApiController::class, 'profile']);
+        Route::get('profile-for-app', [UsersApiController::class, 'profile_for_app']);
         Route::put('change-profile', [UsersApiController::class, 'change_profile']);
         
-        Route::get('address', [AddressApiController::class, 'address']);
+        Route::get('address', [AddressApiController::class, 'show']);
+        Route::get('address-for-app', [AddressApiController::class, 'show_for_app']);
         Route::post('add-address', [AddressApiController::class, 'add_address']);
         Route::put('edit-address/{address}', [AddressApiController::class, 'edit_address']);
         Route::post('delete-address/{address}', [AddressApiController::class, 'delete_address']);
@@ -51,6 +53,7 @@ Route::group(['prefix'=> 'users'], function () {
 
 Route::group(['prefix'=> 'carts', 'middleware'=> 'auth:sanctum'], function () {
     Route::get('/cart', [CartsApiController::class, 'show']);
+    Route::get('/cart-for-app', [CartsApiController::class, 'show_for_app']);
     Route::get('/add/{product}', [CartsApiController::class, 'add_cart']);
     Route::post('/edit-quantity/{product}', [CartsApiController::class, 'edit_quantity']);
     Route::get('/delete/{product}', [CartsApiController::class, 'delete_cart']);
@@ -71,6 +74,7 @@ Route::group(['prefix'=> 'products'], function () {
     Route::get('/search', [ProductsApiController::class, 'search']);
     Route::get('/details/{slug}', [ProductsApiController::class, 'details']);
     Route::get('/products-by-type/{slug}', [ProductsApiController::class, 'prods_by_type']);
+    Route::get('/products-by-type-for-app/{slug}', [ProductsApiController::class, 'prods_by_type_for_app']);
     Route::group(['middleware' => 'auth:sanctum'], function() {
         Route::post('/add-product', [ProductsApiController::class, 'addProduct']);
         Route::post('/show-hidden-product/{product}', [ProductsApiController::class, 'show_hidden_product']);

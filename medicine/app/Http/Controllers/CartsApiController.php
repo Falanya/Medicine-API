@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CartResource;
 use App\Models\Cart;
 use Illuminate\Http\Request;
 use App\Models\Product;
@@ -39,6 +40,15 @@ class CartsApiController extends Controller
                 'message' => 'User not login',
                 'status_code' => 401,
             ]);
+        }
+    }
+
+    public function show_for_app() {
+        $auth = auth()->user();
+        if($auth) {
+            $cart = $auth->carts;
+            $carts = CartResource::collection($cart);
+            return ['data' => $carts, 'totalPrice' => $auth->totalPriceCart];
         }
     }
 

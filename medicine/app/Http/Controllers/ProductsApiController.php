@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ProductResource;
+use App\Http\Resources\ProductTypeResource;
 use App\Models\Comment;
 use App\Models\ImgProduct;
 use App\Models\Product;
@@ -249,6 +250,12 @@ class ProductsApiController extends Controller
             'status_code' => 404,
             'message'=> 'Not ok'
         ]);
+    }
+
+    public function prods_by_type_for_app($slug) {
+        $type = ProductType::where('slug', $slug)->first();
+        $products = new ProductTypeResource($type);
+        return ['data' => $products];
     }
 
     public function edit_product(Product $product, Request $request) {

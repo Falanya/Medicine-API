@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AddressResource;
 use App\Models\Address;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AddressApiController extends Controller
 {
-    public function address() {
+    public function show() {
         $auth = auth()->user();
         $check_count = $auth->addresses->where('user_id', $auth->id)->where('object_status', 1)->count();
         $data = $auth->addresses->where('user_id', $auth->id)->where('object_status', 1);
@@ -28,6 +29,12 @@ class AddressApiController extends Controller
             'message' => 'Not success'
         ]);
 
+    }
+
+    public function show_for_app() {
+        $auth = auth()->user();
+        $addresses = AddressResource::collection($auth->addresses)->where('object_status', 1);
+        return $addresses;
     }
 
     public function add_address(Request $request) {
