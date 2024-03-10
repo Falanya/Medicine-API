@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddressApiController;
 use App\Http\Controllers\CartsApiController;
+use App\Http\Controllers\FavoritesController;
 use App\Http\Controllers\OrderAdminApiController;
 use App\Http\Controllers\OrderApiController;
 use App\Http\Controllers\ProductsApiController;
@@ -48,6 +49,10 @@ Route::group(['prefix'=> 'users'], function () {
         Route::post('delete-all-address', [AddressApiController::class, 'delete_all_address']);
 
         Route::get('promotions', [PromotionApiController::class, 'show_user']);
+        Route::get('promotions-for-app', [PromotionApiController::class, 'show_user_for_app']);
+
+        Route::get('create-or-delete-favorite/{product}', [FavoritesController::class, 'create_or_delete']);
+        Route::get('show-favorite', [FavoritesController::class, 'show']);
     });
 });
 
@@ -64,6 +69,7 @@ Route::group(['prefix' => 'orders', 'middleware' => 'auth:sanctum'], function() 
     Route::get('/checkout', [OrderApiController::class, 'show_checkout']);
     Route::post('/post-checkout', [OrderApiController::class, 'post_checkout']);
     Route::get('/history', [OrderApiController::class, 'history']);
+    Route::get('/history-for-app', [OrderApiController::class, 'history_for_app']);
     Route::get('/detail/{order}', [OrderApiController::class, 'detail']);
     Route::post('/apply-promotion', [OrderApiController::class, 'apply-promotion']);
 });

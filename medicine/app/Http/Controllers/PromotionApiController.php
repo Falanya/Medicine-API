@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PromotionResource;
 use App\Models\Promotion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -246,5 +247,11 @@ class PromotionApiController extends Controller
                 'status_code' => 401,
             ]);
         }
+    }
+
+    public function show_user_for_app() {
+        $promotion = Promotion::where('status', 1)->orderBy('id','DESC')->get();
+        $promotions = PromotionResource::collection($promotion);
+        return $promotions;
     }
 }

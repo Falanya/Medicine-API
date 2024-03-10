@@ -4,10 +4,13 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductTypeController;
+use App\Http\Middleware\AuthenticateMiddleware;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,7 +50,7 @@ Route::group(['prefix'=> 'account'], function() {
     Route::post('/login', [AccountController::class, 'check_login'])->name('account.post_login');
 
     Route::get('/register', [AccountController::class, 'register'])->name('account.register');
-    Route::post('/register', [AccountController::class, 'check_register']);
+    Route::post('/register', [AccountController::class, 'check_register'])->name('account.post_register');
     Route::get('/verify-account/{email}', [AccountController::class,'verify_account'])->name('account.verify_account');
 
     Route::get('/forgot-password', [AccountController::class, 'forgot_password'])->name('account.forgot_password');
@@ -55,7 +58,7 @@ Route::group(['prefix'=> 'account'], function() {
     Route::get('/reset-password/{token}', [AccountController::class, 'reset_password'])->name('account.reset_password');
     Route::post('/process-reset-password', [AccountController::class, 'process_reset_password'])->name('account.process_reset_password');
 
-    Route::group(['middleware' => 'auth'], function() {
+    Route::group(['middleware' => 'login'], function() {
         Route::get('/profile', [AccountController::class, 'profile'])->name('account.profile');
         Route::post('/profile', [AccountController::class,'check_profile']);
 
@@ -76,7 +79,7 @@ Route::group(['prefix'=> 'account'], function() {
     Route::get('/logout', [AccountController::class, 'check_logout'])->name('account.logout');
 });
 
-Route::group(['prefix' => 'cart', 'middleware' => 'auth'], function() {
+Route::group(['prefix' => 'cart', 'middleware' => 'login'], function() {
     Route::get('/', [CartController::class, 'index'])->name('cart.index');
     Route::get('add/{product}', [CartController::class,'add_cart'])->name('cart.add');
     Route::get('plus-1/{product}', [CartController::class, 'plus_1_product'])->name('cart.plus');
@@ -86,7 +89,7 @@ Route::group(['prefix' => 'cart', 'middleware' => 'auth'], function() {
 
 });
 
-Route::group(['prefix' => 'order', 'middleware' => 'auth'], function() {
+Route::group(['prefix' => 'order', 'middleware' => 'login'], function() {
     Route::get('/checkout', [OrderController::class, 'checkout'])->name('order.checkout');
     Route::post('/checkout', [OrderController::class, 'post_checkout']);
     Route::get('/verify/{token}', [OrderController::class, 'verify'])->name('order.verify');
@@ -96,7 +99,7 @@ Route::group(['prefix' => 'order', 'middleware' => 'auth'], function() {
 
 });
 
-Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
+Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function() {
     Route::get('/', [AdminController::class, 'index'])->name('admin.index');
     Route::get('/order', [AdminController::class, 'order_index'])->name('admin.order_index');
     Route::get('/order-detail/{order}', [AdminController::class, 'order_detail'])->name('admin.order_detail');
@@ -106,4 +109,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function() {
         'product' => ProductController::class,
         'productType' => ProductTypeController::class
     ]);
+});
+
+Route::group(['prefix' => 'dashboard', 'middlware' => 'admin'], function() {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+
+    Route::group(['prefix' => 'user'], function() {
+        Route::get('/index', [UserController::class, 'index'])->name('dashboard.user.index');
+    });
 });

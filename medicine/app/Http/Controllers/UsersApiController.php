@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Mail\ResetPasswordApi;
 use App\Mail\VerifyAccountApi;
 use Illuminate\Http\Request;
@@ -150,6 +151,19 @@ class UsersApiController extends Controller
             'status_code' => 200,
             'message' => 'Success'
         ]);
+    }
+
+    public function profile_for_app() {
+        $auth = auth()->user()->id;
+        if($auth) {
+            $user = new UserResource(User::findOrFail($auth));
+            return $user;
+        } else {
+            return response()->json([
+                'message' => 'You are not login',
+                'status_code' => 401,
+            ]);
+        }
     }
 
     public function change_profile(Request $request) {

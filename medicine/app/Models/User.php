@@ -37,6 +37,10 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class,'user_id','id');
     }
 
+    public function favorites() {
+        return $this->hasMany(Favorites::class,'user_id','id')->orderBy('id','DESC');
+    }
+
     public function getTotalPriceCartAttribute() {
         $total = 0;
         foreach($this->carts as $item) {

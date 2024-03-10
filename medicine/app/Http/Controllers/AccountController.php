@@ -13,15 +13,19 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use App\Http\Requests\AuthRequest;
+use App\Http\Requests\RegisterRequest;
 
 class AccountController extends Controller
 {
     public function login() {
-        $proTypes = ProductType::orderBy('name','ASC')->get();
-        return view('account.login', compact('proTypes'));
+        if(auth()->user()) {
+            return redirect()->route('home.index');
+        }
+        return view('account.login');
     }
 
-    public function check_login(Request $request) {
+    public function check_login(AuthRequest $request) {
         $request->validate([
             'email' => 'required|email|exists:users',
             'password' => 'required'
@@ -34,21 +38,23 @@ class AccountController extends Controller
         if($data_check) {
             if(auth('web')->user()->email_verified_at == '') {
                 auth('web')->logout();
-                return redirect()->back()->with('no','Your account is not verify, please check email again!');
+                return redirect()->back()->with('error','Tài khoản của bạn chưa xác thực, hãy kiểm tra hộp thư email');
             }
             
-            return redirect()->route('home.index')->with('ok','Welcome back');
+            return redirect()->route('home.index')->with('success','Chào mừng đến với Medicine Mart');
         }
 
-        return redirect()->back()->with('no','User email or password invalid');
+        return redirect()->back()->with('error','Email hoặc mật khẩu không đúng');
     }
 
     public function register() {
-        $proTypes = ProductType::orderBy('name','ASC')->get();
-        return view('account.register', compact('proTypes'));
+        if (auth()->user()) {
+            return redirect()->route('home.index');
+        }
+        return view('account.register');
     }
 
-    public function check_register(Request $request) {
+    public function check_register(RegisterRequest $request) {
         $request->validate([
             'email' => 'required|email|unique:users',
             'fullname' => 'required|min:5',
@@ -62,21 +68,21 @@ class AccountController extends Controller
 
         if($user = User::create($data)) {
             Mail::to($user->email)->send(new VerifyAccount($user));
-            return redirect()->route('account.login')->with('ok','User created successfully, please check your mail to verify account');
+            return redirect()->route('account.login')->with('success','Đăng ký thành công, hãy kiểm tra hộp thư email của bạn');
         }
 
-        return redirect()->back()->with('no','somthing error, please try again');
+        return redirect()->back()->with('error','Có một vài lỗi, hãy thử lại');
     }
 
     public function verify_account($email) {
         User::where('email', $email)->whereNull('email_verified_at')->firstOrFail();
         User::where('email', $email)->update(['email_verified_at' => date('Y-m-d')]);
-        return redirect()->route('account.login')->with('ok','Verify account successfully, Now you can login again');
+        return redirect()->route('account.login')->with('success','Verify account successfully, Now you can login again');
     }
 
     public function check_logout() {
         auth()->logout();
-        return redirect()->route('home.index')->with('ok','You are logout');
+        return redirect()->route('home.index')->with('success','You are logout');
     }
 
     public function change_password() {
@@ -99,7 +105,9 @@ class AccountController extends Controller
         $data['password'] = bcrypt(request('password'));
         $check = User::where('email', $user->email)->update($data);
         if($check) {
-            return redirect()->back();
+            return redirect()->back()->with('success','Password changed successfully');
+        } else {
+            return redirect()->back()->with('error','Something errors, please try again');
         }
     }
 
@@ -125,9 +133,9 @@ class AccountController extends Controller
         $data = $request->only('fullname','gender');
         $check = $user->update($data);
         if($check) {
-            return redirect()->back()->with('ok','Update your profile successfully');
+            return redirect()->back()->with('success','Update your profile successfully');
         }
-        return redirect()->back()->with('no','Something error, please check again');
+        return redirect()->back()->with('error','Something error, please check again');
 
     }
 
@@ -159,7 +167,7 @@ class AccountController extends Controller
 
         Mail::to($request->email)->send(new ResetPassword($formData));
 
-        return redirect()->route('account.login');
+        return redirect()->route('account.login')->with('success','Please check mail to verify');
     }
 
     public function reset_password($token) {
@@ -185,7 +193,7 @@ class AccountController extends Controller
         User::where('id', $user->id)->update([
             'password' => Hash::make($request->password),
         ]);
-        return redirect()->route('account.login')->with('ok','Reset password successfully');
+        return redirect()->route('account.login')->with('success','Reset password successfully');
     }
 
     public function show_promotions() {
