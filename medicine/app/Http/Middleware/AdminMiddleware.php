@@ -16,11 +16,11 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::id() == null) {
-            return redirect()->route('account.login')->with('error','Bạn chưa đăng nhập');
-        }
-        elseif(auth()->user()->role_id == 1) {
-            return redirect()->route('home.index')->with('error','Bạn không đủ quyền hạn');
+        if (auth()->id() == null) {
+            return redirect()->route('account.login')->with('error', 'Bạn chưa đăng nhập');
+        } 
+        if (auth()->user()->role_id == 1) {
+            return redirect()->route('home.index')->with('error', 'Bạn không đủ quyền hạn');
         }
         return $next($request);
     }
