@@ -3,10 +3,10 @@
 namespace App\Services\Interfaces;
 
 /**
- * Interface ProvinceServiceInterface
+ * Interface BaseServiceInterface
  * @package App\Services\Interfaces
  */
-interface ProvinceServiceInterface
+interface BaseServiceInterface
 {
     public function getAll();
 }

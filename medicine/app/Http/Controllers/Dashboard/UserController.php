@@ -37,7 +37,8 @@ class UserController extends Controller
     }
 
     public function create() {
-        $provinces = $this->provinceService->all();
+        $provinces = $this->provinceService->getAll();
+        //dd($provinces);
         $config = [
             'css' => [
                 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css'

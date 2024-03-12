@@ -113,7 +113,7 @@
                                 <div class="form-row">
                                     <label for="" class="control-label text-right">Quận/Huyện</label>
                                     <span class="text-danger">(*)</span>
-                                    <select name="district_id" class="form-control setupSelect2">
+                                    <select name="district_id" class="form-control setupSelect2 districts">
                                         <option value="0">[Chọn quận/huyện]</option>
                                     </select>
                                 </div>

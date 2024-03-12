@@ -8,11 +8,14 @@
             let _this = $(this)
             let province_id = _this.val()
             $.ajax({
-                url: 'http://127.0.0.1:8000/ajax/location/getLocation',
+                url: '/ajax/location/getLocation',
                 type: 'GET',
+                data: {
+                    'province_id': province_id
+                },
                 dataType: 'json',
                 success: function (res) {
-                    console.log(res);
+                    $('.districts').html(res.html)
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log('Lỗi: ' + textStatus + ' ' + errorThrown);

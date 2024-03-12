@@ -14,7 +14,6 @@
             @include($template)
             @include('dashboard.components.footer')
         </div>
-        @include('dashboard.components.message')
     </div>
 
     @include('dashboard.components.script')

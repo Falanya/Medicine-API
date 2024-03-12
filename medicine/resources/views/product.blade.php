@@ -32,7 +32,7 @@
 <form action="{{ route('home.post_comment', $product->id) }}" method="POST" role="form">
     @csrf
     <div class="form-group">
-        <textarea name="comment" class="form-control" rows="3" placeholder="Nội dung bình luận"></textarea>
+        <textarea name="comment" class="form-control" rows="3" placeholder="Nội dung bình luận" style="resize: none;"></textarea>
         @error('comment') <small>{{ $message }}</small> @enderror
     </div>
 
