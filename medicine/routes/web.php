@@ -5,6 +5,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\LocationController;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
@@ -122,3 +123,6 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'admin'], function() {
         Route::post('/post-edit', [UserController::class, 'post_edit'])->name('dashboard.user.post-edit');
     });
 });
+
+/* AJAX */
+Route::get('/ajax/location/getLocation', [LocationController::class, 'getLocation'])->name('ajax.location.getLocation')->middleware('admin');

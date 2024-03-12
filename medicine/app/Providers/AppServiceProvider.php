@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\Cart;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,6 +15,9 @@ class AppServiceProvider extends ServiceProvider
 
     public $bindings = [
         'App\Services\Interfaces\UserServiceInterface' => 'App\Services\UserService',
+        'App\Services\Interfaces\ProvinceServiceInterface' => 'App\Services\ProvinceService',
+        'App\Services\Interfaces\DistrictServiceInterface' => 'App\Services\DistrictService',
+        'App\Services\Interfaces\WardServiceInterface' => 'App\Services\WardService',
     ];
     public function register(): void
     {

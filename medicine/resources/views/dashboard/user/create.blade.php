@@ -99,8 +99,13 @@
                                 <div class="form-row">
                                     <label for="" class="control-label text-right">Thành phố</label>
                                     <span class="text-danger">(*)</span>
-                                    <select name="province_id" class="form-control">
+                                    <select name="province_id" class="form-control setupSelect2 province">
                                         <option value="0">[Chọn thành phố]</option>
+                                        @if(isset($provinces))
+                                            @foreach($provinces as $province)
+                                                <option value="{{ $province->code }}">{{ $province->name }}</option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
@@ -108,7 +113,7 @@
                                 <div class="form-row">
                                     <label for="" class="control-label text-right">Quận/Huyện</label>
                                     <span class="text-danger">(*)</span>
-                                    <select name="district_id" class="form-control">
+                                    <select name="district_id" class="form-control setupSelect2">
                                         <option value="0">[Chọn quận/huyện]</option>
                                     </select>
                                 </div>
@@ -119,7 +124,7 @@
                                 <div class="form-row">
                                     <label for="" class="control-label text-right">Phường/Xã</label>
                                     <span class="text-danger">(*)</span>
-                                    <select name="ward_id" class="form-control">
+                                    <select name="ward_id" class="form-control setupSelect2">
                                         <option value="0">[Chọn phường/xã]</option>
                                     </select>
                                 </div>
