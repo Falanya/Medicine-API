@@ -21,6 +21,9 @@
                 </div>
             </li>
             <li class="active">
+                <a href="{{ route('dashboard.index') }}"><i class="fa fa-th-large"></i> <span class="nav-label">Trang chủ</span></a>
+            </li>
+            <li class="active">
                 <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">Quản lý Thành viên</span> <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li class="active"><a href="{{ route('dashboard.user.index') }}">Thành viên</a></li>

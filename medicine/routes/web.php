@@ -116,5 +116,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'admin'], function() {
 
     Route::group(['prefix' => 'user'], function() {
         Route::get('/index', [UserController::class, 'index'])->name('dashboard.user.index');
+        Route::get('/create', [UserController::class, 'create'])->name('dashboard.user.create');
+        Route::post('/post-create', [UserController::class, 'post_create'])->name('dashboard.user.post-create');
+        Route::get('/edit', [UserController::class, 'edit'])->name('dashboard.user.edit');
+        Route::post('/post-edit', [UserController::class, 'post_edit'])->name('dashboard.user.post-edit');
     });
 });

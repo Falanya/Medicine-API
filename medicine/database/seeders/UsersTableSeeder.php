@@ -17,7 +17,7 @@ class UsersTableSeeder extends Seeder
     public function run(): void
     {
         DB::table('users')->insert([
-            array('fullname'=>'Admin', 'email'=>'admin@gmail.com', 'phone' => '0123456789', 'address' => 'Ho Chi Minh', 'password'=>Hash::make('admin'), 'role_id'=>2,
+            array('fullname'=>'Admin', 'email'=>'admin@gmail.com', 'phone' => '0123456789', 'address' => 'Ho Chi Minh', 'password'=>Hash::make('admin'), 'role_id'=>2, 'email_verified_at' => Carbon::now('Asia/Ho_Chi_Minh'),
             'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'), 'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh')),
             array('fullname'=>'Nguyen Van A', 'email'=>'A@gmail.com', 'phone' => '0123456789', 'address' => 'Ho Chi Minh', 'password'=>Hash::make('123456'), 'role_id'=>1,
             'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'), 'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh')),

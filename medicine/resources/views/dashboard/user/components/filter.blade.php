@@ -15,7 +15,8 @@
             <div class="uk-flex uk-flex-middle">
                 <select name="user_catalogue_id" class="form-control mr10">
                     <option value="0">Chọn thành viên nhóm </option>
-                    <option value="1">Quản trị viên</option>
+                    <option value="1">Thành viên</option>
+                    <option value="2">Quản trị viên</option>
                 </select>
                 <div class="uk-search uk-flex uk-flex-middle mr10">
                     <div class="input-group">
@@ -25,7 +26,7 @@
                         </span>
                     </div>
                 </div>
-                <a href="" class="btn btn-danger"><i class="fa fa-plus mr5"></i>Thêm mới thành viên</a>
+                <a href="{{ route('dashboard.user.create') }}" class="btn btn-danger"><i class="fa fa-plus mr5"></i>Thêm mới thành viên</a>
             </div>
         </div>
     </div>
