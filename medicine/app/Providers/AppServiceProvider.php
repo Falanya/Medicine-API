@@ -33,7 +33,10 @@ class AppServiceProvider extends ServiceProvider
     {
         view()->composer('*', function($view) {
             if ($user = auth()->user()) {
-                $cart = Cart::where('user_id', $user->id)->count();
+                $cart = Cart::where([
+                    'user_id' => $user->id,
+                    'status' => 1,
+                ])->count();
                 $view->with(compact('cart'));
             }
             

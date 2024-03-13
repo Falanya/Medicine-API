@@ -16,7 +16,7 @@ class CartController extends Controller
             'user_id' => $user,
         ])->count();
         $proTypes = ProductType::orderBy('name','ASC')->get();
-        $carts = Cart::orderBy('created_at','DESC')->where('user_id',$user)->get();
+        $carts = Cart::orderBy('created_at','DESC')->where(['user_id' => $user, 'status' => 1])->get();
         return view('cart', compact('carts','proTypes','count_cart'));
     }
 
@@ -25,12 +25,14 @@ class CartController extends Controller
         $user_id = auth()->id();
         $cartExists = Cart::where([
             'user_id' => $user_id,
-            'product_id' => $product->id
+            'product_id' => $product->id,
+            'status' => 1,
         ])->first();
         if ($cartExists) {
             Cart::where([
                 'user_id' => $user_id,
                 'product_id' => $product->id,
+                'status' => 1,
             ])->increment('quantity', $quantity);
         } else {
             $data = [
@@ -75,20 +77,26 @@ class CartController extends Controller
 
     public function delete_cart(Product $product) {
         $user_id = auth()->user()->id;
-        Cart::where([
+        $cart = Cart::where([
             'user_id' => $user_id,
-            'product_id' => $product->id
-        ])->delete();
-        return redirect()->back();
+            'product_id' => $product->id,
+            'status' => 1,
+        ])->first();
+        $cart->status = 0;
+        $cart->save();
+        return redirect()->back()->with('success','Product deleted from cart');
     }
 
     public function clear_cart() {
         $user_id = auth()->user()->id;
-        $check = Cart::where([
-            'user_id' => $user_id
-        ])->delete();
-        if ($check) {
-        return redirect()->back();
+        $carts = Cart::where([
+            'user_id' => $user_id,
+            'status' => 1,
+        ])->get();
+        foreach($carts as $key => $cart) {
+            $cart->status = 0;
+            $cart->save();
         }
+        return redirect()->back()->with('success','All products deleted from cart');
     }
 }
