@@ -101,8 +101,9 @@ class OrderController extends Controller
                     'price' => $price,
                 ];
                 ProductOrder::create($data_order);
+                $cart->status = 0;
+                $cart->save();
             }
-            $auth->carts()->delete();
             $order->token = $token;
             $order->save();
 

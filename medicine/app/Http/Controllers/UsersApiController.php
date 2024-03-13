@@ -21,6 +21,9 @@ class UsersApiController extends Controller
             'fullname' => 'bail|required|string|min:6',
             'email' => 'bail|required|email|unique:users',
             'gender' => 'bail|required',
+            'address' => 'bail|required|string',
+            'phone' => 'bail|required|numeric',
+            'birthday' => 'bail|required',
             'password' => 'bail|required|min:6',
             'confirm_password' => 'bail|required|same:password'
         ]);

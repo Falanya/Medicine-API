@@ -221,9 +221,9 @@ class OrderApiController extends Controller
                     //Sau khi có thông tin của 1 sản phẩm trong vòng lặp thì lưu thông tin đó vào bảng Product_Orders và tiếp tục vòng lặp
                     //sản phẩm khác cho đến khi hết sản phẩm trong giỏ hàng của người dùng
                     ProductOrder::create($data_order);
+                    $cart->status = 0;
+                    $cart->save();
                 };
-                //Sau khi kết thúc vòng lặp thì xóa tất cả sản phẩm thuộc id người dùng trong giỏ hàng
-                $auth->carts()->delete();
 
                 //Lưu các thông tin còn lại(nếu có trong bảng Orders)
                 $order->token = $token;
