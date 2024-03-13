@@ -3,29 +3,37 @@
     var HT = {};
     var $document = $(document)
 
-    HT.province = () => {
-        $(document).on('change', '.province', function () {
+    HT.getLocation = () => {
+        $(document).on('change', '.location', function () {
             let _this = $(this)
-            let province_id = _this.val()
-            $.ajax({
-                url: '/ajax/location/getLocation',
-                type: 'GET',
-                data: {
-                    'province_id': province_id
+            let option = {
+                'data': {
+                    'location_id': _this.val(),
                 },
-                dataType: 'json',
-                success: function (res) {
-                    $('.districts').html(res.html)
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log('Lỗi: ' + textStatus + ' ' + errorThrown);
-                }
-            });
+                'target': _this.attr('data-target'),
+            }
+
+            HT.sendDataTogetLocation(option)
         })
     }
 
+    HT.sendDataTogetLocation = (option) => {
+        $.ajax({
+            url: '/ajax/location/getLocation',
+            type: 'GET',
+            data: option,
+            dataType: 'json',
+            success: function (res) {
+                $('.' + option.target).html(res.html)
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log('Lỗi: ' + textStatus + ' ' + errorThrown);
+            }
+        });
+    }
+
     $document.ready(function () {
-        HT.province();
+        HT.getLocation();
     });
 
 })(jQuery);

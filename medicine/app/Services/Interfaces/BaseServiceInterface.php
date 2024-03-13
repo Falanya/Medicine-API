@@ -9,4 +9,6 @@ namespace App\Services\Interfaces;
 interface BaseServiceInterface
 {
     public function getAll();
+    
+    // public function findById($id);
 }

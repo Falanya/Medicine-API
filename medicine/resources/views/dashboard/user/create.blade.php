@@ -2,6 +2,7 @@
 
 
 <form action="" method="POST" role="form" class="box">
+    @csrf
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
             <div class="col-lg-5">
@@ -99,7 +100,7 @@
                                 <div class="form-row">
                                     <label for="" class="control-label text-right">Thành phố</label>
                                     <span class="text-danger">(*)</span>
-                                    <select name="province_id" class="form-control setupSelect2 province">
+                                    <select name="province_id" class="form-control setupSelect2 province location" data-target="districts">
                                         <option value="0">[Chọn thành phố]</option>
                                         @if(isset($provinces))
                                             @foreach($provinces as $province)
@@ -113,7 +114,7 @@
                                 <div class="form-row">
                                     <label for="" class="control-label text-right">Quận/Huyện</label>
                                     <span class="text-danger">(*)</span>
-                                    <select name="district_id" class="form-control setupSelect2 districts">
+                                    <select name="district_id" class="form-control setupSelect2 districts location" data-target="wards">
                                         <option value="0">[Chọn quận/huyện]</option>
                                     </select>
                                 </div>
@@ -124,7 +125,7 @@
                                 <div class="form-row">
                                     <label for="" class="control-label text-right">Phường/Xã</label>
                                     <span class="text-danger">(*)</span>
-                                    <select name="ward_id" class="form-control setupSelect2">
+                                    <select name="ward_id" class="form-control setupSelect2 wards">
                                         <option value="0">[Chọn phường/xã]</option>
                                     </select>
                                 </div>

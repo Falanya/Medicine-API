@@ -20,4 +20,8 @@ class BaseService implements BaseServiceInterface
     public function getAll() {
         return $this->model->all();
     }
+
+    // public function findById($modeId, array $column = ['*'], array $relation = []) {
+    //     return $this->model->select($column)->with($relation)->findOrFail($modeId);
+    // }
 }

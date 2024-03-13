@@ -21,4 +21,8 @@ class DistrictService extends BaseService implements DistrictServiceInterface
     public function findDistrictByProvinceId(int $province_id) {
         return $this->model->where('province_code', $province_id)->get();
     }
+
+    public function findById($modeId, array $column = ['*'], array $relation = []) {
+        return $this->model->select($column)->with($relation)->findOrFail($modeId);
+    }
 }

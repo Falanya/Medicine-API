@@ -10,4 +10,5 @@ interface DistrictServiceInterface
 {
     public function getAll();
     public function findDistrictByProvinceId(int $province_id);
+    public function findById($id);
 }

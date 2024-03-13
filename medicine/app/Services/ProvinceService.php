@@ -17,4 +17,8 @@ class ProvinceService extends BaseService implements ProvinceServiceInterface
     public function __construct(Province $model){
         $this->model = $model;
     }
+
+    public function findById($modeId, array $column = ['*'], array $relation = []) {
+        return $this->model->select($column)->with($relation)->findOrFail($modeId);
+    }
 }
