@@ -23,7 +23,7 @@ class OrderController extends Controller
         $auth = auth()->user();
         $address = Address::orderBy('id','ASC')->where('user_id',$auth->id)->get();
         $address_count = $auth->addresses->count();
-        $carts = Cart::orderBy('created_at','DESC')->where('user_id', $auth->id)->get();
+        $carts = Cart::orderBy('created_at','DESC')->where(['user_id' => $auth->id, 'status' => 1])->get();
         return view('checkout', compact('proTypes','auth', 'address',  'address_count','carts'));
     }
 
