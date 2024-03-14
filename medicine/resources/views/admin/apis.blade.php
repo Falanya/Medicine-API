@@ -16,7 +16,7 @@
         <tbody>
             {{-- Người dùng --}}
             <tr>
-                <td rowspan="14">
+                <td rowspan="16">
                     <h2>Users</h2>
                 </td>
                 <td>Đăng ký (POST)</td>
@@ -91,15 +91,21 @@
             </tr>
 
             <tr>
-                <td>Quên mật khẩu (?)</td>
-                <td>/api/users/....</td>
-                <td>Unknown</td>
+                <td>Xem voucher (GET)</td>
+                <td>/api/users/promotions</td>
+                <td>OK</td>
             </tr>
 
             <tr>
-                <td>Reset password (?)</td>
-                <td>/api/users/....</td>
-                <td>Unknown</td>
+                <td>Thêm hoặc xóa sản phẩm yêu thích (GET)</td>
+                <td>/api/users/create-or-delete-favorite/{product_id}</td>
+                <td>OK</td>
+            </tr>
+
+            <tr>
+                <td>Xem sản phẩm yêu thích (GET)</td>
+                <td>/api/users/show-favorite</td>
+                <td>OK</td>
             </tr>
 
             <tr>
@@ -111,7 +117,7 @@
 
             {{-- Giỏ hàng --}}
             <tr>
-                <td rowspan="6">
+                <td rowspan="5">
                     <h2>Cart</h2>
                 </td>
                 <td>Hiển thị giỏ hàng (GET)</td>
@@ -126,14 +132,8 @@
             </tr>
 
             <tr>
-                <td>Thêm 1 sản phẩm trong giỏ hàng (GET)</td>
-                <td>/api/carts/plus-1/{id}</td>
-                <td>OK</td>
-            </tr>
-
-            <tr>
-                <td>Trừ 1 sản phẩm trong giỏ hàng (GET)</td>
-                <td>/api/carts/minus-1/{id}</td>
+                <td>Sửa số lượng sản phẩm trong giỏ hàng (POST)</td>
+                <td>/api/edit-quantity/{product}</td>
                 <td>OK</td>
             </tr>
 
