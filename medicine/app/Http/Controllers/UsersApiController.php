@@ -36,7 +36,7 @@ class UsersApiController extends Controller
             ]);
         }
 
-        $data_check = $request->all('fullname','email','gender');
+        $data_check = $request->all('fullname','email','gender','address','phone','birthday');
         $data_check['password'] = bcrypt(request('password'));
 
         if ($data=User::create($data_check)) {

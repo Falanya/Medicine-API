@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('district_id',10)->nullable();
             $table->string('ward_id',10)->nullable();
             $table->string('address',255);
-            $table->dateTime('birthday')->nullable();
+            $table->date('birthday')->nullable();
             $table->string('image',255)->nullable();
             $table->unsignedInteger('role_id')->default(1);
             $table->foreign('role_id')->references('id')->on('roles');
