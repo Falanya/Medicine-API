@@ -40,10 +40,12 @@ class OrderApiController extends Controller
             $total += $price*$item->quantity;
             $cart = [
                 'STT' => $key + 1,
+                'id' => $item->id,
                 'name' => $item->product->name,
                 'img' => $item->product->img,
                 'quantity' => $item->quantity,
-                'price' => number_format($price)
+                'price' => number_format($price),
+                'status' => $item->status == 1 ? 'Show' : 'Hidden',
             ];
             $carts[] = $cart;
         }
@@ -141,9 +143,7 @@ class OrderApiController extends Controller
     }
 
     public function post_checkout(Request $request) {
-        //Lấy thông tin người dùng đang đăng nhập
         $auth = auth()->user();
-        //Kiểm tra thông tin nhập từ form
         $validator = Validator::make($request->all(), [
             'address_id' => 'bail|required|exists:addresses,id',
             'note' => 'max:255',
@@ -187,7 +187,6 @@ class OrderApiController extends Controller
         ], [
             'address_id.exists' => "The address you selected doesn't invalid"
         ]);
-        //Xuất lỗi nếu có lỗi từ form nhập
         if ($validator->fails()) {
             return response()->json([
                 'message' => $validator->errors()->all(),
@@ -195,37 +194,29 @@ class OrderApiController extends Controller
             ]);
         }
 
-        //Đặt mảng data chứa thông tin từ form nhập
         $data = $request->only('address_id','note','promotion_code');
-        //Lấy thêm id người dùng đang đăng nhập từ biến $auth
         $data['user_id'] = $auth->id;
-        //Kiểm tra nếu sản phẩm trong giỏ hàng của người dùng lớn hơn 0 mới được tạo đơn
         if ($auth->carts()->count() > 0) {
         
-            //Tạo đơn hàng với dữ liệu được lấy từ mảng $data
             $order = Order::create($data);
 
             if($order) {
                 $token = Str::random(40);
 
-                //Vòng lặp in ra sản phẩm trong bảng Carts và tạo sản phẩm lưu vào bảng Product_Orders
                 foreach($auth->carts as $key => $cart) {
                     $price = $cart->product->discount > 0 && $cart->product->discount < $cart->product->price ? $cart->product->discount : $cart->product->price;
-                    //Lấy thông tin sản phẩm lưu vào mảng $data_order
                     $data_order = [
                         'order_id' => $order->id,
                         'product_id' => $cart->product_id,
                         'quantity' => $cart->quantity,
                         'price' => $price
                     ];
-                    //Sau khi có thông tin của 1 sản phẩm trong vòng lặp thì lưu thông tin đó vào bảng Product_Orders và tiếp tục vòng lặp
-                    //sản phẩm khác cho đến khi hết sản phẩm trong giỏ hàng của người dùng
+
                     ProductOrder::create($data_order);
                     $cart->status = 0;
                     $cart->save();
                 };
 
-                //Lưu các thông tin còn lại(nếu có trong bảng Orders)
                 $order->token = $token;
                 $order->created_at = Carbon::now('Asia/Ho_Chi_Minh');
                 $order->updated_at = Carbon::now('Asia/Ho_Chi_Minh');
