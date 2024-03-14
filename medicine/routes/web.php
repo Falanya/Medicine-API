@@ -83,8 +83,7 @@ Route::group(['prefix'=> 'account'], function() {
 Route::group(['prefix' => 'cart', 'middleware' => 'login'], function() {
     Route::get('/', [CartController::class, 'index'])->name('cart.index');
     Route::get('add/{product}', [CartController::class,'add_cart'])->name('cart.add');
-    Route::get('plus-1/{product}', [CartController::class, 'plus_1_product'])->name('cart.plus');
-    Route::get('minus-1/{product}', [CartController::class, 'minus_1_product'])->name('cart.minus');
+    Route::get('update-cart/{product}', [CartController::class, 'update_cart'])->name('cart.update');
     Route::delete('/delete/{product}', [CartController::class,'delete_cart'])->name('cart.delete');
     Route::delete('/clear', [CartController::class,'clear_cart'])->name('cart.clear');
 

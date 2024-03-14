@@ -14,6 +14,7 @@ class CartController extends Controller
         $user = auth()->user()->id;
         $count_cart = Cart::where([
             'user_id' => $user,
+            'status' => 1,
         ])->count();
         $proTypes = ProductType::orderBy('name','ASC')->get();
         $carts = Cart::orderBy('created_at','DESC')->where(['user_id' => $user, 'status' => 1])->get();
@@ -48,31 +49,27 @@ class CartController extends Controller
         
     }
 
-    public function plus_1_product(Product $product, Request $request) {
+    public function update_cart($product, Request $request) {
+        $auth = auth()->user();
+        $request->validate([
+            'quantity' => ['required','numeric', function($attr,$value,$fail) {
+                if($value < 0) {
+                    return $fail('Quantity must be greater than 0');
+                }
+            }]
+        ]);
         $quantity = $request->quantity ? floor($request->quantity) : 1;
-        $user = auth()->user()->id;
-        Cart::where([
-            'user_id' => $user,
-            'product_id' => $product->id
-        ])->increment('quantity', $quantity);
-        return redirect()->back();
-    }
-
-    public function minus_1_product(Product $product, Request $request) {
-        $quantity = $request->quantity ? floor($request->quantity) : 1;
-        $user = auth()->user()->id;
-        $quantity_check = Cart::where([
-            'user_id' => $user,
-            'product_id' => $product->id
+        $cart = Cart::where([
+            'user_id' => $auth->id,
+            'product_id' => $product,
+            'status' => 1,
         ])->first();
-        if($quantity_check->quantity > 1) {
-            Cart::where([
-                'user_id' => $user,
-                'product_id' => $product->id
-            ])->decrement('quantity', $quantity);
-            return redirect()->back();
+        if(!$cart) {
+            return redirect()->back()->with('error','Cannot find product');
         }
-        return redirect()->back();
+        $cart->quantity = $quantity;
+        $cart->save();
+        return redirect()->back()->with('success','Product updated successfully');
     }
 
     public function delete_cart(Product $product) {

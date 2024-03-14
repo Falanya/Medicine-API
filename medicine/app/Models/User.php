@@ -18,7 +18,7 @@ class User extends Authenticatable
     protected $hidden = ['password', 'created_at', 'updated_at', 'created_by', 'updated_by','email_verified_at'];
 
     public function carts() {
-        return $this->hasMany(Cart::class,'user_id','id');
+        return $this->hasMany(Cart::class,'user_id','id')->where('status', 1);
     }
 
     public function roles() {

@@ -34,9 +34,10 @@
                     <td>{{ $item->product->name }}</td>
                     <td>{{ $price }}</td>
                     <td>
-                        <a href="{{ route('cart.minus', $item->product_id) }}"><i class="far fa-minus-square"></i></a>
-                        {{ $item->quantity }}
-                        <a href="{{ route('cart.plus', $item->product_id) }}"><i class="far fa-plus-square"></i></a>
+                        <form action="{{ route('cart.update', $item->product->id) }}" method="GET">
+                            <input type="number" min="1" value="{{ $item->quantity }}" name="quantity" style="width: 50px; text-align: center">
+                            <button><i class="fa fa-save"></i></button>
+                        </form>
                     </td>
                     <td>
                         
