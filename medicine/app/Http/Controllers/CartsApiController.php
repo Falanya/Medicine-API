@@ -25,6 +25,7 @@ class CartsApiController extends Controller
                     'name' => $item->product->name,
                     'price' => number_format($price),
                     'quantity' => $item->quantity,
+                    'status' => $item->status == 1 ? 'Show' : 'Hidden',
                 ];
                 $products[] = $product;
                 $total += $price*$item->quantity;
@@ -58,11 +59,13 @@ class CartsApiController extends Controller
         $cartExist = Cart::where([
             'user_id' => $auth->id,
             'product_id' => $product->id,
+            'status' => 1,
         ])->first();
         if($cartExist) {
             $check = Cart::where([
                 'user_id' => $auth->id,
-                'product_id' => $product->id 
+                'product_id' => $product->id,
+                'status' => 1,
             ])->increment('quantity', $quantity);
             if ($check) {
                 return response()->json([
@@ -115,11 +118,13 @@ class CartsApiController extends Controller
         $cart = Cart::where([
             'user_id' => $auth->id,
             'product_id' => $product->id,
+            'status' => 1,
         ])->first();
         if($cart) {
             $check = Cart::where([
                 'user_id' => $auth->id,
                 'product_id' => $product->id,
+                'status' => 1,
             ])->update([
                 'quantity' => $quantity,
             ]);
@@ -146,7 +151,8 @@ class CartsApiController extends Controller
         $auth = auth()->user();
         $cartExist = Cart::where([
             'user_id' => $auth->id,
-            'product_id' => $product->id
+            'product_id' => $product->id,
+            'status' => 1,
         ])->first();
 
         if(!$cartExist) {
@@ -159,9 +165,11 @@ class CartsApiController extends Controller
 
         $cartUser = Cart::where([
             'user_id' => $auth->id,
-            'product_id' => $product->id
-        ]);
-        $check = $cartUser->delete();
+            'product_id' => $product->id,
+            'status' => 1,
+        ])->first();
+        $cartUser->status = 0;
+        $check = $cartUser->save();
         if ($check) {
             return response()->json([
                 'message' => 'This product was successfully removed from your cart',
@@ -177,17 +185,18 @@ class CartsApiController extends Controller
 
     public function clear_cart() {
         $auth = auth()->user();
-        $cartUser = Cart::where('user_id', $auth->id);
-        $check = $cartUser->delete();
-        if ($check) {
-            return response()->json([
-                'message' => 'All products has been successfully removed from your cart',
-                'status_code' => 200
-            ]);
+        $cartUser = Cart::where([
+            'user_id' => $auth->id,
+            'status' => 1,
+        ])->get();
+        
+        foreach($cartUser as $key => $item) {
+            $item->status = 0;
+            $item->save();
         }
         return response()->json([
-            'message' => 'Something errors, please try again',
-            'status_code' => 404
+            'message' => 'All products has been successfully removed from your cart',
+            'status_code' => 200
         ]);
     }
 }

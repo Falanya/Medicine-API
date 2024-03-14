@@ -17,11 +17,13 @@ class CartResource extends JsonResource
         // return parent::toArray($request);
         $price = $this->product->discount > 0 && $this->product->discount < $this->product->price ? $this->product->discount : $this->product->price;
         return ([
-            'id' => $this->product->id,
-            'name' => $this->product->name,
+            'id' => $this->id,
+            'user_id' => $this->user_id,
+            'name_product' => $this->product->name,
             'img' => $this->product->img,
             'quantity' => $this->quantity,
             'price' => number_format($price),
+            'status' => $this->status == 1? 'Show' : 'Hidden',
         ]);
     }
 }
