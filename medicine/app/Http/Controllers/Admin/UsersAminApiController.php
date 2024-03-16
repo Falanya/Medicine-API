@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\UsersResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UsersAminApiController extends Controller
 {
@@ -27,6 +28,7 @@ class UsersAminApiController extends Controller
             $user = User::find($id);
             if($user) {
                 if($user->status == 1) {
+                    DB::table('personal_access_tokens')->where('tokenable_id', $id)->delete();
                     $user->status = 0;
                 } else {
                     $user->status = 1;

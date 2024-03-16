@@ -16,7 +16,7 @@ class User extends Authenticatable
 
     protected $append = ['totalPriceCart','statusVerify'];
     protected $table = "users";
-    protected $fillable = ['fullname', 'email', 'password', 'gender','phone','province_id','district_id','ward_id','address','birthday','image','object_status','status'];
+    protected $fillable = ['fullname', 'email', 'password', 'gender','phone','province_id','district_id','ward_id','address','birthday','image','status'];
     protected $hidden = ['password', 'created_at', 'updated_at', 'created_by', 'updated_by','email_verified_at'];
 
     public function carts() {

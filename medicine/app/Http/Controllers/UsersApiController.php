@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Mail\ResetPassword;
 use App\Mail\ResetPasswordApi;
 use App\Mail\VerifyAccountApi;
 use Illuminate\Http\Request;
@@ -49,7 +50,7 @@ class UsersApiController extends Controller
     }
 
     public function verify_account($email) {
-        if ($user = User::where('email', $email)->whereNull('email_verified_at')->firstOrFail()) {
+        if (User::where('email', $email)->whereNull('email_verified_at')->firstOrFail()) {
             if (User::where('email', $email)->update(['email_verified_at' => now()])) {
                 return response()->json([
                     'status_code' => 200,
@@ -57,13 +58,11 @@ class UsersApiController extends Controller
                 ]);
             }
             return response()->json([
-                'data' => null,
                 'status_code' => 422,
                 'message' => 'Could not verify user email'
             ]);
         }
         return response()->json([
-            'data' => null,
             'status_code' => 422,
             'message'=> 'Could not find user email'
         ]);
@@ -88,11 +87,16 @@ class UsersApiController extends Controller
 
         if($data_check) {
             if(auth()->user()->email_verified_at == '') {
-                auth()->logout();
                 return response()->json([
-                    'data' => null,
                     'message' => 'Could not login, please verify email',
-                    'status_code' => '422',
+                    'status_code' => 422,
+                ]);
+            }
+
+            if(auth()->user()->status == 0) {
+                return response()->json([
+                    'message' => 'Account has been locked, please try again',
+                    'status_code' => 422,
                 ]);
             }
 
@@ -104,7 +108,6 @@ class UsersApiController extends Controller
             ]);
         } else {
             return response()->json([
-                'data' => null,
                 'status_code' => 404,
                 'message' => 'Your password is incorrect, please check again'
             ]);
@@ -206,42 +209,4 @@ class UsersApiController extends Controller
         ]);
     }
 
-    public function forgot_password() {
-        return view('medicine.forgot-password');
-    }
-
-    public function process_forgot_password(Request $request) {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email|exists:users,email',
-        ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        $token = Str::random(60);
-        $user = User::where('email', $request->email)->first();
-        $existsEmail = DB::table('password_reset_tokens')->where('email', $request->email)->first();
-        if($existsEmail) {
-            DB::table('password_reset_tokens')->where('email', $request->email)->delete(); 
-        }
-        DB::table('password_reset_tokens')->insert([
-            'email' => $user->email,
-            'token' => $token,
-        ]);
-
-        $check = Mail::to($request->email)->send(new ResetPasswordApi($token,$user));
-        if($check) {
-            return response()->json([
-                'message' => 'Please check mail to reset your password',
-                'status_code' => 200
-            ]);
-        } else{
-            return response()->json([
-                'message' => 'Something errors, please try again',
-                'status_code' => 401,
-            ]);
-        }
-
-    }
 }
