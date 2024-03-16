@@ -62,7 +62,7 @@ Route::group(['prefix'=> 'carts', 'middleware'=> 'auth:sanctum'], function () {
     Route::get('/cart', [CartsApiController::class, 'show']);
     Route::get('/cart-for-app', [CartsApiController::class, 'show_for_app']);
     Route::get('/add/{product}', [CartsApiController::class, 'add_cart']);
-    Route::post('/edit-quantity/{cart}', [CartsApiController::class, 'edit_quantity']);
+    Route::post('/edit-quantity/{id}', [CartsApiController::class, 'edit_quantity']);
     Route::get('/delete/{cart}', [CartsApiController::class, 'delete_cart']);
     Route::get('/clear', [CartsApiController::class,'clear_cart']);
     Route::post('/save-quantities', [CartsApiController::class, 'save_quantities']);

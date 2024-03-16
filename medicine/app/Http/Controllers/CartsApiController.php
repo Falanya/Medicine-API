@@ -27,6 +27,7 @@ class CartsApiController extends Controller
                     'price' => number_format($price),
                     'quantity' => $item->quantity,
                     'status' => $item->status == 1 ? 'Show' : 'Hidden',
+                    'status_in_stock' => $item->product->quantity == 0 ? 'Sold Out' : 'In stock',
                 ];
                 $products[] = $product;
                 $total += $price*$item->quantity;
@@ -63,12 +64,12 @@ class CartsApiController extends Controller
             'status' => 1,
         ])->first();
         if($cartExist) {
-            $check = Cart::where([
-                'user_id' => $auth->id,
-                'product_id' => $product->id,
-                'status' => 1,
-            ])->increment('quantity', $quantity);
-            if ($check) {
+            if($product->quantity > 0 && $product->status == 1) {
+                Cart::where([
+                    'user_id' => $auth->id,
+                    'product_id' => $product->id,
+                    'status' => 1,
+                ])->increment('quantity', $quantity);
                 return response()->json([
                     'data' => Cart::where(['user_id' => $auth->id, 'product_id' => $product->id])->first(),
                     'status_code' => 200,
@@ -77,7 +78,7 @@ class CartsApiController extends Controller
             }
             return response()->json([
                 'status_code' => 404,
-                'message' => "Can't add product to cart, please check again"
+                'message' => "Product is sold out"
             ]);
         }
         $data = [
@@ -86,8 +87,8 @@ class CartsApiController extends Controller
             'quantity' => $quantity,
         ];
 
-        $creCart = Cart::create($data);
-        if($creCart) {
+        if($product->quantity > 0 && $product->status == 1) {
+            Cart::create($data);
             return response()->json([
                 'data' => Cart::where(['user_id' => $auth->id, 'product_id' => $product->id])->first(),
                 'status_code' => 200,
@@ -95,50 +96,57 @@ class CartsApiController extends Controller
             ]);
         }
         return response()->json([
-            'message' => "Can't cart, please check again",
+            'message' => "Product is sold out",
             'status_code' => 404
         ]);
     }
 
-    public function edit_quantity($cart ,Request $request) {
+    public function edit_quantity($id ,Request $request) {
         $auth = auth()->user();
+        $cart = Cart::where([
+            'id' => $id,
+            'status' => 1,
+        ])->first();
+        if (!$cart || $cart->user_id != $auth->id) {
+            return response()->json([
+                'message' => 'Cannot find product in your cart',
+                'status_code' => 404,
+            ]);
+        }
         $validator = Validator::make($request->all(), [
-            'quantity' => ['required','numeric', function($attr,$value,$fail) {
+            'quantity' => ['required','numeric', function($attr,$value,$fail) use($cart) {
                 if($value < 1) {
-                    $fail('Quantity must greater than 1');
+                    $fail('Quantity must be greater than 0');
+                }
+                $product = Product::find($cart->product_id);
+                if (!$product) {
+                    $fail('Product not found');
+                } elseif ($product->status == 0) {
+                    $fail('Product is not available');
+                } elseif ($product->quantity < $value) {
+                    $fail('This product only has ' . $product->quantity . ' left in stock');
                 }
             }],
         ]);
         if($validator->fails()) {
             return response()->json([
                 'message' => $validator->errors()->all(),
-                'status_code' => 401,
+                'status_code' => 400,
             ]);
         }
         $quantity = $request->quantity ? floor($request->quantity) : 1;
-        $cart = Cart::where([
-            'id' => $cart,
-            'status' => 1,
-        ])->first();
-        if($cart && $cart->user_id == $auth->id) {
-            $cart->quantity = $quantity;
-            $check = $cart->save();
-            if($check) {
-                return response()->json([
-                    'message' => 'Success',
-                    'status_code' => 200,
-                ]);
-            }
+        $cart->quantity = $quantity;
+        $check = $cart->save();
+        if($check) {
             return response()->json([
-                'message' => 'Something errors, please check again',
-                'status_code' => 402,
-            ]);
-        } else {
-            return response()->json([
-                'message' => 'Cannot find product from you cart',
-                'status_code' => 401,
+                'message' => 'Success',
+                'status_code' => 200,
             ]);
         }
+        return response()->json([
+            'message' => 'Something errors, please check again',
+            'status_code' => 402,
+        ]);
         
     }
 

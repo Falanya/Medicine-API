@@ -14,9 +14,10 @@ class CartResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        // return parent::toArray($request);
+        $stt = 1;
         $price = $this->product->discount > 0 && $this->product->discount < $this->product->price ? $this->product->discount : $this->product->price;
         return ([
+            'STT' => $stt++,
             'id' => $this->id,
             'user_id' => $this->user_id,
             'name_product' => $this->product->name,
@@ -24,6 +25,7 @@ class CartResource extends JsonResource
             'quantity' => $this->quantity,
             'price' => number_format($price),
             'status' => $this->status == 1? 'Show' : 'Hidden',
+            'status_in_stock' => $this->product->quantity == 0 ? 'Sold out' : 'In stock',
         ]);
     }
 }

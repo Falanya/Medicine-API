@@ -27,6 +27,7 @@ class ProductResource extends JsonResource
             'type_id' => $this->type_id,
             'describe' => $this->describe,
             'info' => $this->info,
+            'quantity' => $this->quantity,
             'price' => number_format($this->price),
             'discount' => number_format($this->discount),
             'percen_sale' => $percent_sale.'%',

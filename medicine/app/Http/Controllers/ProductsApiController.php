@@ -37,6 +37,7 @@ class ProductsApiController extends Controller
                 'type_id' => $item->type_id,
                 'describe' => $item->describe,
                 'info' => $item->info,
+                'quantity' => $item->quantity,
                 'price' => number_format($item->price),
                 'discount' => number_format($discount),
                 'percen_sale' => floor($percen_sale).'%',
@@ -79,6 +80,7 @@ class ProductsApiController extends Controller
                 $product = [
                     "id" => $item->id,
                     "name" => $item->name,
+                    'quantity' => $item->quantity,
                     "price" => number_format($item->price),
                     "discount" => number_format($discount),
                     "percen_sale" => floor($percen_sale)."%",
@@ -107,6 +109,7 @@ class ProductsApiController extends Controller
             'type_id' => 'required|numeric',
             'describe' => 'required',
             'info' => 'required',
+            'quantity' => 'required|numeric',
             'price' => 'required|numeric',
             'discount' => 'nullable|numeric',
             'img' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
@@ -230,6 +233,7 @@ class ProductsApiController extends Controller
                     'id' => $item->id,
                     'type_id' => $item->type_id,
                     'name' => $item->name,
+                    'quantity' => $item->quantity,
                     'img' => $item->img,
                     'price' => number_format($item->price),
                     'slug' => $item->slug,
@@ -264,6 +268,7 @@ class ProductsApiController extends Controller
             'type_id' => 'required|numeric',
             'describe' => 'required',
             'info' => 'required',
+            'quantity' => 'required|numeric',
             'price' => 'required|numeric',
             'discount' => 'nullable|numeric',
             'img' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
@@ -322,11 +327,10 @@ class ProductsApiController extends Controller
     }
 
     public function details($slug) {
-        $product = Product::where('slug', $slug)->first();
-        $img_details = $product->img_details();
+        $data = Product::where('slug', $slug)->first();
+        $product = new ProductResource($data);
         return response()->json([
             'data' => $product,
-            'img_details' => $img_details,
             'status_code' => 200,
         ]);
     }
