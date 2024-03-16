@@ -1,77 +1,56 @@
 <!DOCTYPE html>
-<html lang="">
+<html>
+
 <head>
+
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Forgot password</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <title>Medicine</title>
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.3/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <style>
-        .vertical-center {
-            min-height: 100%;
-            min-height: 100vh;
-    
-            display: flex;
-            align-items: center;
-        }
+    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('font-awesome/css/font-awesome.css') }}" rel="stylesheet">
 
-        .title-wrapper {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: aqua;
-            height: 50px;
-            padding: 10px;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-        }
-    </style>
+    <link href="{{ asset('css/animate.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
 </head>
-<body>
-    <div class="container vertical-center">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="title-wrapper">
-                <p style="font-weight: bold; font-size: 20px">MEDICINE MART ACCOUNT</p>
-                <p style="font-size: 17px"><a href="#" class="text-right">Return to Login</a></p>
-            </div>
 
-            <div class="panel panel-info">
-                <div class="panel-body">
-                    <form action="{{ route('account.process_forgot_password') }}" method="POST" role="form">
-                        @csrf
-                        <div class="text-center">
-                            <h3>Forgot password</h3>
-                        </div>
-                        <hr>
-                        <div class="form-group">
-                            <label for="">Email</label>
-                            <input type="text" class="form-control" name="email" placeholder="Input email">
-                            @error('email') <small>{{ $message }}</small> @enderror
-                        </div>
+<body class="gray-bg">
 
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-sm btn-primary">Find account</button>
+    <div class="passwordBox animated fadeInDown">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="ibox-content">
+
+                    <h2 class="font-bold">Forgot password</h2>
+
+                    <p>
+                        Enter your email address and your password will be reset and emailed to you.
+                    </p>
+
+                    <div class="row">
+
+                        <div class="col-lg-12">
+                            <form class="m-t" role="form" action="{{ route('account.process_forgot_password') }}" method="POST">
+                                @csrf
+                                <div class="form-group">
+                                    <input type="email" class="form-control" name="email" placeholder="Email address">
+                                    @error('email') 
+                                        <small class="text-danger">{{ $message }}</small> 
+                                    @enderror
+                                </div>
+
+                                <button type="submit" class="btn btn-primary block full-width m-b">Send</button>
+                            </form>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-
         </div>
-
     </div>
 
-    <!-- jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Bootstrap JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
+
 </html>
