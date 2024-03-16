@@ -96,4 +96,18 @@ class CartController extends Controller
         }
         return redirect()->back()->with('success','All products deleted from cart');
     }
+
+    public function save_quantities(Request $request) {
+        if ($request->has('quantities')) {
+            $quantities = $request->input('quantities');
+
+            foreach ($quantities as $cartId => $quantity) {
+                Cart::where('id', $cartId)->update(['quantity' => $quantity]);
+            }
+
+            return redirect()->back()->with('success','Quantities updated successfully');
+        }
+
+        return redirect()->back()->with('error', 'Quantities data not found');
+    }
 }

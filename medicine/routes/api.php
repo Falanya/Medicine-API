@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\AddressApiController;
+use App\Http\Controllers\Admin\OrdersApiController;
+use App\Http\Controllers\Admin\PromotionsApiController;
+use App\Http\Controllers\Admin\UsersAminApiController;
 use App\Http\Controllers\CartsApiController;
 use App\Http\Controllers\FavoritesController;
-use App\Http\Controllers\OrderAdminApiController;
 use App\Http\Controllers\OrderApiController;
 use App\Http\Controllers\ProductsApiController;
 use App\Http\Controllers\ProductTypesApiController;
@@ -60,9 +62,10 @@ Route::group(['prefix'=> 'carts', 'middleware'=> 'auth:sanctum'], function () {
     Route::get('/cart', [CartsApiController::class, 'show']);
     Route::get('/cart-for-app', [CartsApiController::class, 'show_for_app']);
     Route::get('/add/{product}', [CartsApiController::class, 'add_cart']);
-    Route::post('/edit-quantity/{product}', [CartsApiController::class, 'edit_quantity']);
-    Route::get('/delete/{product}', [CartsApiController::class, 'delete_cart']);
+    Route::post('/edit-quantity/{cart}', [CartsApiController::class, 'edit_quantity']);
+    Route::get('/delete/{cart}', [CartsApiController::class, 'delete_cart']);
     Route::get('/clear', [CartsApiController::class,'clear_cart']);
+    Route::post('/save-quantities', [CartsApiController::class, 'save_quantities']);
 });
 
 Route::group(['prefix' => 'orders', 'middleware' => 'auth:sanctum'], function() {
@@ -101,15 +104,19 @@ Route::group(['prefix'=> 'product-types'], function () {
 
 Route::group(['prefix' => 'admin', 'middleware' => 'auth:sanctum'], function() {
     Route::group(['prefix' => 'orders'], function() {
-        Route::get('show', [OrderAdminApiController::class, 'show']);
-        Route::get('details/{order}', [OrderAdminApiController::class, 'details']);
-        Route::get('update-status/{order}', [OrderAdminApiController::class, 'update_status']);
+        Route::get('show', [OrdersApiController::class, 'show']);
+        Route::get('details/{order}', [OrdersApiController::class, 'details']);
+        Route::get('update-status/{order}', [OrdersApiController::class, 'update_status']);
     });
 
     Route::group(['prefix' => 'promotions'], function() {
-        Route::get('show', [PromotionApiController::class, 'show']);
-        Route::post('create', [PromotionApiController::class, 'create']);
-        Route::get('details/{promotion}', [PromotionApiController::class, 'details']);
-        Route::post('edit/{promotion}', [PromotionApiController::class, 'edit']);
+        Route::get('show', [PromotionsApiController::class, 'show']);
+        Route::post('create', [PromotionsApiController::class, 'create']);
+        Route::get('details/{promotion}', [PromotionsApiController::class, 'details']);
+        Route::post('edit/{promotion}', [PromotionsApiController::class, 'edit']);
+    });
+
+    Route::group(['prefix' => 'users'], function() {
+        Route::get('show', [UsersAminApiController::class, 'show']);
     });
 });

@@ -21,6 +21,7 @@ class CartsApiController extends Controller
                 $price = $item->product->discount > 0 && $item->product->discount < $item->product->price ? $item->product->discount : $item->product->price;
                 $product = [
                     'STT' => $key + 1,
+                    'id' => $item->id,
                     'img' => $item->product->img,
                     'name' => $item->product->name,
                     'price' => number_format($price),
@@ -99,7 +100,7 @@ class CartsApiController extends Controller
         ]);
     }
 
-    public function edit_quantity(Product $product ,Request $request) {
+    public function edit_quantity($cart ,Request $request) {
         $auth = auth()->user();
         $validator = Validator::make($request->all(), [
             'quantity' => ['required','numeric', function($attr,$value,$fail) {
@@ -116,18 +117,12 @@ class CartsApiController extends Controller
         }
         $quantity = $request->quantity ? floor($request->quantity) : 1;
         $cart = Cart::where([
-            'user_id' => $auth->id,
-            'product_id' => $product->id,
+            'id' => $cart,
             'status' => 1,
         ])->first();
-        if($cart) {
-            $check = Cart::where([
-                'user_id' => $auth->id,
-                'product_id' => $product->id,
-                'status' => 1,
-            ])->update([
-                'quantity' => $quantity,
-            ]);
+        if($cart && $cart->user_id == $auth->id) {
+            $cart->quantity = $quantity;
+            $check = $cart->save();
             if($check) {
                 return response()->json([
                     'message' => 'Success',
@@ -136,7 +131,7 @@ class CartsApiController extends Controller
             }
             return response()->json([
                 'message' => 'Something errors, please check again',
-                'status_code' => 401,
+                'status_code' => 402,
             ]);
         } else {
             return response()->json([
@@ -147,11 +142,10 @@ class CartsApiController extends Controller
         
     }
 
-    public function delete_cart(Product $product) {
+    public function delete_cart($cart) {
         $auth = auth()->user();
         $cartExist = Cart::where([
-            'user_id' => $auth->id,
-            'product_id' => $product->id,
+            'id' => $cart,
             'status' => 1,
         ])->first();
 
@@ -163,24 +157,24 @@ class CartsApiController extends Controller
             ]);
         }
 
-        $cartUser = Cart::where([
-            'user_id' => $auth->id,
-            'product_id' => $product->id,
-            'status' => 1,
-        ])->first();
-        $cartUser->status = 0;
-        $check = $cartUser->save();
-        if ($check) {
+        if($cartExist && $cartExist->user_id == $auth->id) {
+            $cartExist->status = 0;
+            $check = $cartExist->save();
+            if ($check) {
+                return response()->json([
+                    'message' => 'This product was successfully removed from your cart',
+                    'status_code' => 200
+                ]);
+            }
             return response()->json([
-                'message' => 'This product was successfully removed from your cart',
-                'status_code' => 200
+                'message' => 'Something errors, please check again',
+                'status_code' => 404
             ]);
         }
         return response()->json([
-            'message' => 'Something errors, please check again',
-            'status_code' => 404
+            'message' => 'Cannot find product from cart',
+            'status_code' => 401,
         ]);
-
     }
 
     public function clear_cart() {
@@ -198,5 +192,19 @@ class CartsApiController extends Controller
             'message' => 'All products has been successfully removed from your cart',
             'status_code' => 200
         ]);
+    }
+
+    public function save_quantities(Request $request) {
+        if ($request->has('quantities')) {
+            $quantities = $request->input('quantities');
+
+            foreach ($quantities as $cartId => $quantity) {
+                Cart::where('id', $cartId)->update(['quantity' => $quantity]);
+            }
+
+            return response()->json(['message' => 'Quantities updated successfully'], 200);
+        }
+
+        return response()->json(['message' => 'Quantities data not found'], 400);
     }
 }

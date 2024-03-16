@@ -34,10 +34,7 @@
                     <td>{{ $item->product->name }}</td>
                     <td>{{ $price }}</td>
                     <td>
-                        <form action="{{ route('cart.update', $item->product->id) }}" method="GET">
-                            <input type="number" min="1" value="{{ $item->quantity }}" name="quantity" style="width: 50px; text-align: center">
-                            <button><i class="fa fa-save"></i></button>
-                        </form>
+                        <input type="number" min="1" value="{{ $item->quantity }}" name="quantities[{{ $item->id }}]" class="quantity-input" style="width: 50px; text-align: center">
                     </td>
                     <td>
                         
@@ -51,6 +48,7 @@
                 @endforeach
             </tbody>
         </table>
+        <button type="button" class="btn btn-primary" id="saveQuantitiesBtn">Save Quantities</button>
         <div>
             <h3>Total amount: {{ number_format($totalAmount) }}</h3>
             
@@ -67,5 +65,67 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Bắt sự kiện khi nút "Save Quantities" được nhấn
+        document.getElementById('saveQuantitiesBtn').addEventListener('click', function () {
+            // Tạo một object để lưu trữ số lượng sản phẩm mới
+            var quantities = {};
+
+            // Lặp qua mỗi input và lưu số lượng vào object
+            var quantityInputs = document.querySelectorAll('.quantity-input');
+            quantityInputs.forEach(function (input) {
+                var productId = input.getAttribute('name').match(/\d+/)[0];
+                quantities[productId] = input.value;
+            });
+
+            // Gửi yêu cầu Ajax
+            fetch('{{ url('/cart/save-quantities') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ quantities: quantities })
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Xử lý phản hồi thành công
+                    Toastify({
+                        text: 'Quantities updated successfully',
+                        duration: 3000, // Thời gian hiển thị thông báo (đơn vị: miligiây)
+                        gravity: 'top', // Vị trí hiển thị của thông báo
+                        style: {
+                            background: 'linear-gradient(to right, #00b09b, #96c93d)', // Màu nền của thông báo
+                        }
+                    }).showToast();
+                    // Cập nhật giao diện nếu cần
+                } else {
+                    // Xử lý phản hồi lỗi
+                    Toastify({
+                        text: 'Failed to update quantities',
+                        duration: 3000,
+                        gravity: 'top',
+                        style: {
+                            background: '#ff6347',
+                        }
+                    }).showToast();
+                }
+            })
+            .catch(error => {
+                // Xử lý lỗi khi gửi yêu cầu
+                Toastify({
+                    text: 'An error occurred',
+                    duration: 3000,
+                    gravity: 'top',
+                    style: {
+                        background: '#ff6347',
+                    }
+                }).showToast();
+                console.error('An error occurred:', error);
+            });
+        });
+    });
+</script>
 
 @stop

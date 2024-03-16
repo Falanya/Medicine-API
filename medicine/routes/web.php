@@ -86,7 +86,7 @@ Route::group(['prefix' => 'cart', 'middleware' => 'login'], function() {
     Route::get('update-cart/{product}', [CartController::class, 'update_cart'])->name('cart.update');
     Route::delete('/delete/{product}', [CartController::class,'delete_cart'])->name('cart.delete');
     Route::delete('/clear', [CartController::class,'clear_cart'])->name('cart.clear');
-
+    Route::post('/save-quantities', [CartController::class, 'save_quantities'])->name('cart.save_quantities');
 });
 
 Route::group(['prefix' => 'order', 'middleware' => 'login'], function() {

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
 
-class OrderAdminApiController extends Controller
+class OrdersApiController extends Controller
 {
     public function show() {
         //Cuối đường link thêm "?status=0/1/2/3/4", đại diện cho các trạng thái đơn hàng
