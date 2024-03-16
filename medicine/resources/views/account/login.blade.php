@@ -39,7 +39,7 @@
                         </div>
                         <button type="submit" class="btn btn-primary block full-width m-b">Đăng nhập</button>
 
-                        <a href="#">
+                        <a href="{{ route('account.forgot_password') }}">
                             <small>Quên mật khẩu?</small>
                         </a>
 
