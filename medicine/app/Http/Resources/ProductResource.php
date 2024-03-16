@@ -30,6 +30,7 @@ class ProductResource extends JsonResource
             'price' => number_format($this->price),
             'discount' => number_format($this->discount),
             'percen_sale' => $percent_sale.'%',
+            'view' => $this->view,
             'img' => $this->img,
             'status' => $this->status == 1 ? 'Show' : 'Hidden',
             'slug' => $this->slug,

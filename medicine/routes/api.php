@@ -84,6 +84,8 @@ Route::group(['prefix'=> 'products'], function () {
     Route::get('/details/{slug}', [ProductsApiController::class, 'details']);
     Route::get('/products-by-type/{slug}', [ProductsApiController::class, 'prods_by_type']);
     Route::get('/products-by-type-for-app/{slug}', [ProductsApiController::class, 'prods_by_type_for_app']);
+    Route::get('/top-view', [ProductsApiController::class, 'top_view']);
+    Route::get('/up-view/{product}', [ProductsApiController::class, 'up_view']);
     Route::group(['middleware' => 'auth:sanctum'], function() {
         Route::post('/add-product', [ProductsApiController::class, 'addProduct']);
         Route::post('/show-hidden-product/{product}', [ProductsApiController::class, 'show_hidden_product']);

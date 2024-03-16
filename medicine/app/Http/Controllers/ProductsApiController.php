@@ -365,4 +365,26 @@ class ProductsApiController extends Controller
         ]);
     }
 
+    public function top_view() {
+        $product = Product::orderBy('view','DESC')->where('status', 1)->limit(10)->get();
+        $products = ProductResource::collection($product);
+        return $products;
+    }
+
+    public function up_view($product) {
+        $products = Product::find($product);
+        if($products) {
+            $products->view = $products->view + 1;
+            $products->save();
+            return response()->json([
+                'message' => 'Success',
+                'status_code' => 200,
+            ]);
+        }
+        return response()->json([
+            'message' => 'Cannot find product',
+            'status_code' => 401,
+        ]);
+    }
+
 }
