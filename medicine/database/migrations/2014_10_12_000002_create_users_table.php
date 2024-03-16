@@ -26,7 +26,6 @@ return new class extends Migration
             $table->string('image',255)->nullable();
             $table->unsignedInteger('role_id')->default(1);
             $table->foreign('role_id')->references('id')->on('roles');
-            $table->tinyInteger('object_status')->default(1);
             $table->boolean('status')->default(1);
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();

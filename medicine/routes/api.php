@@ -118,5 +118,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:sanctum'], function() {
 
     Route::group(['prefix' => 'users'], function() {
         Route::get('show', [UsersAminApiController::class, 'show']);
+        Route::get('change-status/{id}', [UsersAminApiController::class, 'change_status']);
+        Route::get('delete/{id}', [UsersAminApiController::class, 'delete']);
     });
 });

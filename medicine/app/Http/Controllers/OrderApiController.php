@@ -216,7 +216,7 @@ class OrderApiController extends Controller
                     $cart->status = 0;
                     $cart->save();
                 };
-
+                $auth->cart->delete();
                 $order->token = $token;
                 $order->created_at = Carbon::now('Asia/Ho_Chi_Minh');
                 $order->updated_at = Carbon::now('Asia/Ho_Chi_Minh');

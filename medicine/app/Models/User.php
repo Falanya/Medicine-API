@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,7 +14,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $append = ['totalPriceCart'];
+    protected $append = ['totalPriceCart','statusVerify'];
     protected $table = "users";
     protected $fillable = ['fullname', 'email', 'password', 'gender','phone','province_id','district_id','ward_id','address','birthday','image','object_status','status'];
     protected $hidden = ['password', 'created_at', 'updated_at', 'created_by', 'updated_by','email_verified_at'];
@@ -48,6 +50,18 @@ class User extends Authenticatable
             $total += $price * $item->quantity;
         }
         return number_format($total);
+    }
+
+    public function getStatusVerifyAttribute() {
+        $past = Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at);
+        $now = Carbon::now('Asia/Ho_Chi_Minh');
+        $message = '';
+        if($this->email_verified_at == null) {
+            $message = 'User not verified ';
+        } else {
+            $message = 'User verified ';
+        }
+        return  $message . '(Created ' . $past->diffForHumans($now) . ')';
     }
 
 }
