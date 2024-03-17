@@ -61,6 +61,28 @@ class UsersTableSeeder extends Seeder
                 'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
                 'updated_at' => Carbon::now('Asia/Ho_Chi_Minh')
             ],
+            [
+                'fullname' => 'Huy Béo',
+                'email' => 'lakewood12112003@gmail.com',
+                'phone' => '0123456789',
+                'address' => 'Ho Chi Minh',
+                'password' => Hash::make('123456'),
+                'role_id' => 1,
+                'email_verified_at' => Carbon::now('Asia/Ho_Chi_Minh'),
+                'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
+                'updated_at' => Carbon::now('Asia/Ho_Chi_Minh')
+            ],
+            [
+                'fullname' => 'Tuấn',
+                'email' => 'vtuan0612@gmail.com',
+                'phone' => '0123456789',
+                'address' => 'Ho Chi Minh',
+                'password' => Hash::make('123456'),
+                'role_id' => 1,
+                'email_verified_at' => Carbon::now('Asia/Ho_Chi_Minh'),
+                'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
+                'updated_at' => Carbon::now('Asia/Ho_Chi_Minh')
+            ],
         ]);
         User::factory()->count(100)->create();
     }

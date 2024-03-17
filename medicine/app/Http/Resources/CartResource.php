@@ -26,6 +26,7 @@ class CartResource extends JsonResource
             'price' => number_format($price),
             'status' => $this->status == 1? 'Show' : 'Hidden',
             'status_in_stock' => $this->product->quantity == 0 ? 'Sold out' : 'In stock',
+            'message_quantity' => $this->product->quantity < $this->quantity ? 'Only has '. $this->product->quantity .' left in stock' : '',
         ]);
     }
 }

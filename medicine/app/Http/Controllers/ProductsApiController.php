@@ -15,48 +15,13 @@ use Illuminate\Support\Str;
 
 class ProductsApiController extends Controller
 {
-    public function product(Product $product, Request $request) {
-        $products = Product::orderBy('id', 'DESC')->where('status',1)->get();
-        $products_list = [];
-        $statusProduct = [
-            0 => 'Sold out',
-            1 => 'In stock'
-        ];
-
-        foreach ($products as $item) {
-            if ($item->discount < $item->price && $item->discount > 0) {
-                $discount = $item->discount;
-                $percen_sale = ($item->price - $item->discount) / $item->price * 100;
-            } else {
-                $discount = 0;
-                $percen_sale = 0;
-            }
-            $product = [
-                'id' => $item->id,
-                'name' => $item->name,
-                'type_id' => $item->type_id,
-                'describe' => $item->describe,
-                'info' => $item->info,
-                'quantity' => $item->quantity,
-                'price' => number_format($item->price),
-                'discount' => number_format($discount),
-                'percen_sale' => floor($percen_sale).'%',
-                'img' => $item->img,
-                'status' => $statusProduct[$item->status] ?? '',
-                'slug' => $item->slug
-            ];
-            $products_list[] = $product;
-        }
-
-        return response()->json([
-            'data' => $products_list,
-            'status_code' => 200,
-            'message' => 'ok'
-        ]);
+    public function product() {
+        $products = Product::orderBy('id', 'DESC')->where('status', 1)->paginate(10);
+        return ProductResource::collection($products);
     }
 
     public function product_for_app() {
-        $products = Product::orderBy('id', 'DESC')->where('status', 1)->get();
+        $products = Product::orderBy('id', 'DESC')->where('status', 1)->paginate(10);
         return ProductResource::collection($products);
     }
 
@@ -64,38 +29,7 @@ class ProductsApiController extends Controller
         $key = $request->search;
         if ($key) {
             $data = Product::orderBy('id', 'DESC')->where('name','like','%'.$key.'%')->where('status', 1)->get();
-            $products = [];
-            $status_content = [
-                0 => "hidden",
-                1 => "show"
-            ];
-            foreach($data as $key => $item) {
-                if ($item->discount > 0 && $item->discount < $item->price) {
-                    $discount = $item->discount;
-                    $percen_sale = ($item->price - $item->discount) / $item->price * 100;
-                } else {
-                    $discount = 0;
-                    $percen_sale = 0;
-                }
-                $product = [
-                    "id" => $item->id,
-                    "name" => $item->name,
-                    'quantity' => $item->quantity,
-                    "price" => number_format($item->price),
-                    "discount" => number_format($discount),
-                    "percen_sale" => floor($percen_sale)."%",
-                    "img" => $item->img,
-                    "slug" => $item->slug,
-                    "status" => $item->status,
-                    "status_content" => $status_content[$item->status] ?? '',
-                ];
-                $products[] = $product;
-            }
-            return response()->json([
-                'data' => $products,
-                'message' => 'Success',
-                'status_code' => 200,
-            ]);
+            return ProductResource::collection($data);
         }
         return response()->json([
             'message' => 'Something errors, please check again',
@@ -219,46 +153,14 @@ class ProductsApiController extends Controller
     }
 
     public function prods_by_type($slug) {
-
-        $nameType = ProductType::where('slug', $slug)->first();
-        $data = $nameType->products;
-        $products = [];
-        $statusProduct = [
-            0 => 'Sold out',
-            1 => 'In stock'
-        ];
-        if($data) {
-            foreach($data as $item) {
-                $product = [
-                    'id' => $item->id,
-                    'type_id' => $item->type_id,
-                    'name' => $item->name,
-                    'quantity' => $item->quantity,
-                    'img' => $item->img,
-                    'price' => number_format($item->price),
-                    'slug' => $item->slug,
-                    'discount' => number_format($item->discount),
-                    'status' => $statusProduct[$item->status] ?? '',
-                ];
-                $products[] = $product;
-            }
-            return response()->json([
-                'type' => $nameType->name,
-                'products'=> $products,
-                'status_code' => 200,
-                'message'=> 'ok'
-            ]);
-        }
-        return response()->json([
-            'data' => null,
-            'status_code' => 404,
-            'message'=> 'Not ok'
-        ]);
+        $type = ProductType::where('slug', $slug)->first();
+        $products = $type->products()->paginate(10);
+        return ['data' => $products];
     }
 
     public function prods_by_type_for_app($slug) {
         $type = ProductType::where('slug', $slug)->first();
-        $products = new ProductTypeResource($type);
+        $products = $type->products()->paginate(10);
         return ['data' => $products];
     }
 
