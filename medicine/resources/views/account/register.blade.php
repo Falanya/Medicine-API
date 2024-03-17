@@ -26,58 +26,49 @@
             <form class="m-t" role="form" action="{{ route('account.post_register') }}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <label for="" class="control-label text-right">Họ và tên</label>
-                    <input type="text" class="form-control" name="fullname" placeholder="Họ và tên">
+                    <label for="" class="control-label text-right">Fullname</label>
+                    <input type="text" class="form-control" name="fullname" placeholder="Input fullname">
                     @error('fullname') <small style="color: tomato">{{ $message }}</small> @enderror
                 </div>
                 <div class="form-group">
                     <label for="" class="control-label text-right">Email</label>
-                    <input type="text" class="form-control" name="email" placeholder="Email">
+                    <input type="text" class="form-control" name="email" placeholder="Input email">
                     @error('email') <small style="color: tomato">{{ $message }}</small> @enderror
                 </div>
                 <div class="form-group">
-                    <label for="" class="control-label text-right">Giới tính</label>
+                    <label for="" class="control-label text-right">Phone</label>
+                    <input type="text" class="form-control" name="phone" placeholder="Input email">
+                    @error('phone') <small style="color: tomato">{{ $message }}</small> @enderror
+                </div>
+                <div class="form-group">
+                    <label for="" class="control-label text-right">Gender</label>
                     <select name="gender" id="input" class="form-control">
-                        <option value="1">Nam</option>
-                        <option value="0">Nữ</option>
+                        <option value="1">Male</option>
+                        <option value="0">Female</option>
                     </select>
                     @error('gender') <small style="color: tomato">{{ $message }}</small> @enderror
                 </div>
                 <div class="form-group">
-                    <label for="" class="control-label text-right">Mật khẩu</label>
-                    <input type="password" class="form-control" name="password" placeholder="Mật khẩu">
+                    <label for="" class="control-label text-right">Birthday</label>
+                    <input type="date" class="form-control" name="birthday" placeholder="Input birthday">
+                    <span><strong>Format: Month/Day/Year</strong></span>
+                    @error('address') <small style="color: tomato">{{ $message }}</small> @enderror
+                </div>  
+                <div class="form-group">
+                    <label for="" class="control-label text-right">Address</label>
+                    <input type="text" class="form-control" name="address" placeholder="Input address">
+                    @error('address') <small style="color: tomato">{{ $message }}</small> @enderror
+                </div>  
+                <div class="form-group">
+                    <label for="" class="control-label text-right">Password</label>
+                    <input type="password" class="form-control" name="password" placeholder="Input password">
                     @error('password') <small style="color: tomato">{{ $message }}</small> @enderror
                 </div>
                 <div class="form-group">
-                    <label for="" class="control-label text-right">Xác nhận</label>
-                    <input type="password" class="form-control" name="confirm_password" placeholder="Xác nhận mật khẩu">
+                    <label for="" class="control-label text-right">Cofirm password</label>
+                    <input type="password" class="form-control" name="confirm_password" placeholder="Input confirm password">
                     @error('confirm_password') <small style="color: tomato">{{ $message }}</small> @enderror
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-row">
-                                <label for="" class="control-label text-right">Thành phố</label>
-                                <span class="text-danger">(*)</span>
-                                <select name="province" class="form-control setupSelect2">
-                                    <option value="0">[Chọn thành phố]</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-row">
-                                <label for="" class="control-label text-right">Địa chỉ</label>
-                                <span class="text-danger">(*)</span>
-                                <input type="text" name="address" value="" class="form-control" placeholder="" autocomplete="off">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="" class="control-label text-right">Địa chỉ</label>
-                    <input type="text" class="form-control" name="address" placeholder="Địa chỉ">
-                    @error('confirm_password') <small style="color: tomato">{{ $message }}</small> @enderror
-                </div>   
+                </div> 
                 <button type="submit" class="btn btn-primary block full-width m-b">Register</button>
 
                 <p class="text-muted text-center"><small>Already have an account?</small></p>

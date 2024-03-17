@@ -12,7 +12,7 @@ class HomeController extends Controller
 {
     public function index() {
         $proTypes = ProductType::orderBy('name','ASC')->get();
-        $pros = Product::orderBy('id','DESC')->where('status', 1)->get();
+        $pros = Product::orderBy('id','DESC')->where('status', 1)->paginate(9);
         return view('index', compact('proTypes','pros'));
     }
 

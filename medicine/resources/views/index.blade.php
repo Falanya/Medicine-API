@@ -47,6 +47,8 @@
         }
     </script>
 </div>
-
+{{
+    $pros->links('pagination::bootstrap-4')
+}}
 
 @stop

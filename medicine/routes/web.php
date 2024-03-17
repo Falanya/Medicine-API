@@ -60,11 +60,14 @@ Route::group(['prefix'=> 'account'], function() {
     Route::post('/process-reset-password', [AccountController::class, 'process_reset_password'])->name('account.process_reset_password');
 
     Route::group(['middleware' => 'login'], function() {
+        Route::get('/index', [AccountController::class, 'index'])->name('account.index');
+        Route::get('setting', [AccountController::class, 'setting'])->name('account.setting');
+
         Route::get('/profile', [AccountController::class, 'profile'])->name('account.profile');
-        Route::post('/profile', [AccountController::class,'check_profile']);
+        Route::post('/profile', [AccountController::class,'check_profile'])->name('account.post-change-profile');
 
         Route::get('/change-password', [AccountController::class, 'change_password'])->name('account.change_password');
-        Route::post('/change-password', [AccountController::class, 'check_change_password']);
+        Route::post('/change-password', [AccountController::class, 'check_change_password'])->name('account.post-change-password');
 
         Route::get('/address', [AddressController::class,'index'])->name('account.address');
         Route::get('/add-address', [AddressController::class,'add_address'])->name('account.add_address');
@@ -75,9 +78,10 @@ Route::group(['prefix'=> 'account'], function() {
         Route::delete('/delete-all-address', [AddressController::class, 'delete_all_address'])->name('account.delete_all_address');
 
         Route::get('/promotions', [AccountController::class, 'show_promotions'])->name('account.promotions');
+        
+        Route::get('/logout', [AccountController::class, 'check_logout'])->name('account.logout');
     });
     
-    Route::get('/logout', [AccountController::class, 'check_logout'])->name('account.logout');
 });
 
 Route::group(['prefix' => 'cart', 'middleware' => 'login'], function() {

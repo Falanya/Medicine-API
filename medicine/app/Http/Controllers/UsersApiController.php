@@ -10,6 +10,7 @@ use App\Mail\VerifyAccountApi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -37,7 +38,9 @@ class UsersApiController extends Controller
             ]);
         }
 
-        $data_check = $request->all('fullname','email','gender','address','phone','birthday');
+        $data_check = $request->all('fullname','email','gender','address','phone');
+        $birthday = Carbon::createFromFormat('Y-m-d', $request->birthday);
+        $data_check['birthday'] = $birthday->format('Y-m-d');
         $data_check['password'] = bcrypt(request('password'));
 
         if ($data=User::create($data_check)) {
@@ -175,9 +178,11 @@ class UsersApiController extends Controller
     public function change_profile(Request $request) {
         $auth = auth()->user();
         $validator = Validator::make($request->all(), [
-            'email' => 'bail|required|email|unique:users,email,'.$auth->id,
             'fullname' => 'bail|required|string|min:6',
             'gender' => 'bail|required',
+            'phone' => 'required|numeric',
+            'birthday' => 'required',
+            'address' => 'required|string',
             'confirm_password' => ['bail', 'required', function($attr,$value,$fail) use($auth) {
                 if(!Hash::check($value, $auth->password)) {
                     $fail('Your password is incorrect, please try again');
@@ -192,7 +197,9 @@ class UsersApiController extends Controller
             ]);
         }
 
-        $data = $request->only('fullname','gender');
+        $data = $request->only('fullname','gender','phone','address');
+        $birthday = Carbon::createFromFormat('Y-m-d', $request->birthday);
+        $data['birthday'] = $birthday->format('Y-m-d');
         $user = User::where('email', $auth->email)->first();
         $check = $user->update($data);
         if($check) {

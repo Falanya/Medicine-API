@@ -41,7 +41,7 @@ class AccountController extends Controller
                 return redirect()->back()->with('error','Tài khoản của bạn chưa xác thực, hãy kiểm tra hộp thư email');
             }
             
-            return redirect()->route('home.index')->with('success','Chào mừng đến với Medicine Mart');
+            return redirect()->route('account.index')->with('success','Chào mừng đến với Medicine Mart');
         }
 
         return redirect()->back()->with('error','Email hoặc mật khẩu không đúng');
@@ -57,13 +57,18 @@ class AccountController extends Controller
     public function check_register(RegisterRequest $request) {
         $request->validate([
             'email' => 'required|email|unique:users',
-            'fullname' => 'required|min:5',
+            'fullname' => 'required|string|min:5',
             'gender' => 'required',
+            'address' => 'required|string',
+            'phone' => 'required|numeric',
+            'birthday' => 'required',
             'password' => 'required|min:6',
             'confirm_password' => 'required|same:password'
         ]);
 
-        $data = $request->only('email','fullname','gender');
+        $data = $request->only('email','fullname','gender','address','phone');
+        $birthday = Carbon::createFromFormat('Y-m-d', $request->birthday);
+        $data['birthday'] = $birthday->format('Y-m-d');
         $data['password'] = bcrypt(request('password'));
 
         if($user = User::create($data)) {
@@ -82,7 +87,7 @@ class AccountController extends Controller
 
     public function check_logout() {
         auth()->logout();
-        return redirect()->route('home.index')->with('success','You are logout');
+        return redirect()->route('account.index')->with('success','You are logout');
     }
 
     public function change_password() {
@@ -94,15 +99,15 @@ class AccountController extends Controller
     public function check_change_password(Request $request) {
         $user = auth()->user();
         $request->validate([
-            'password_confirm' => ['required', function($attr,$value,$fail) use($user) {
+            'old_password' => ['required', function($attr,$value,$fail) use($user) {
                 if(!Hash::check($value, $user->password)) {
                     return $fail('Your password is incorrect, please check again');
                 }
             }],
-            'password' => 'required|min:6',
-            'new_password_confirm' => 'required|same:password'
+            'new_password' => 'required|min:6',
+            'new_password_confirm' => 'required|same:new_password'
         ]);
-        $data['password'] = bcrypt(request('password'));
+        $data['password'] = bcrypt(request('new_password'));
         $check = User::where('email', $user->email)->update($data);
         if($check) {
             return redirect()->back()->with('success','Password changed successfully');
@@ -120,9 +125,11 @@ class AccountController extends Controller
     public function check_profile(Request $request) {
         $user = auth()->user();
         $request->validate([
-            'email' => 'required|email|unique:users,email,'.$user->id,
-            'fullname' => 'required',
+            'fullname' => 'required|string',
             'gender' => 'required',
+            'phone' => 'required|numeric',
+            'birthday' => 'required',
+            'address' => 'required|string',
             'password' => ['required', function($attr, $value, $fail) use($user) {
                 if(!Hash::check($value, $user->password)) {
                     return $fail('Your password is incorrect');
@@ -130,7 +137,9 @@ class AccountController extends Controller
             }],
         ]);
 
-        $data = $request->only('fullname','gender');
+        $data = $request->only('fullname','gender','phone','address');
+        $birthday = Carbon::createFromFormat('Y-m-d', $request->birthday);
+        $data['birthday'] = $birthday->format('Y-m-d');
         $check = $user->update($data);
         if($check) {
             return redirect()->back()->with('success','Update your profile successfully');
@@ -198,6 +207,18 @@ class AccountController extends Controller
 
     public function show_promotions() {
         
+    }
+
+    public function index() {
+        $config = 'medicine.components.info';
+        $auth = auth()->user();
+        return view('medicine.layout', compact('config','auth'));
+    }
+
+    public function setting() {
+        $config = 'medicine.components.form';
+        $auth = auth()->user();
+        return view('medicine.layout', compact('config','auth'));
     }
 
 }
