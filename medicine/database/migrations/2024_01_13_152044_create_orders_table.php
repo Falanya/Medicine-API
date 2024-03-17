@@ -15,6 +15,7 @@ return new class extends Migration
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->string('address_default');
             $table->unsignedInteger('address_id');
             $table->foreign('address_id')->references('id')->on('addresses');
             $table->string('note', 255)->nullable();

@@ -6,11 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Mail\OrderMailApi;
 use App\Models\Cart;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\ProductOrder;
 use App\Models\Promotion;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
@@ -51,6 +51,7 @@ class OrderApiController extends Controller
         }
 
         return response()->json([
+            'address_default' => $auth->address,
             'addresses' => $addresses,
             'carts' => $carts,
             'total' => $total,
@@ -95,6 +96,7 @@ class OrderApiController extends Controller
             ];
             $address = $order->address;
             $reInfo = [
+                'address_default' => $order->address,
                 'receiver_name' => $address->receiver_name,
                 'phone' => $address->phone,
                 'address' => $address->address
@@ -145,6 +147,7 @@ class OrderApiController extends Controller
     public function post_checkout(Request $request) {
         $auth = auth()->user();
         $validator = Validator::make($request->all(), [
+            'address_default' => 'bail|required|string',
             'address_id' => 'bail|required|exists:addresses,id',
             'note' => 'max:255',
             'promotion_code' => ['nullable', 'exists:promotions,code', function($attr,$value,$fail) use($auth) {
@@ -194,9 +197,20 @@ class OrderApiController extends Controller
             ]);
         }
 
-        $data = $request->only('address_id','note','promotion_code');
+        $data = $request->only('address_default','address_id','note','promotion_code');
         $data['user_id'] = $auth->id;
+        $cart = $auth->carts;
         if ($auth->carts()->count() > 0) {
+
+            foreach($auth->carts as $cart) {
+                $product = $cart->product;
+                if($product->quantity < $cart->quantity) {
+                    return response()->json([
+                        'message' => 'Some products is sold out, please try again',
+                        'status_code' => 400,
+                    ]);
+                }
+            }
         
             $order = Order::create($data);
 
@@ -257,14 +271,8 @@ class OrderApiController extends Controller
             $order->status = 1;
             $order->save();
 
-            return response()->json([
-                'message' => 'Verify your order successfully',
-                'status_code' => 200,
-            ]);
+            return 'Verify your order successfully';
         }
-        return response()->json([
-            'message' => 'Cannot found order, please check again',
-            'status_code' => 401,
-        ]);
+        return 'Cannot found order, please check again';
     }
 }

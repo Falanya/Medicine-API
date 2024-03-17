@@ -14,21 +14,21 @@ class OrdersTableSeeder extends Seeder
     public function run(): void
     {
         DB::table('orders')->insert([
-            array('user_id'=>2, 'address_id'=>1, 'note'=>'Hang de vo', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
+            array('user_id'=>2, 'address_default' => 'Ho Chi Minh', 'address_id'=>1, 'note'=>'Hang de vo', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
             'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh')),
-            array('user_id'=>2, 'address_id'=>1, 'note'=>'Hang kho vo', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
+            array('user_id'=>2, 'address_default' => 'Ho Chi Minh', 'address_id'=>1, 'note'=>'Hang kho vo', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
             'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh')),
-            array('user_id'=>2, 'address_id'=>2, 'note'=>'Hang qua mac', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
+            array('user_id'=>2, 'address_default' => 'Ho Chi Minh', 'address_id'=>2, 'note'=>'Hang qua mac', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
             'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh')),
-            array('user_id'=>2, 'address_id'=>2, 'note'=>'Hang qua re', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
+            array('user_id'=>2, 'address_default' => 'Ho Chi Minh', 'address_id'=>2, 'note'=>'Hang qua re', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
             'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh')),
-            array('user_id'=>3, 'address_id'=>3, 'note'=>'Hang qua dom', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
+            array('user_id'=>3, 'address_default' => 'Ho Chi Minh', 'address_id'=>3, 'note'=>'Hang qua dom', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
             'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh')),
-            array('user_id'=>3, 'address_id'=>3, 'note'=>'Hang qua chat luong', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
+            array('user_id'=>3, 'address_default' => 'Ho Chi Minh', 'address_id'=>3, 'note'=>'Hang qua chat luong', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
             'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh')),
-            array('user_id'=>3, 'address_id'=>4, 'note'=>'Hang qua dep', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
+            array('user_id'=>3, 'address_default' => 'Ho Chi Minh', 'address_id'=>4, 'note'=>'Hang qua dep', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
             'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh')),
-            array('user_id'=>3, 'address_id'=>4, 'note'=>'Hang qua xau', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
+            array('user_id'=>3, 'address_default' => 'Ho Chi Minh', 'address_id'=>4, 'note'=>'Hang qua xau', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
             'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh'))
         ]);
     }
