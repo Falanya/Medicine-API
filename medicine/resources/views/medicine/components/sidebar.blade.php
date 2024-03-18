@@ -11,12 +11,20 @@
                 </div>
             </li>
             <li class="active">
-                <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Information</span>
+                <a><i class="fa fa-th-large"></i> <span class="nav-label">Information</span>
                     <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse">
-                    <li><a href="{{ route('account.index') }}"> Account Information</a></li>
-                    <li><a href="{{ route('account.setting') }}"> Account Settings</a></li>
+                    <li><a href="{{ route('account.index') }}">Account Information</a></li>
+                    <li><a href="{{ route('account.setting') }}">Account Settings</a></li>
                     <li><a href="#"> Login Devices</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <a><i class="fa fa-th-large"></i> <span class="nav-label">Orders List</span>
+                    <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li><a href="{{ route('account.index') }}">History</a></li>
                 </ul>
             </li>
             

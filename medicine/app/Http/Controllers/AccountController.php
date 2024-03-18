@@ -40,7 +40,9 @@ class AccountController extends Controller
                 auth('web')->logout();
                 return redirect()->back()->with('error','Tài khoản của bạn chưa xác thực, hãy kiểm tra hộp thư email');
             }
-            
+            if(auth('web')->user()->role_id == 2) {
+                return redirect()->route('dashboard.index')->with('success','Chào mừng đến với Medicine Mart');
+            }
             return redirect()->route('account.index')->with('success','Chào mừng đến với Medicine Mart');
         }
 

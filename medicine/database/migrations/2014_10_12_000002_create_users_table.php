@@ -19,8 +19,7 @@ return new class extends Migration
             $table->boolean('gender')->default(0);
             $table->string('phone',20);
             $table->string('address',255);
-            $table->date('birthday')->nullable();
-            $table->string('image',255)->nullable();
+            $table->date('birthday');
             $table->unsignedInteger('role_id')->default(1);
             $table->foreign('role_id')->references('id')->on('roles');
             $table->boolean('status')->default(1);

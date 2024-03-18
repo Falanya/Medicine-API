@@ -4,14 +4,12 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\Dashboard\DashboardController;
-use App\Http\Controllers\Dashboard\LocationController;
-use App\Http\Controllers\Dashboard\UserController;
+use App\Http\Controllers\Dashboard\HomeController as DashboardHomeController;
+use App\Http\Controllers\Dashboard\UsersController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductTypeController;
-use App\Http\Middleware\AuthenticateMiddleware;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -61,7 +59,11 @@ Route::group(['prefix'=> 'account'], function() {
 
     Route::group(['middleware' => 'login'], function() {
         Route::get('/index', [AccountController::class, 'index'])->name('account.index');
-        Route::get('setting', [AccountController::class, 'setting'])->name('account.setting');
+        Route::get('/setting', [AccountController::class, 'setting'])->name('account.setting');
+        Route::group(['prefix' => 'orders'], function() {
+            Route::get('/history', [])->name('account.order.history');
+        });
+        
 
         Route::get('/profile', [AccountController::class, 'profile'])->name('account.profile');
         Route::post('/profile', [AccountController::class,'check_profile'])->name('account.post-change-profile');
@@ -116,16 +118,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function() {
 });
 
 Route::group(['prefix' => 'dashboard', 'middleware' => 'admin'], function() {
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
-
-    Route::group(['prefix' => 'user'], function() {
-        Route::get('/index', [UserController::class, 'index'])->name('dashboard.user.index');
-        Route::get('/create', [UserController::class, 'create'])->name('dashboard.user.create');
-        Route::post('/post-create', [UserController::class, 'post_create'])->name('dashboard.user.post-create');
-        Route::get('/edit', [UserController::class, 'edit'])->name('dashboard.user.edit');
-        Route::post('/post-edit', [UserController::class, 'post_edit'])->name('dashboard.user.post-edit');
+    Route::get('/', [DashboardHomeController::class, 'index'])->name('dashboard.index');
+    Route::group(['prefix' => 'users'], function() {
+        Route::get('/index', [UsersController::class, 'index'])->name('dashboard.users.index');
     });
 });
-
-/* AJAX */
-Route::get('/ajax/location/getLocation', [LocationController::class, 'getLocation'])->name('ajax.location.getLocation')->middleware('admin');

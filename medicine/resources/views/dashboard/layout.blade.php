@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="">
 
 <head>
     @include('dashboard.components.head')
 </head>
 
 <body>
+
     <div id="wrapper">
         @include('dashboard.components.sidebar')
-
-        <div id="page-wrapper" class="gray-bg dashbard-1">
+        <div id="page-wrapper" class="gray-bg">
             @include('dashboard.components.nav')
-            @include($template)
-            @include('dashboard.components.footer')
+            @include($config)
         </div>
     </div>
-
+    
     @include('dashboard.components.script')
 </body>
+
 </html>

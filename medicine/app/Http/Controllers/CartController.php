@@ -102,7 +102,10 @@ class CartController extends Controller
             $quantities = $request->input('quantities');
 
             foreach ($quantities as $cartId => $quantity) {
-                Cart::where('id', $cartId)->update(['quantity' => $quantity]);
+               $check = Cart::where(['id' => $cartId, 'status' => 1])->update(['quantity' => $quantity]);
+               if(!$check) {
+                return redirect()->back()->with('error', 'Cannot find product from cart');
+               }
             }
 
             return redirect()->back()->with('success','Quantities updated successfully');

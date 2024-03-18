@@ -28,7 +28,7 @@ class CartsApiController extends Controller
                     'quantity' => $item->quantity,
                     'status' => $item->status == 1 ? 'Show' : 'Hidden',
                     'status_in_stock' => $item->product->quantity == 0 ? 'Sold Out' : 'In stock',
-                    'message_quantity' => $item->product->quantity < $item->quantity ? 'Only has'. $item->product->quantity .'left in stock' : '',
+                    'message_quantity' => $item->product->quantity < $item->quantity ? 'Only has '. $item->product->quantity .' left in stock' : '',
                 ];
                 $products[] = $product;
                 $total += $price*$item->quantity;
