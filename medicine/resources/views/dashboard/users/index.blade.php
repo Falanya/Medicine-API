@@ -29,7 +29,6 @@
                             <th>ID</th>
                             <th>Thông tin</th>
                             <th>Email</th>
-                            <th>Địa chỉ</th>
                             <th>Xác minh email</th>
                             <th>Status</th>
                             <th></th>
@@ -46,7 +45,6 @@
                                 <p><strong>Ngày sinh:</strong> {{ $item->birthday }}
                             </td>
                             <td>{{ $item->email }}</td>
-                            <td>{{ $item->address }}</td>
                             <td><strong>{{ $item->statusVerify }}</strong></td>
                             <td>{{ $item->status == 1 ? 'Active' : 'Blocked' }}</td>
                             <td class="text-center"><a class="btn btn-primary"><i class="fas fa-trash"></i></a></td>

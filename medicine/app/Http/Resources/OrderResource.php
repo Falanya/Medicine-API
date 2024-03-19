@@ -14,8 +14,20 @@ class OrderResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $status = [
+            0 => 'Not verified',
+            1 => 'Verified',
+            2 => 'Shipping',
+            3 => 'Compeleted',
+            4 => 'Canceled',
+        ];
         return ([
-            
+            'id' => $this->id,
+            'user_id' => new UsersResource($this->user_id),
+            'address_id' => new AddressResource($this->address_id),
+            'note' => $this->note,
+            'status' => $status[$this->status] ?? '',
+            'created_at' => $this->created_at,
         ]);
     }
 }

@@ -16,12 +16,12 @@ use Illuminate\Support\Str;
 class ProductsApiController extends Controller
 {
     public function product() {
-        $products = Product::orderBy('id', 'DESC')->where('status', 1)->paginate(10);
+        $products = Product::orderBy('id', 'DESC')->where('status', 1)->get();
         return ProductResource::collection($products);
     }
 
     public function product_for_app() {
-        $products = Product::orderBy('id', 'DESC')->where('status', 1)->paginate(10);
+        $products = Product::orderBy('id', 'DESC')->where('status', 1)->get();
         return ProductResource::collection($products);
     }
 
@@ -272,7 +272,7 @@ class ProductsApiController extends Controller
     }
 
     public function top_view() {
-        $product = Product::orderBy('view','DESC')->where('status', 1)->limit(10)->get();
+        $product = Product::orderBy('view','DESC')->where('status', 1)->where('view', '>', 0)->limit(10)->get();
         $products = ProductResource::collection($product);
         return $products;
     }

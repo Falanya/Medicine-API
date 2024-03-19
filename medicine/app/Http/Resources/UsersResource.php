@@ -22,10 +22,10 @@ class UsersResource extends JsonResource
             'email' => $this->email,
             'gender' => $this->gender,
             'phone' => $this->phone,
-            'address' => $this->address,
             'birthday' => $this->birthday,
             'role_id' => $this->role_id == 1 ? 'Member' : 'Admin',
             'status' => $this->status == 1 ? 'Active' : 'Blocked',
+            'email_verify' => $this->email_verified_at != null ? 'Verifed' : null,
             'status_verify' => $this->statusVerify,
         ];
     }

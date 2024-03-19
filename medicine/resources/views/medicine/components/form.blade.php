@@ -53,14 +53,6 @@
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
-                        <div class="form-group"><label class="col-sm-2 control-label">Address</label>
-
-                            <div class="col-sm-10">
-                                <input name="address" value="{{ $auth->address }}" type="text" placeholder="Input address" class="form-control">
-                                @error('address') <small class="text-danger">{{ $message }}</small> @enderror
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
                         <div class="form-group"><label class="col-sm-2 control-label">Confirm password</label>
 
                             <div class="col-sm-10">

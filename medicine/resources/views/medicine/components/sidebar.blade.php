@@ -10,7 +10,7 @@
                     
                 </div>
             </li>
-            <li class="active">
+            <li>
                 <a><i class="fa fa-th-large"></i> <span class="nav-label">Information</span>
                     <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse">
@@ -24,10 +24,18 @@
                 <a><i class="fa fa-th-large"></i> <span class="nav-label">Orders List</span>
                     <span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse">
-                    <li><a href="{{ route('account.index') }}">History</a></li>
+                    <li><a href="{{ route('order.index') }}">History</a></li>
                 </ul>
             </li>
             
+            <li>
+                <a><i class="fa fa-th-large"></i> <span class="nav-label">MailBox</span>
+                    <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li><a href="{{ route('account.index') }}">Compose email</a></li>
+                    <li><a href="{{ route('account.index') }}">Inbox</a></li>
+                </ul>
+            </li>
         </ul>
 
     </div>

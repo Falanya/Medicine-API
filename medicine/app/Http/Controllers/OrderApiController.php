@@ -199,6 +199,10 @@ class OrderApiController extends Controller
 
         $data = $request->only('address_default','address_id','note','promotion_code');
         $data['user_id'] = $auth->id;
+        $date = Carbon::now('Asia/Ho_Chi_Minh');
+        $dateformat = $date->format('dmYs');
+        $randomString = Str::random(2);
+        $data['tracking_number'] = $dateformat.$randomString;
         $cart = $auth->carts;
         if ($auth->carts()->count() > 0) {
 

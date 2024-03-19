@@ -23,7 +23,6 @@ class UsersApiController extends Controller
             'fullname' => 'bail|required|string|min:6',
             'email' => 'bail|required|email|unique:users',
             'gender' => 'bail|required',
-            'address' => 'bail|required|string',
             'phone' => 'bail|required|numeric',
             'birthday' => 'bail|required',
             'password' => 'bail|required|min:6',
@@ -38,7 +37,7 @@ class UsersApiController extends Controller
             ]);
         }
 
-        $data_check = $request->all('fullname','email','gender','address','phone');
+        $data_check = $request->all('fullname','email','gender','phone');
         $birthday = Carbon::createFromFormat('d-m-Y', $request->birthday);
         $data_check['birthday'] = $birthday->format('Y-m-d');
         $data_check['password'] = bcrypt(request('password'));
@@ -182,7 +181,6 @@ class UsersApiController extends Controller
             'gender' => 'bail|required',
             'phone' => 'required|numeric',
             'birthday' => 'required',
-            'address' => 'required|string',
             'confirm_password' => ['bail', 'required', function($attr,$value,$fail) use($auth) {
                 if(!Hash::check($value, $auth->password)) {
                     $fail('Your password is incorrect, please try again');
@@ -197,7 +195,7 @@ class UsersApiController extends Controller
             ]);
         }
 
-        $data = $request->only('fullname','gender','phone','address');
+        $data = $request->only('fullname','gender','phone');
         $birthday = Carbon::createFromFormat('Y-m-d', $request->birthday);
         $data['birthday'] = $birthday->format('Y-m-d');
         $user = User::where('email', $auth->email)->first();

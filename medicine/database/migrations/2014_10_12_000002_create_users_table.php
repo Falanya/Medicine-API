@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('password', 255);
             $table->boolean('gender')->default(0);
             $table->string('phone',20);
-            $table->string('address',255);
             $table->date('birthday');
             $table->unsignedInteger('role_id')->default(1);
             $table->foreign('role_id')->references('id')->on('roles');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\OrderResource;
 use App\Mail\OrderMail;
 use App\Models\Address;
 use App\Models\Cart;
@@ -88,6 +89,11 @@ class OrderController extends Controller
 
         $data = $request->only('address_id', 'note', 'promotion_code');
         $data['user_id'] = $auth->id;
+        $date = Carbon::now('Asia/Ho_Chi_Minh');
+        $dateformat = $date->format('dmYs');
+        $randomString = Str::random(2);
+        $data['tracking_number'] = $dateformat.$randomString;
+
         $order = Order::create($data);
         if ($order) {
             $token = Str::random(40);
@@ -129,6 +135,20 @@ class OrderController extends Controller
             return redirect()->route('home.index');
         }
         return redirect()->route('home.index');
+    }
+
+    public function index() {
+        $config = 'medicine.orders.index';
+        $auth = auth()->user();
+        $orders = Order::where('user_id', $auth->id)->orderBy('id', 'DESC')->paginate(10);
+        return view('medicine.layout', compact('config','auth','orders'));
+    }
+
+    public function details($order) {
+        $config = 'medicine.orders.details';
+        $auth = auth()->user();
+        $details = $auth->orders->where('tracking_number', $order)->first();
+        return view('medicine.layout', compact('config','auth','details'));
     }
 
 }

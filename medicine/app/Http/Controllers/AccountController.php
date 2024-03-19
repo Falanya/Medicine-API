@@ -61,14 +61,13 @@ class AccountController extends Controller
             'email' => 'required|email|unique:users',
             'fullname' => 'required|string|min:5',
             'gender' => 'required',
-            'address' => 'required|string',
             'phone' => 'required|numeric',
             'birthday' => 'required',
             'password' => 'required|min:6',
             'confirm_password' => 'required|same:password'
         ]);
 
-        $data = $request->only('email','fullname','gender','address','phone');
+        $data = $request->only('email','fullname','gender','phone');
         $birthday = Carbon::createFromFormat('Y-m-d', $request->birthday);
         $data['birthday'] = $birthday->format('Y-m-d');
         $data['password'] = bcrypt(request('password'));
@@ -131,7 +130,6 @@ class AccountController extends Controller
             'gender' => 'required',
             'phone' => 'required|numeric',
             'birthday' => 'required',
-            'address' => 'required|string',
             'password' => ['required', function($attr, $value, $fail) use($user) {
                 if(!Hash::check($value, $user->password)) {
                     return $fail('Your password is incorrect');
@@ -139,7 +137,7 @@ class AccountController extends Controller
             }],
         ]);
 
-        $data = $request->only('fullname','gender','phone','address');
+        $data = $request->only('fullname','gender','phone');
         $birthday = Carbon::createFromFormat('Y-m-d', $request->birthday);
         $data['birthday'] = $birthday->format('Y-m-d');
         $check = $user->update($data);
@@ -212,13 +210,13 @@ class AccountController extends Controller
     }
 
     public function index() {
-        $config = 'medicine.components.info';
+        $config = 'medicine.information.index';
         $auth = auth()->user();
         return view('medicine.layout', compact('config','auth'));
     }
 
     public function setting() {
-        $config = 'medicine.components.form';
+        $config = 'medicine.information.setting';
         $auth = auth()->user();
         return view('medicine.layout', compact('config','auth'));
     }

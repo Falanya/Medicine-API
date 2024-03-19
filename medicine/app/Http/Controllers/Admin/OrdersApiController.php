@@ -26,7 +26,8 @@ class OrdersApiController extends Controller
                 $order = [
                     'stt' => $key + 1,
                     'id' => $item->id,
-                    'order_data' => $item->created_at->format('d/m/Y'),
+                    'receiver_name' => $item->address->receiver_name,
+                    'order_date' => $item->created_at->format('d/m/Y'),
                     'status_content' => $statusOrder[$item->status] ?? '',
                     'status' => $item->status,
                     'totalPrice' => number_format($item->totalPrice),

@@ -103,6 +103,9 @@ Route::group(['prefix' => 'order', 'middleware' => 'login'], function() {
     Route::get('/detail/{order}', [OrderController::class, 'detail'])->name('order.detail');
     Route::post('apply-promotion', [OrderController::class, 'apply_promotion'])->name('order.apply_promotion');
 
+    Route::get('/index', [OrderController::class, 'index'])->name('order.index');
+    Route::get('/details/{order}', [OrderController::class, 'details'])->name('order.details');
+
 });
 
 Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function() {

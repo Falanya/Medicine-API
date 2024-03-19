@@ -7,17 +7,39 @@ use App\Http\Resources\UsersResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class UsersAminApiController extends Controller
 {
     public function show() {
         $auth = auth()->user();
         if($auth->role_id == 2) {
-            $users = User::orderBy('id','DESC')->limit(5)->get();
+            $users = User::orderBy('id','ASC')->get();
             return ['data' => UsersResource::collection($users), 'status_code' => 200];
         }
         return response()->json([
             'message' => 'Verify Not success',
+            'status_code' => 401,
+        ]);
+    }
+
+    public function search(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+        ]);
+        if($validator->fails()) {
+            return response()->json([
+                'message' => $validator->errors()->all(),
+                'status_code' => 401,
+            ]);
+        }
+        $user = User::where('email', $request->email)->first();
+        if($user) {
+            $data = new UsersResource($user);
+            return ['data' => $data,'status_code' => 200];
+        }
+        return response()->json([
+            'message' => 'Email is invalid',
             'status_code' => 401,
         ]);
     }
