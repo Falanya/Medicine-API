@@ -5,6 +5,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Dashboard\HomeController as DashboardHomeController;
+use App\Http\Controllers\Dashboard\OrdersController;
 use App\Http\Controllers\Dashboard\UsersController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
@@ -124,5 +125,8 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'admin'], function() {
     Route::get('/', [DashboardHomeController::class, 'index'])->name('dashboard.index');
     Route::group(['prefix' => 'users'], function() {
         Route::get('/index', [UsersController::class, 'index'])->name('dashboard.users.index');
+    });
+    Route::group(['prefix' => 'orders'], function() {
+        Route::get('/index', [OrdersController::class, 'show'])->name('dashboard.orders.index');
     });
 });

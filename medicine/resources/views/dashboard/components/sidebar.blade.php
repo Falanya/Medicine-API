@@ -28,6 +28,16 @@
                     <li><a href="#">Nhóm thành viên</a></li>
                 </ul>
             </li>
+            <li>
+                <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Quản lý đơn hàng</span>
+                    <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li><a href="{{ route('dashboard.orders.index') }}">Đã xác minh</a></li>
+                    <li><a href="{{ route('dashboard.orders.index', ['status' => 2]) }}">Đang vận chuyển</a></li>
+                    <li><a href="{{ route('dashboard.orders.index', ['status' => 3]) }}">Đã hoàn thành</a></li>
+                    <li><a href="{{ route('dashboard.orders.index', ['status' => 4]) }}">Đã hủy</a></li>
+                </ul>
+            </li>
         </ul>
 
     </div>
