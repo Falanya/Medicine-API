@@ -5,8 +5,8 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\Dashboard\HomeController as DashboardHomeController;
-use App\Http\Controllers\Dashboard\OrdersController;
-use App\Http\Controllers\Dashboard\UsersController;
+use App\Http\Controllers\Dashboard\OrdersController as DashboardOrdersController;
+use App\Http\Controllers\Dashboard\UsersController as DashboardUsersController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
@@ -124,9 +124,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'admin'], function() {
 Route::group(['prefix' => 'dashboard', 'middleware' => 'admin'], function() {
     Route::get('/', [DashboardHomeController::class, 'index'])->name('dashboard.index');
     Route::group(['prefix' => 'users'], function() {
-        Route::get('/index', [UsersController::class, 'index'])->name('dashboard.users.index');
+        Route::get('/index', [DashboardUsersController::class, 'index'])->name('dashboard.users.index');
     });
     Route::group(['prefix' => 'orders'], function() {
-        Route::get('/index', [OrdersController::class, 'show'])->name('dashboard.orders.index');
+        Route::get('/index', [DashboardOrdersController::class, 'show'])->name('dashboard.orders.index');
+        Route::get('/details/{order}', [DashboardOrdersController::class, 'details'])->name('dashboard.orders.details');
+        Route::get('/change-status/{order}', [DashboardOrdersController::class, 'change_status'])->name('dashboard.orders.change-status');
     });
 });

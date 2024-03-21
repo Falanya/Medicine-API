@@ -23,11 +23,13 @@ class OrderResource extends JsonResource
         ];
         return ([
             'id' => $this->id,
+            'tracking_number' => $this->tracking_number,
             'user_id' => new UsersResource($this->user_id),
             'address_id' => new AddressResource($this->address_id),
             'note' => $this->note,
             'status' => $status[$this->status] ?? '',
             'created_at' => $this->created_at,
+            'products_order' => new ProductOrderResource($this->id),
         ]);
     }
 }
