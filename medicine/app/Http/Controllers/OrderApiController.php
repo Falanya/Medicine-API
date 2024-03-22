@@ -72,6 +72,7 @@ class OrderApiController extends Controller
         foreach($auth_order as $item) {
             $order = [
                 'id' => $item->id,
+                'tracking_number' => $item->tracking_number,
                 'order_date' => $item->created_at->format('d/m/Y'),
                 'status_content' => $statusOrder[$item->status] ?? '',
                 'status' => $item->status,
@@ -109,6 +110,7 @@ class OrderApiController extends Controller
                 4 => 'Cancelled'
             ];
             $orderInfo = [
+                'tracking_number' => $order->tracking_number,
                 'discount' => number_format($order->discountPrice),
                 'totalPrice' => number_format($order->totalPrice),
                 'note' => $order->note,
@@ -128,7 +130,7 @@ class OrderApiController extends Controller
                 ];
                 $products[] = $product;
             }
-            
+
             return response()->json([
                 'cusInfo' => $cusInfo,
                 'reInfo' => $reInfo,
@@ -141,7 +143,7 @@ class OrderApiController extends Controller
                 'message' => "Your order cannot be found"
             ]);
         }
-        
+
     }
 
     public function post_checkout(Request $request) {
@@ -200,9 +202,8 @@ class OrderApiController extends Controller
         $data = $request->only('address_default','address_id','note','promotion_code');
         $data['user_id'] = $auth->id;
         $date = Carbon::now('Asia/Ho_Chi_Minh');
-        $dateformat = $date->format('dmYs');
-        $randomString = Str::random(2);
-        $data['tracking_number'] = $dateformat.$randomString;
+        $dateformat = $date->format('dmYhis');
+        $data['tracking_number'] = $dateformat.$auth->id;
         $cart = $auth->carts;
         if ($auth->carts()->count() > 0) {
 
@@ -215,7 +216,7 @@ class OrderApiController extends Controller
                     ]);
                 }
             }
-        
+
             $order = Order::create($data);
 
             if($order) {

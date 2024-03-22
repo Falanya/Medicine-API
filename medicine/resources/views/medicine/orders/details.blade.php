@@ -41,7 +41,7 @@ foreach($details->details as $item) {
         <div class="col-lg-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Thông tin người đặt</h5>
+                    <h5>Thông tin tài khoản</h5>
                 </div>
                 <div class="ibox-content">
                     <p><strong>Fullname:</strong> {{ $details->user->fullname }}</p>
@@ -53,7 +53,7 @@ foreach($details->details as $item) {
         <div class="col-lg-6">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Thông tin người nhận</h5>
+                    <h5>Thông tin nhận hàng</h5>
                 </div>
                 <div class="ibox-content">
                     <p><strong>Fullname:</strong> {{ $details->address->receiver_name }}</p>

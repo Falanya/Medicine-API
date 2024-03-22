@@ -36,3 +36,8 @@
 
 <!-- Sparkline demo data  -->
 <script src="{{ asset('js/demo/sparkline-demo.js') }}"></script>
+
+<!-- Sweet alert -->
+<script src="{{ asset('js/plugins/sweetalert/sweetalert.min.js') }}"></script>
+
+

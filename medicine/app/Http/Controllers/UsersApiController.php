@@ -38,7 +38,7 @@ class UsersApiController extends Controller
         }
 
         $data_check = $request->all('fullname','email','gender','phone');
-        $birthday = Carbon::createFromFormat('d-m-Y', $request->birthday);
+        $birthday = Carbon::createFromFormat('Y-m-d', $request->birthday);
         $data_check['birthday'] = $birthday->format('Y-m-d');
         $data_check['password'] = bcrypt(request('password'));
 

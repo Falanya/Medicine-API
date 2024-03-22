@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="vn">
 
 <head>
     @include('dashboard.components.head')
@@ -14,7 +14,7 @@
             @include($config)
         </div>
     </div>
-    
+
     @include('dashboard.components.script')
 </body>
 

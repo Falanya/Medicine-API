@@ -33,12 +33,12 @@ class OrdersController extends Controller
     public function change_status($order) {
         $request = request('status', 1);
         if($request) {
-            $orders = Order::where('tracking_number', $request)->first();
-            $order->status = $request;
-            $order->save();
+            $orders = Order::where('tracking_number', $order)->first();
+            $orders->status = $request;
+            $orders->save();
             return redirect()->back();
         }
         return view(404);
     }
-    
+
 }

@@ -61,8 +61,8 @@
                         <tr>
                             <td>{{ $item->tracking_number }}</td>
                             <td>{{ number_format($item->totalPrice) }}</td>
-                            <td>{{ $item->created_at->format('d-m-Y') }}</td>
-                            <td>{{ $item->updated_at->format('d-m-Y') }}</td>
+                            <td>{{ $item->created_at->format('d-m-Y H:i:s') }}</td>
+                            <td>{{ $item->updated_at->format('d-m-Y H:i:s') }}</td>
                             <td class="text-center"><a href="{{ route('dashboard.orders.details', $item->tracking_number) }}" class="btn btn-primary"><i class="fa fa-edit"></i></a></td>
                         </tr>
                         @endforeach

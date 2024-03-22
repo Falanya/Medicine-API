@@ -64,7 +64,7 @@ Route::group(['prefix'=> 'account'], function() {
         Route::group(['prefix' => 'orders'], function() {
             Route::get('/history', [])->name('account.order.history');
         });
-        
+
 
         Route::get('/profile', [AccountController::class, 'profile'])->name('account.profile');
         Route::post('/profile', [AccountController::class,'check_profile'])->name('account.post-change-profile');
@@ -81,10 +81,10 @@ Route::group(['prefix'=> 'account'], function() {
         Route::delete('/delete-all-address', [AddressController::class, 'delete_all_address'])->name('account.delete_all_address');
 
         Route::get('/promotions', [AccountController::class, 'show_promotions'])->name('account.promotions');
-        
+
         Route::get('/logout', [AccountController::class, 'check_logout'])->name('account.logout');
     });
-    
+
 });
 
 Route::group(['prefix' => 'cart', 'middleware' => 'login'], function() {
@@ -125,6 +125,9 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'admin'], function() {
     Route::get('/', [DashboardHomeController::class, 'index'])->name('dashboard.index');
     Route::group(['prefix' => 'users'], function() {
         Route::get('/index', [DashboardUsersController::class, 'index'])->name('dashboard.users.index');
+        Route::get('/create', [DashboardUsersController::class, 'create'])->name('dashboard.users.create');
+        Route::post('/post-create', [DashboardUsersController::class, 'post_create'])->name('dashboard.users.post_create');
+        Route::get('/delete/{user}', [DashboardUsersController::class, 'delete'])->name('dashboard.users.delete');
     });
     Route::group(['prefix' => 'orders'], function() {
         Route::get('/index', [DashboardOrdersController::class, 'show'])->name('dashboard.orders.index');

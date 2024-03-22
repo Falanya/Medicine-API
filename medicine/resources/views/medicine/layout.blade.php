@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="vn">
 
 <head>
     @include('medicine.components.head')

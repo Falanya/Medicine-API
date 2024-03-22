@@ -53,16 +53,16 @@ class OrderController extends Controller
                     if ($promotion->status == 0) {
                         return $fail('Voucher is not active');
                     }
-    
+
                     $now = Carbon::now('Asia/Ho_Chi_Minh');
                     $nowF = Carbon::createFromFormat('Y-m-d H:i:s', $now);
                     $startsAt = Carbon::createFromFormat('Y-m-d H:i:s', $promotion->starts_at);
                     $expiresAt = Carbon::createFromFormat('Y-m-d H:i:s', $promotion->expires_at);
-    
+
                     if ($nowF->lt($startsAt)) {
                         return $fail('Voucher can only be used from ' . $startsAt->format('d/m/Y H:i:s'));
                     }
-    
+
                     if ($expiresAt->lt($nowF)) {
                         return $fail('Voucher has expired');
                     }
@@ -90,9 +90,8 @@ class OrderController extends Controller
         $data = $request->only('address_id', 'note', 'promotion_code');
         $data['user_id'] = $auth->id;
         $date = Carbon::now('Asia/Ho_Chi_Minh');
-        $dateformat = $date->format('dmYs');
-        $randomString = Str::random(2);
-        $data['tracking_number'] = $dateformat.$randomString;
+        $dateformat = $date->format('dmYhis');
+        $data['tracking_number'] = $dateformat.$auth->id;
 
         $order = Order::create($data);
         if ($order) {

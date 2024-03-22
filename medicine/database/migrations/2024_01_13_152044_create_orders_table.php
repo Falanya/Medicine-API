@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('promotion_code',255)->nullable();
             $table->boolean('status')->default(0);
             $table->string('token', 50)->nullable();
-            $table->bigInteger('object_status')->default(1);
             $table->timestamps();
         });
     }
