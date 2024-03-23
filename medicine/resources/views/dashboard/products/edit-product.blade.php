@@ -21,15 +21,15 @@
         <div class="col-lg-12">
             <div class="tabs-container">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a data-toggle="tab" href="#tab-1"> Product info</a></li>
-                    <li class=""><a data-toggle="tab" href="#tab-4"> Images</a></li>
+                    <li class="active"><a data-toggle="tab" href="#tab-1">Thông tin sản phẩm</a></li>
+                    <li class=""><a data-toggle="tab" href="#tab-4">Ảnh mô tả</a></li>
                 </ul>
                 <div class="tab-content">
                     <div id="tab-1" class="tab-pane active">
                         <div class="panel-body">
 
                             <fieldset class="form-horizontal">
-                                <form method="POST" action="{{ route('dashboard.products.post-edit-product', $details->id) }}">
+                                <form id="productForm" method="POST" action="{{ route('dashboard.products.post-edit-product', $details->id) }}" enctype="multipart/form-data">
                                     @csrf
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Name:</label>
@@ -38,19 +38,13 @@
                                             @error('name') <small class="text-danger">{{ $message }}</small> @enderror
                                         </div>
                                     </div>
-                                    {{-- <div class="form-group">
-                                        <label class="col-sm-2 control-label">Slug</label>
-                                        <div class="col-sm-10">
-                                            <input type="text" id="slug" value="{{ $details->slug }}" name="slug" class="form-control" placeholder="Slug sản phẩm">
-                                        </div>
-                                    </div> --}}
                                     <input type="hidden" id="slug" value="{{ $details->slug }}" name="slug" class="form-control" placeholder="Slug sản phẩm">
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Loại:</label>
                                         <div class="col-sm-10">
                                             <select name="type_id" id="input" class="form-control">
                                                 @foreach($types as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                    <option value="{{ $item->id }}" {{ $item->id == $details->type_id ? 'selected' : '' }}>{{ $item->name }}</option>
                                                 @endforeach
                                             </select>
                                             @error('type_id') <small class="text-danger">{{ $message }}</small> @enderror
@@ -59,28 +53,28 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Thông tin:</label>
                                         <div class="col-sm-10">
-                                            <input name="info" type="text" value="{{ $details->info }}" class="form-control" placeholder="Nhập thông tin">
+                                            <input id="info" name="info" type="text" value="{{ $details->info }}" class="form-control" placeholder="Nhập thông tin">
                                             @error('info') <small class="text-danger">{{ $message }}</small> @enderror
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Mô tả:</label>
                                         <div class="col-sm-10">
-                                            <input name="describe" value="{{ $details->describe }}" type="text" class="form-control" placeholder="Nhập mô tả">
+                                            <input id="describe" name="describe" value="{{ $details->describe }}" type="text" class="form-control" placeholder="Nhập mô tả">
                                             @error('describe') <small class="text-danger">{{ $message }}</small> @enderror
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Số lượng:</label>
                                         <div class="col-sm-10">
-                                            <input name="quantity" value="{{ $details->quantity }}" type="text" class="form-control" placeholder="Nhập số lượng">
+                                            <input id="quantity" name="quantity" value="{{ $details->quantity }}" type="text" class="form-control" placeholder="Nhập số lượng">
                                             @error('quantity') <small class="text-danger">{{ $message }}</small> @enderror
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Giá:</label>
                                         <div class="col-sm-10">
-                                            <input name="price"value="{{ $details->price }}" type="text" class="form-control" placeholder="Nhập giá">
+                                            <input id="price" name="price"value="{{ $details->price }}" type="text" class="form-control" placeholder="Nhập giá">
                                             @error('price') <small class="text-danger">{{ $message }}</small> @enderror
                                         </div>
                                     </div>
@@ -88,13 +82,27 @@
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Giá giảm(nếu có, không thì để 0):</label>
                                         <div class="col-sm-10">
-                                            <input name="discount" value="{{ $details->discount }}" type="text" class="form-control" placeholder="Nhập giá">
+                                            <input id="discount" name="discount" value="{{ $details->discount }}" type="text" class="form-control" placeholder="Nhập giá">
                                             @error('discount') <small class="text-danger">{{ $message }}</small> @enderror
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Ảnh đại diện:</label>
+                                        <div class="col-sm-10">
+                                            <img id="currentImage" src="{{ asset('storage/images/products/'.$details->img) }}" alt="Current Image" style="max-width: 200px;">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Tải lên ảnh mới:</label>
+                                        <div class="col-sm-10">
+                                            <input name="img" type="file" class="form-control" placeholder="Image" onchange="previewImage(event)">
+                                            @error('img') <small>{{ $message }}</small> @enderror
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
                                     <div class="form-group">
                                         <div class="col-sm-4 col-sm-offset-2">
+                                            <button type="button" onclick="cancelEdit()" class="btn btn-danger">Hủy bỏ</button>
                                             <button onclick="return confirm('Bạn chắc chứ?')" class="btn btn-primary button-create" type="submit">Xác nhận</button>
                                         </div>
                                     </div>
@@ -286,5 +294,45 @@
         slug = slug.replace(/\@\-|\-\@|\@/gi, '');
         //In slug ra textbox có id “slug”
         document.getElementById('slug').value = slug;
+    }
+</script>
+<script>
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('currentImage');
+            output.src = reader.result;
+        }
+        reader.readAsDataURL(event.target.files[0]);
+    }
+
+    function cancelEdit() {
+        var form = document.getElementById('productForm');
+        form.reset();
+
+        // Lấy các giá trị ban đầu của các trường input
+        var name = "{{ $details->name }}";
+        var slug = "{{ $details->slug }}";
+        var type_id = "{{ $details->type_id }}";
+        var info = "{{ $details->info }}";
+        var describe = "{{ $details->describe }}";
+        var quantity = "{{ $details->quantity }}";
+        var price = "{{ $details->price }}";
+        var discount = "{{ $details->discount }}";
+        var imgPath = "{{ asset('storage/images/products/'.$details->img) }}";
+
+        // Gán các giá trị ban đầu cho các trường input
+        document.getElementById('nameProduct').value = name;
+        document.getElementById('slug').value = slug;
+        document.getElementById('input').value = type_id;
+        document.getElementById('info').value = info;
+        document.getElementById('describe').value = describe;
+        document.getElementById('quantity').value = quantity;
+        document.getElementById('price').value = price;
+        document.getElementById('discount').value = discount;
+
+        // Khôi phục lại ảnh hiện tại
+        var currentImage = document.getElementById('currentImage');
+        currentImage.src = imgPath;
     }
 </script>

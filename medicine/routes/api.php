@@ -42,7 +42,7 @@ Route::group(['prefix'=> 'users'], function () {
         Route::get('profile', [UsersApiController::class, 'profile']);
         Route::get('profile-for-app', [UsersApiController::class, 'profile_for_app']);
         Route::put('change-profile', [UsersApiController::class, 'change_profile']);
-        
+
         Route::get('address', [AddressApiController::class, 'show']);
         Route::get('address-for-app', [AddressApiController::class, 'show_for_app']);
         Route::post('add-address', [AddressApiController::class, 'add_address']);

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\ProductType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ProductsController extends Controller
 {
@@ -48,6 +49,20 @@ class ProductsController extends Controller
             'quantity' => 'required|numeric',
             'price' => 'required|numeric',
             'discount' => 'required|numeric',
+            'img' => ['nullable','image','mimes:jpeg,png,jpg,gif,svg', function($attr,$value,$fail) use($request) {
+                if($value != null) {
+                    if($request->hasAny('img')) {
+                        $file = $request->file('img');
+                        if(!$file->isValid()) {
+                            return $fail('Invalid photo');
+                        }
+                    } else {
+                        if (!$request->exists('img')) {
+                            return $fail('Image is not exist');
+                        }
+                    }
+                }
+            }],
         ]);
         $product = Product::where('id', $id)->first();
         if($product) {
@@ -59,6 +74,13 @@ class ProductsController extends Controller
             $product->quantity = $request->quantity;
             $product->info = $request->info;
             $product->describe = $request->describe;
+
+            if($request->img != null) {
+                $img_name = Str::random(32).".".$request->img->getClientOriginalExtension();
+                $request->img->storeAs('images/products', $img_name, 'public');
+                $product->img = $img_name;
+            }
+
             $check = $product->save();
             if($check) {
                 return redirect()->back()->with('success','Cập nhật sản phẩm thành công');
@@ -67,6 +89,20 @@ class ProductsController extends Controller
 
         }
         return redirect()->back()->with('error','Không tìm thấy sản phẩm');
+    }
+
+    public function update_status_product($id) {
+        $product = Product::find($id);
+        if($product) {
+            if($product->status == 1) {
+                $product->status = 0;
+            } else {
+                $product->status = 1;
+            }
+            $product->save();
+            return response()->json(['success' => true, 'message' => 'Cập nhật trạng thái sản phẩm thành công']);
+        }
+        return response()->json(['success' => false, 'message' => 'Không tìm thấy sản phẩm']);
     }
 
     public function edit_product_type($id) {

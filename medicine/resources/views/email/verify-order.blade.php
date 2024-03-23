@@ -19,11 +19,14 @@
         <th>{{ $detail->quantity }}</th>
         <th>{{ number_format($detail->price * $detail->quantity) }}</th>
     </tr>
-    <?php $total += $detail->price * $detail->quantity ?>
     @endforeach
     <tr>
+        <th colspan="4">Discount:</th>
+        <th>{{ number_format($order->discountPrice) }}</th>
+    </tr>
+    <tr>
         <th colspan="4">Total price:</th>
-        <th>{{ number_format($total) }}</th>
+        <th>{{ number_format($order->totalPrice) }}</th>
     </tr>
 
 </table>

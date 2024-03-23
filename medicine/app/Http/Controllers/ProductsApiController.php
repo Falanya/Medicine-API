@@ -115,7 +115,7 @@ class ProductsApiController extends Controller
         //         ]);
         //     }
         // }
-        
+
         // return response()->json([
         //     'message' => 'Something errors, please try again',
         //     'status_code' => 404
@@ -145,7 +145,7 @@ class ProductsApiController extends Controller
                 'status_code' => 200,
             ]);
         }
-        
+
         return response()->json([
             'message' => 'Something errors, please check again',
             'status_code' => 404,
@@ -196,7 +196,7 @@ class ProductsApiController extends Controller
             $request->img->storeAs('images/products', $img_name, 'public');
             $data['img'] = $img_name;
         }
-        
+
         $check = $product->update($data);
         if ($check) {
             if($request->hasFile('imgs')) {
@@ -213,7 +213,7 @@ class ProductsApiController extends Controller
                     ]);
                 }
             }
-            
+
             $product_data = $product->fresh();
             return response()->json([
                 'data' => $product_data,
@@ -249,7 +249,7 @@ class ProductsApiController extends Controller
                     'status_code' => 401,
                 ]);
             }
-    
+
             $data = $request->only('comment');
             $data['user_id'] = $auth->id;
             $data['product_id'] = $product->id;

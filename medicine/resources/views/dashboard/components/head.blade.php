@@ -17,3 +17,4 @@
 <link href="{{ asset('css/plugins/summernote/summernote.css') }}" rel="stylesheet">
 <link href="{{ asset('css/plugins/summernote/summernote-bs3.css') }}" rel="stylesheet">
 <link href="{{ asset('css/plugins/datapicker/datepicker3.css') }}" rel="stylesheet">
+<link href="{{ asset('css/customize.css') }}" rel="stylesheet">

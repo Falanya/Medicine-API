@@ -63,4 +63,18 @@ class UsersController extends Controller
         }
         return redirect()->back()->with('error','Chỉ có thể xóa tài khoản chưa xác minh email');
     }
+
+    public function update_status($id) {
+        $user = User::find($id);
+        if($user) {
+            if($user->status == 1) {
+                $user->status = 0;
+            } else {
+                $user->status = 1;
+            }
+            $user->save();
+            return response()->json(['message' => 'Cập nhật trạng thái người dùng thành công', 'success' => true]);
+        }
+        return response()->json(['message' => 'Không tìm thấy người dùng', 'success' => false]);
+    }
 }
