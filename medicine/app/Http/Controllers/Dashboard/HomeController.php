@@ -12,7 +12,6 @@ class HomeController extends Controller
         $auth = auth()->user();
         $config = 'dashboard.home.index';
         $statistics_users = $this->statistics();
-        dd($statistics_users);
         return view('dashboard.layout', compact('auth','config','statistics_users'));
     }
 

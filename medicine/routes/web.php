@@ -7,6 +7,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\Dashboard\HomeController as DashboardHomeController;
 use App\Http\Controllers\Dashboard\OrdersController as DashboardOrdersController;
 use App\Http\Controllers\Dashboard\UsersController as DashboardUsersController;
+use App\Http\Controllers\Dashboard\ProductsController as DashboardProductsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
@@ -133,5 +134,14 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'admin'], function() {
         Route::get('/index', [DashboardOrdersController::class, 'show'])->name('dashboard.orders.index');
         Route::get('/details/{order}', [DashboardOrdersController::class, 'details'])->name('dashboard.orders.details');
         Route::get('/change-status/{order}', [DashboardOrdersController::class, 'change_status'])->name('dashboard.orders.change-status');
+    });
+    Route::group(['prefix' => 'products'], function() {
+        Route::get('/list-products', [DashboardProductsController::class, 'list_products'])->name('dashboard.products.list-products');
+        Route::get('/list-types', [DashboardProductsController::class, 'list_types'])->name('dashboard.products.list-types');
+        Route::get('/product-details/{id}', [DashboardProductsController::class, 'product_details'])->name('dashboard.products.product-details');
+        Route::get('/edit-product/{id}', [DashboardProductsController::class,'edit_product'])->name('dashboard.products.edit-product');
+        Route::post('/post-edit-product/{id}', [DashboardProductsController::class,'post_edit_product'])->name('dashboard.products.post-edit-product');
+        Route::get('/edit-product-type/{id}', [DashboardProductsController::class,'edit_product_type'])->name('dashboard.products.edit-product-type');
+        Route::post('/post-edit-product-type/{id}', [DashboardProductsController::class,'post_edit_product_type'])->name('dashboard.products.post-edit-product-type');
     });
 });

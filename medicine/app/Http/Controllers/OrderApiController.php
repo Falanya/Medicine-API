@@ -63,11 +63,11 @@ class OrderApiController extends Controller
         $auth_order = $auth->orders;
         $order_list = [];
         $statusOrder = [
-            0 => 'Not verified',
-            1 => 'Verified',
-            2 => 'Shipping',
-            3 => 'Completed',
-            4 => 'Cancelled',
+            0 => 'Chưa xác minh email',
+            1 => 'Đã xác minh email',
+            2 => 'Đang vận chuyển',
+            3 => 'Đã hoàn thành',
+            4 => 'Đã hủy',
         ];
         foreach($auth_order as $item) {
             $order = [
@@ -149,7 +149,6 @@ class OrderApiController extends Controller
     public function post_checkout(Request $request) {
         $auth = auth()->user();
         $validator = Validator::make($request->all(), [
-            'address_default' => 'bail|required|string',
             'address_id' => 'bail|required|exists:addresses,id',
             'note' => 'max:255',
             'promotion_code' => ['nullable', 'exists:promotions,code', function($attr,$value,$fail) use($auth) {

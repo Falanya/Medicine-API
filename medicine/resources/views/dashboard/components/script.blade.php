@@ -40,4 +40,38 @@
 <!-- Sweet alert -->
 <script src="{{ asset('js/plugins/sweetalert/sweetalert.min.js') }}"></script>
 
+<!-- slick carousel-->
+<script src="{{ asset('js/plugins/slick/slick.min.js') }}"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.product-images').slick({
+            dots: true
+        });
+    });
+
+</script>
+
+<!-- SUMMERNOTE -->
+<script src="{{ asset('js/plugins/summernote/summernote.min.js') }}"></script>
+
+<!-- Data picker -->
+<script src="{{ asset('js/plugins/datapicker/bootstrap-datepicker.js') }}"></script>
+
+<script>
+    $(document).ready(function () {
+
+        $('.summernote').summernote();
+
+        $('.input-group.date').datepicker({
+            todayBtn: "linked",
+            keyboardNavigation: false,
+            forceParse: false,
+            calendarWeeks: true,
+            autoclose: true
+        });
+
+    });
+</script>
+
 
