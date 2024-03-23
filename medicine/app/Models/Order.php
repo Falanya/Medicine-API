@@ -10,7 +10,7 @@ class Order extends Model
     use HasFactory;
     protected $appends = ['totalPrice','discountPrice'];
     protected $table = 'orders';
-    protected $fillable = ['tracking_number','user_id','address_id','note', 'promotion_code','status', 'token','object_status'];
+    protected $fillable = ['tracking_number','user_id','address_id','note', 'promotion_code','status', 'token'];
 
     public function address() {
         return $this->hasOne(Address::class,'id','address_id');

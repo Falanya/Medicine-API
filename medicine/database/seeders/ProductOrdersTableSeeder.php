@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ProductOrder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -48,5 +49,6 @@ class ProductOrdersTableSeeder extends Seeder
             array('order_id'=>4, 'product_id'=>7, 'quantity'=>3, 'price' => 200000, 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
             'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh'))
         ]);
+        ProductOrder::factory()->count(3000)->create();
     }
 }

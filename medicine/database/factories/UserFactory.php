@@ -23,14 +23,18 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $createdAt = $this->faker->dateTimeBetween('first day of January this year', 'now');
+        $emailVerified = $this->faker->dateTimeBetween($createdAt, '+1 week');
         return [
             'fullname' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'phone' => fake()->phoneNumber,
-            'birthday' => $this->faker->dateTimeBetween('-80 years', '-18 years')->format('Y-m-d'),
-            'email_verified_at' => now(),
+            'phone' => fake()->phoneNumber(),
+            'gender' => fake()->randomElement([0,1]),
+            'birthday' => fake()->dateTimeBetween('-40 years', '-20 years')->format('Y-m-d'),
+            'email_verified_at' => $emailVerified,
             'password' => static::$password ??= Hash::make('123456'),
-            'remember_token' => Str::random(10),
+            'created_at' => $createdAt,
+            'updated_at'=> $createdAt,
         ];
     }
 

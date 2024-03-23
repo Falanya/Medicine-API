@@ -2,19 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Promotion;
+use App\Models\Favorites;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
-class PromotionsTableSeeder extends Seeder
+class FavoriteTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Promotion::factory()->count(50)->create();
+        Favorites::factory()->count(1000)->create();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Order;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -35,5 +36,6 @@ class OrdersTableSeeder extends Seeder
             array('tracking_number' => $tracking_numer.Str::random(2), 'user_id'=>3, 'address_id'=>4, 'note'=>'Hang qua xau', 'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'),
             'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh'))
         ]);
+        Order::factory(1000)->create();
     }
 }

@@ -23,7 +23,7 @@ class UsersTableSeeder extends Seeder
                 'phone' => '0123456789',
                 'password' => Hash::make('admin'),
                 'birthday' => "2003/01/01",
-                'role_id' => 2,
+                'role_id' => 3,
                 'email_verified_at' => Carbon::now('Asia/Ho_Chi_Minh'),
                 'created_at' => Carbon::now('Asia/Ho_Chi_Minh'),
                 'updated_at' => Carbon::now('Asia/Ho_Chi_Minh')
@@ -84,6 +84,6 @@ class UsersTableSeeder extends Seeder
                 'updated_at' => Carbon::now('Asia/Ho_Chi_Minh')
             ],
         ]);
-        User::factory()->count(100)->create();
+        User::factory()->count(1000)->create();
     }
 }

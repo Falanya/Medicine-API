@@ -85,13 +85,13 @@ class AddressApiController extends Controller
                 'status_code' => 404,
             ]);
         }
-        
+
         return response()->json([
             'data' => null,
             'status_code' => 404,
             'message' => 'Something errors, please check again'
         ]);
-        
+
     }
 
     public function edit_address(Address $address, Request $request) {
@@ -145,7 +145,7 @@ class AddressApiController extends Controller
             'status_code' => 200,
             'message' => 'Success'
         ]);
-        
+
     }
 
     public function delete_address(Address $address) {
@@ -176,7 +176,7 @@ class AddressApiController extends Controller
             'user_id' => $auth->id,
             'object_status' => 1
         ])->get();
-        
+
         foreach($addresses as $address) {
             $address->object_status = 0;
             $address->save();

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Address;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -28,5 +29,6 @@ class AddressesTableSeeder extends Seeder
             array('user_id'=>4, 'address'=>'Quan 2, Ho Chi Minh', 'phone'=>'0123456787', 'receiver_name'=>'Nguyen Van C',
             'created_at'=>Carbon::now('Asia/Ho_Chi_Minh'), 'updated_at'=>Carbon::now('Asia/Ho_Chi_Minh'))
         ]);
+        Address::factory()->count(1000)->create();
     }
 }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('address', 255);
-            $table->string('phone', 12);
+            $table->string('phone', 20);
             $table->string('receiver_name', 255);
             $table->tinyInteger('object_status')->default(1);
             $table->timestamps();
