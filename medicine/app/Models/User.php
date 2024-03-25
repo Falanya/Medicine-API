@@ -16,8 +16,8 @@ class User extends Authenticatable
 
     protected $append = ['totalPriceCart','statusVerify'];
     protected $table = "users";
-    protected $fillable = ['fullname', 'email', 'password', 'gender','phone','birthday', 'role_id','status'];
-    protected $hidden = ['password', 'created_at', 'updated_at', 'created_by', 'updated_by','email_verified_at'];
+    protected $fillable = ['fullname', 'email', 'password', 'gender','phone','birthday', 'role_id','status','email_verified_at'];
+    protected $hidden = ['password', 'created_at', 'updated_at', 'created_by', 'updated_by'];
 
     public function carts() {
         return $this->hasMany(Cart::class,'user_id','id')->where('status', 1);

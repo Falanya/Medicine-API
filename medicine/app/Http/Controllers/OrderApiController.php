@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AddressResource;
+use App\Http\Resources\CartResource;
 use App\Mail\OrderMailApi;
 use App\Models\Cart;
 use App\Models\Order;
@@ -51,11 +53,22 @@ class OrderApiController extends Controller
         }
 
         return response()->json([
-            'address_default' => $auth->address,
             'addresses' => $addresses,
             'carts' => $carts,
             'total' => $total,
         ]);
+    }
+
+    public function show_checkout_for_app() {
+        $auth = auth()->user();
+        $addresses = AddressResource::collection($auth->addresses);
+        $carts = CartResource::collection($auth->carts);
+        $total = 0;
+        foreach($carts as $key => $item) {
+            $price = $item->product->discount > 0 && $item->product->discount < $item->product->price ? $item->product->discount : $item->product->price;
+            $total += $price*$item->quantity;
+        }
+        return ['addresses' => $addresses, 'carts' => $carts, 'totalPrice' => number_format($total)];
     }
 
     public function history() {
@@ -275,7 +288,7 @@ class OrderApiController extends Controller
             $order->status = 1;
             $order->save();
 
-            return 'Verify your order successfully';
+            return redirect()->away('https://test4.nhathuoc.store/')->with('success','Xác nhận đơn hàng thành công');
         }
         return 'Cannot found order, please check again';
     }

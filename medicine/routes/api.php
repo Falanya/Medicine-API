@@ -70,6 +70,7 @@ Route::group(['prefix'=> 'carts', 'middleware'=> 'auth:sanctum'], function () {
 
 Route::group(['prefix' => 'orders', 'middleware' => 'auth:sanctum'], function() {
     Route::get('/checkout', [OrderApiController::class, 'show_checkout']);
+    Route::get('/checkout-for-app', [OrderApiController::class,'show_checkout_for_app']);
     Route::post('/post-checkout', [OrderApiController::class, 'post_checkout']);
     Route::get('/history', [OrderApiController::class, 'history']);
     Route::get('/history-for-app', [OrderApiController::class, 'history_for_app']);

@@ -54,10 +54,7 @@ class UsersApiController extends Controller
     public function verify_account($email) {
         if (User::where('email', $email)->whereNull('email_verified_at')->firstOrFail()) {
             if (User::where('email', $email)->update(['email_verified_at' => now()])) {
-                return response()->json([
-                    'status_code' => 200,
-                    'message' => 'Verify account successfully, Now you can login again',
-                ]);
+                return redirect()->away('https://test4.nhathuoc.store/');
             }
             return response()->json([
                 'status_code' => 422,

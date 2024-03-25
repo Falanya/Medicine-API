@@ -117,136 +117,48 @@
                         <div class="panel-body">
 
                             <div class="table-responsive">
+                                <div class="ibox-title">
+                                    <div class="ibox-tools">
+                                        <button id="saveOrdersBtn" class="btn btn-primary">Lưu thứ tự hiển thị</button>
+                                    </div>
+                                </div>
                                 <table class="table table-bordered table-stripped">
+
                                     <thead>
                                         <tr>
                                             <th>
-                                                Image preview
+                                                Ảnh mô tả
                                             </th>
                                             <th>
-                                                Image url
+                                                Đường dẫn
                                             </th>
                                             <th>
-                                                Sort order
+                                                Thứ tự
                                             </th>
                                             <th>
-                                                Actions
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <img src="{{ asset('img/gallery/2s.jpg') }}">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" disabled
-                                                    value="http://mydomain.com/images/image1.png">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" value="1">
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-white"><i class="fa fa-trash"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <img src="{{ asset('img/gallery/1s.jpg') }}">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" disabled
-                                                    value="http://mydomain.com/images/image2.png">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" value="2">
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-white"><i class="fa fa-trash"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <img src="{{ asset('img/gallery/3s.jpg') }}">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" disabled
-                                                    value="http://mydomain.com/images/image3.png">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" value="3">
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-white"><i class="fa fa-trash"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <img src="{{ asset('img/gallery/4s.jpg') }}">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" disabled
-                                                    value="http://mydomain.com/images/image4.png">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" value="4">
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-white"><i class="fa fa-trash"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <img src="{{ asset('img/gallery/5s.jpg') }}">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" disabled
-                                                    value="http://mydomain.com/images/image5.png">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" value="5">
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-white"><i class="fa fa-trash"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <img src="{{ asset('img/gallery/6s.jpg') }}">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" disabled
-                                                    value="http://mydomain.com/images/image6.png">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" value="6">
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-white"><i class="fa fa-trash"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <img src="{{ asset('img/gallery/7s.jpg') }}">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" disabled
-                                                    value="http://mydomain.com/images/image7.png">
-                                            </td>
-                                            <td>
-                                                <input type="text" class="form-control" value="7">
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-white"><i class="fa fa-trash"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
+                                        @foreach($details->img_details as $item)
+                                            <tr>
+                                                <td class="text-center">
+                                                    <img src="{{ asset('storage/images/products/'.$item->img) }}" style="max-width: 100px">
+                                                </td>
+                                                <td>
+                                                    <input type="text" class="form-control" disabled
+                                                        value="{{ asset('storage/images/products/'.$item->img) }}">
+                                                </td>
+                                                <td>
+                                                    <input type="text" min="1" class="form-control order-input" name="orders[{{ $item->id }}]" value="{{ $item->sort_order }}">
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-white bg-success"><i class="fa fa-save"></i></button>
+                                                    <button class="btn btn-white bg-danger"><i class="fa fa-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -259,6 +171,8 @@
     </div>
 
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
     function ChangeToSlug()
@@ -335,4 +249,70 @@
         var currentImage = document.getElementById('currentImage');
         currentImage.src = imgPath;
     }
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('saveOrdersBtn').addEventListener('click', function (event) {
+            event.preventDefault();
+
+            var orders = {};
+            var quantityInputs = document.querySelectorAll('.order-input');
+            quantityInputs.forEach(function (input) {
+                var imgId = input.getAttribute('name').match(/\d+/)[0];
+                orders[imgId] = input.value;
+            });
+
+            fetch('{{ url('/dashboard/products/update-sort-order-img-details') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ orders: orders })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json(); // Chuyển đổi dữ liệu JSON thành đối tượng JavaScript
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .then(data => {
+                // Hiển thị thông báo thành công
+                Swal.fire({
+                    toast: true,
+                    icon: 'success',
+                    title: data.message,
+                    animation: true,
+                    position: 'top-right',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+                    }
+                });
+            })
+            .catch(error => {
+                // Hiển thị thông báo lỗi
+                Swal.fire({
+                    toast: true,
+                    icon: 'error',
+                    title: 'Đã xảy ra lỗi',
+                    animation: true,
+                    position: 'top-right',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+                    }
+                });
+                console.error('An error occurred:', error);
+            });
+        });
+    });
 </script>

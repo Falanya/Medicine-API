@@ -8,6 +8,7 @@ use App\Http\Controllers\Dashboard\HomeController as DashboardHomeController;
 use App\Http\Controllers\Dashboard\OrdersController as DashboardOrdersController;
 use App\Http\Controllers\Dashboard\UsersController as DashboardUsersController;
 use App\Http\Controllers\Dashboard\ProductsController as DashboardProductsController;
+use App\Http\Controllers\Dashboard\PromotionController as DasboardPromotionController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
@@ -129,7 +130,7 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'admin'], function() {
         Route::get('/index', [DashboardUsersController::class, 'index'])->name('dashboard.users.index');
         Route::get('/create', [DashboardUsersController::class, 'create'])->name('dashboard.users.create');
         Route::post('/post-create', [DashboardUsersController::class, 'post_create'])->name('dashboard.users.post_create');
-        Route::get('/delete/{user}', [DashboardUsersController::class, 'delete'])->name('dashboard.users.delete');
+        Route::get('/delete/{id}', [DashboardUsersController::class, 'delete'])->name('dashboard.users.delete');
         Route::put('/update-status/{id}', [DashboardUsersController::class, 'update_status'])->name('dashboard.users.update-status');
     });
     Route::group(['prefix' => 'orders'], function() {
@@ -141,10 +142,22 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'admin'], function() {
         Route::get('/list-products', [DashboardProductsController::class, 'list_products'])->name('dashboard.products.list-products');
         Route::get('/list-types', [DashboardProductsController::class, 'list_types'])->name('dashboard.products.list-types');
         Route::get('/product-details/{id}', [DashboardProductsController::class, 'product_details'])->name('dashboard.products.product-details');
+
+        Route::get('/create-product', [DashboardProductsController::class,'create_product'])->name('dashboard.products.create-product');
+        Route::get('/create-product-type', [DashboardProductsController::class,'create_product_type'])->name('dashboard.products.create-product-type');
+        Route::post('/post-create-product', [DashboardProductsController::class,'post_create_product'])->name('dashboard.products.post-create-product');
+        Route::post('/post-create-product-type', [DashboardProductsController::class,'post_create_product_type'])->name('dashboard.products.post-create-product-type');
+
+        Route::get('/edit-product-type/{id}', [DashboardProductsController::class,'edit_product_type'])->name('dashboard.products.edit-product-type');
         Route::get('/edit-product/{id}', [DashboardProductsController::class,'edit_product'])->name('dashboard.products.edit-product');
         Route::post('/post-edit-product/{id}', [DashboardProductsController::class,'post_edit_product'])->name('dashboard.products.post-edit-product');
-        Route::put('/update-status-product/{id}', [DashboardProductsController::class, 'update_status_product'])->name('dashboard.products.update-status-product');
-        Route::get('/edit-product-type/{id}', [DashboardProductsController::class,'edit_product_type'])->name('dashboard.products.edit-product-type');
         Route::post('/post-edit-product-type/{id}', [DashboardProductsController::class,'post_edit_product_type'])->name('dashboard.products.post-edit-product-type');
+
+        Route::post('/update-sort-order-img-details', [DashboardProductsController::class,'update_sort_order_img_details']);
+        Route::put('/update-status-type/{id}', [DashboardProductsController::class,'update_status_type']);
+        Route::put('/update-status-product/{id}', [DashboardProductsController::class, 'update_status_product']);
+    });
+    Route::group(['prefix' => 'promotions'], function() {
+        Route::get('/index', [DasboardPromotionController::class, 'index'])->name('dashboard.promotions.index');
     });
 });

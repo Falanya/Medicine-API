@@ -41,7 +41,7 @@ class ProductTypesApiController extends Controller
 
         $data_check = $request->only('name');
         $data_check['slug'] = Str::slug(request('name'), '-');
-        
+
         if($data=ProductType::create($data_check)) {
             return response()->json([
                 'data' => $data,

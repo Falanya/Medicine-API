@@ -9,7 +9,7 @@
                 <a>Quản lý sản phẩm</a>
             </li>
             <li class="active">
-                <strong>Sửa loại sản phẩm</strong>
+                <strong>Tạo loại sản phẩm</strong>
             </li>
         </ol>
     </div>
@@ -22,14 +22,14 @@
                 <h5>Điền thông tin loại</h5>
             </div>
             <div class="ibox-content">
-                <form action="{{ route('dashboard.products.post-edit-product-type', $type->id) }}" method="POST" class="form-horizontal">
+                <form action="{{ route('dashboard.products.post-create-product-type') }}" method="POST" class="form-horizontal">
                     @csrf
                     <div class="form-group"><label class="col-lg-2 control-label">Tên loại</label>
 
                         <div class="col-lg-10">
-                            <input type="text" id="nameType" value="{{ $type->name }}" name="name" class="form-control" placeholder="Điền tên loại" onkeyup="ChangeToSlug()">
+                            <input type="text" id="nameType" name="name" class="form-control" placeholder="Điền tên loại" onkeyup="ChangeToSlug()">
                             @error('name') <small>{{ $message }}</small> @enderror
-                            <input type="hidden" value="{{ $type->slug }}" name="slug" id="slug" placeholder="Nhập slug" class="form-control">
+                            <input type="hidden" name="slug" id="slug" placeholder="Nhập slug" class="form-control">
                             @error('slug') <small>{{ $message }}</small> @enderror
                         </div>
 

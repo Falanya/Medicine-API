@@ -46,6 +46,13 @@
                     <li><a href="{{ route('dashboard.orders.index', ['status' => 4]) }}">Đã hủy</a></li>
                 </ul>
             </li>
+            <li>
+                <a href="index.html"><i class="fa fa-th-large"></i> <span class="nav-label">Quản lý voucher</span>
+                    <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li><a href="{{ route('dashboard.promotions.index') }}">Danh sách voucher</a></li>
+                </ul>
+            </li>
         </ul>
 
     </div>

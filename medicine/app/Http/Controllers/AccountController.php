@@ -40,6 +40,10 @@ class AccountController extends Controller
                 auth('web')->logout();
                 return redirect()->back()->with('error','Tài khoản của bạn chưa xác thực, hãy kiểm tra hộp thư email');
             }
+            if(auth('web')->user()->status == 0) {
+                auth('web')->logout();
+                return redirect()->back()->with('error','Tài khoản của bạn đã bị khóa');
+            }
             if(auth('web')->user()->role_id > 1) {
                 return redirect()->route('dashboard.index')->with('success','Chào mừng đến với Medicine Mart');
             }

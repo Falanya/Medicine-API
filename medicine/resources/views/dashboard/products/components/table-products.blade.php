@@ -4,14 +4,48 @@
             <div class="ibox-title">
                 <h5>Danh sách sản phẩm</h5>
                 <div class="ibox-tools">
-                    <a class="btn btn-primary">Tạo sản phẩm</a>
+                    <a href="{{ route('dashboard.products.create-product') }}" class="btn btn-primary">Tạo sản phẩm</a>
                 </div>
             </div>
             <div class="ibox-content">
-
+                <div class="row">
+                    <form action="" method="get">
+                        <div class="col-sm-3">
+                            <select name="status" class="input-m form-control input-s-m inline">
+                                <option value="">Trạng thái</option>
+                                <option value="show" {{ request()->status == 'show' ? 'selected' : '' }}>Hiện</option>
+                                <option value="hidden" {{ request()->status == 'hidden' ? 'selected' : '' }}>Ẩn</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <select name="type_product" class="input-m form-control input-s-m inline">
+                                <option value="">Loại sản phẩm</option>
+                                @foreach($types as $item)
+                                    <option value="{{ $item->slug }}" {{ request()->type_product == $item->slug ? 'selected' : '' }}>{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <select name="object_status" class="input-m form-control input-s-m inline">
+                                <option value="">Tình trạng</option>
+                                <option value="in-stock" {{ request()->object_status == 'in-stock' ? 'selected' : '' }}>Còn hàng</option>
+                                <option value="sold-out" {{ request()->object_status == 'sold-out' ? 'selected' : '' }}>Hết hàng</option>
+                            </select>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="input-group">
+                                <input name="keywords" type="search" placeholder="Từ khóa tìm kiếm" class="input-m form-control" value="{{ request()->keywords }}">
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
+                            <th>ID</th>
                             <th></th>
                             <th>Tên</th>
                             <th>Loại</th>
@@ -23,6 +57,7 @@
                     <tbody>
                         @foreach($products as $item)
                         <tr>
+                            <td>{{ $item->id }}</td>
                             <td class="text-center">
                                 <img src="{{ asset('storage/images/products/'.$item->img) }}" alt="" width="100px" height="100px">
                             </td>
@@ -43,7 +78,7 @@
                     </tbody>
                 </table>
                 <div class="text-center">
-                    {{ $products->links('pagination::bootstrap-4') }}
+                    {{ $products->appends(request()->query())->links('pagination::bootstrap-4') }}
                 </div>
             </div>
         </div>

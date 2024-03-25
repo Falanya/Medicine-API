@@ -15,7 +15,7 @@ class CartResource extends JsonResource
     public function toArray(Request $request): array
     {
         $stt = 1;
-        $price = $this->product->discount > 0 && $this->product->discount < $this->product->price ? $this->product->discount : $this->product->price;
+        // $price = $this->product->discount > 0 && $this->product->discount < $this->product->price ? $this->product->discount : $this->product->price;
         return ([
             'STT' => $stt++,
             'id' => $this->id,
@@ -23,7 +23,8 @@ class CartResource extends JsonResource
             'name_product' => $this->product->name,
             'img' => $this->product->img,
             'quantity' => $this->quantity,
-            'price' => number_format($price),
+            'price' => number_format($this->product->price),
+            'discount' => number_format($this->product->discount),
             'status' => $this->status == 1? 'Show' : 'Hidden',
             'status_in_stock' => $this->product->quantity == 0 ? 'Sold out' : 'In stock',
             'message_quantity' => $this->product->quantity < $this->quantity ? 'Only has '. $this->product->quantity .' left in stock' : '',

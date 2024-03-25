@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('img', 255);
             $table->unsignedInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products');
+            $table->double('sort_order')->default(0);
             $table->boolean('status')->default(1);
             $table->timestamps();
         });
