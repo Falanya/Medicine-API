@@ -42,6 +42,7 @@ Route::group(['prefix'=> 'users'], function () {
         Route::get('profile', [UsersApiController::class, 'profile']);
         Route::get('profile-for-app', [UsersApiController::class, 'profile_for_app']);
         Route::put('change-profile', [UsersApiController::class, 'change_profile']);
+        Route::post('change-password', [UsersApiController::class, 'change_password']);
 
         Route::get('address', [AddressApiController::class, 'show']);
         Route::get('address-for-app', [AddressApiController::class, 'show_for_app']);
@@ -52,6 +53,7 @@ Route::group(['prefix'=> 'users'], function () {
 
         Route::get('promotions', [PromotionApiController::class, 'show_user']);
         Route::get('promotions-for-app', [PromotionApiController::class, 'show_user_for_app']);
+        Route::get('promotion/{code}', [PromotionApiController::class,'promotion_details']);
 
         Route::get('create-or-delete-favorite/{product}', [FavoritesController::class, 'create_or_delete']);
         Route::get('show-favorite', [FavoritesController::class, 'show']);
@@ -74,8 +76,9 @@ Route::group(['prefix' => 'orders', 'middleware' => 'auth:sanctum'], function() 
     Route::post('/post-checkout', [OrderApiController::class, 'post_checkout']);
     Route::get('/history', [OrderApiController::class, 'history']);
     Route::get('/history-for-app', [OrderApiController::class, 'history_for_app']);
-    Route::get('/detail/{order}', [OrderApiController::class, 'detail']);
+    Route::get('/detail/{id}', [OrderApiController::class, 'detail']);
     Route::post('/apply-promotion', [OrderApiController::class, 'apply-promotion']);
+    Route::get('/cancel/{id}', [OrderApiController::class, 'cancel']);
 });
 
 Route::group(['prefix'=> 'products'], function () {

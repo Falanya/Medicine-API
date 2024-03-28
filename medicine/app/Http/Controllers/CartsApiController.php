@@ -74,12 +74,12 @@ class CartsApiController extends Controller
                 return response()->json([
                     'data' => Cart::where(['user_id' => $auth->id, 'product_id' => $product->id])->first(),
                     'status_code' => 200,
-                    'message' => 'Add product to cart successfully'
+                    'message' => 'Thêm sản phẩm vào giỏ hàng thành công'
                 ]);
             }
             return response()->json([
                 'status_code' => 404,
-                'message' => "Product is sold out"
+                'message' => "Sản phẩm đã hết hàng"
             ]);
         }
         $data = [
@@ -93,11 +93,11 @@ class CartsApiController extends Controller
             return response()->json([
                 'data' => Cart::where(['user_id' => $auth->id, 'product_id' => $product->id])->first(),
                 'status_code' => 200,
-                'message' => 'Your cart created successfully'
+                'message' => 'Tạo giỏ hàng thành công'
             ]);
         }
         return response()->json([
-            'message' => "Product is sold out",
+            'message' => "Sản phẩm đã hết hàng",
             'status_code' => 404
         ]);
     }
@@ -110,14 +110,14 @@ class CartsApiController extends Controller
         ])->first();
         if (!$cart || $cart->user_id != $auth->id) {
             return response()->json([
-                'message' => 'Cannot find product in your cart',
+                'message' => 'Không tìm thấy sản phẩm',
                 'status_code' => 404,
             ]);
         }
         $validator = Validator::make($request->all(), [
             'quantity' => ['required','numeric', function($attr,$value,$fail) use($cart) {
                 if($value < 1) {
-                    $fail('Quantity must be greater than 0');
+                    $fail('Số lượng sản phẩm phải lớn hơn 0');
                 }
                 $product = Product::find($cart->product_id);
                 if (!$product) {
@@ -148,7 +148,7 @@ class CartsApiController extends Controller
             'message' => 'Something errors, please check again',
             'status_code' => 402,
         ]);
-        
+
     }
 
     public function delete_cart($cart) {
@@ -192,7 +192,7 @@ class CartsApiController extends Controller
             'user_id' => $auth->id,
             'status' => 1,
         ])->get();
-        
+
         foreach($cartUser as $key => $item) {
             $item->status = 0;
             $item->save();

@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
 class PromotionApiController extends Controller
 {
     public function show_user() {
-        $data = Promotion::where('status', 1)->orderBy('id','DESC')->get();
+        $data = Promotion::where('status', 'show')->orderBy('id','DESC')->get();
         if($data->count() > 0) {
             $promotions = [];
             $discount_amount = 0;
@@ -31,7 +31,8 @@ class PromotionApiController extends Controller
                     'description' => $item->description,
                     'discount_amount' => $discount_amount,
                     'min_amount' => number_format($item->min_amount),
-
+                    'starts_at' => $item->starts_at,
+                    'expires_at' => $item->expires_at,
                 ];
                 $promotions[] = $promotion;
             }
@@ -50,8 +51,45 @@ class PromotionApiController extends Controller
     }
 
     public function show_user_for_app() {
-        $promotion = Promotion::where('status', 1)->orderBy('id','DESC')->get();
+        $promotion = Promotion::where('status', 'show')->orderBy('id','DESC')->get();
         $promotions = PromotionResource::collection($promotion);
         return $promotions;
+    }
+
+    public function promotion_details($code) {
+        if (empty($code)) {
+            return response()->json([
+                'message' => 'Mã giảm giá không được rỗng',
+                'status_code' => 400,
+            ]);
+        }
+
+        $promotion = Promotion::where('code', $code)->first();
+        if (!$promotion) {
+            return response()->json([
+                'message' => 'Không tìm thấy mã giảm giá',
+                'status_code' => 404,
+            ]);
+        }
+
+        $now = Carbon::now('Asia/Ho_Chi_Minh');
+        $startsAt = Carbon::parse($promotion->starts_at);
+        $expiresAt = Carbon::parse($promotion->expires_at);
+
+        if ($now->lt($startsAt)) {
+            $error = 'Chỉ được sử dụng từ ngày ' . $promotion->starts_at;
+        } elseif ($now->gt($expiresAt)) {
+            $error = 'Voucher đã hết hạn';
+        } else {
+            $error = '';
+        }
+
+        $details = new PromotionResource($promotion);
+
+        return response()->json([
+            'data' => $details,
+            'message' => $error,
+            'status_code' => empty($error) ? 200 : 403,
+        ]);
     }
 }

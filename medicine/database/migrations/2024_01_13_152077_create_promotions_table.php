@@ -20,7 +20,7 @@ return new class extends Migration
             $table->double('discount_amount');
             $table->double('min_amount')->nullable();
             $table->enum('type',['percent','fixed'])->default('fixed');
-            $table->integer('status')->default(1);
+            $table->enum('status',['hidden','show','expired'])->default('hidden');
             $table->timestamp('starts_at')->nullable();
             $table->timestamp('expires_at')->nullable();
             $table->timestamps();

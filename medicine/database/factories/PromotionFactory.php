@@ -20,6 +20,7 @@ class PromotionFactory extends Factory
         $type = $this->faker->randomElement(['fixed','percent']);
         $discountAmount = $type === 'fixed' ? str_pad($this->faker->numberBetween(10000,500000),'5','0', STR_PAD_RIGHT) : $this->faker->numberBetween(5,50);
         $minAmount = str_pad($this->faker->numberBetween(10000,500000),'5','0', STR_PAD_RIGHT);
+        $status = $this->faker->randomElement(['hidden','show','expired']);
         $startsAt = $this->faker->dateTimeBetween('-1 month', '+1 month');
         $expiresAt = $this->faker->dateTimeBetween($startsAt, $startsAt->format('Y-m-d') . '+1 month');
         return [
@@ -30,6 +31,7 @@ class PromotionFactory extends Factory
             'discount_amount' => $discountAmount,
             'min_amount' => $minAmount,
             'type' => $type,
+            'status' => $status,
             'starts_at' => $startsAt,
             'expires_at' => $expiresAt,
         ];

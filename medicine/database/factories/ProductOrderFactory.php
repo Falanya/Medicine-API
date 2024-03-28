@@ -18,13 +18,17 @@ class ProductOrderFactory extends Factory
      */
     public function definition(): array
     {
+        $order_id = Order::inRandomOrder()->first();
         $productId = Product::inRandomOrder()->first();
         $price = $productId->discount > 0 && $productId->discount < $productId->price ? $productId->discount : $productId->price;
         return [
-            'order_id' => Order::all()->random()->id,
-            'product_id' => $productId,
-            'quantity' => $this->faker->numberBetween(1,50),
+            'order_id' => $order_id->id,
+            'product_id' => $productId->id,
+            'quantity' => $this->faker->numberBetween(1,5),
             'price' => $price,
+            'status' => $order_id->status == 3 ? 1 : 0,
+            'created_at' => $order_id->created_at->format('Y-m-d H:i:s'),
+            'updated_at'=> $order_id->updated_at->format('Y-m-d H:i:s'),
         ];
     }
 }

@@ -46,7 +46,7 @@ class UsersApiController extends Controller
             Mail::to($data->email)->send(new VerifyAccountApi($data));
             return response()->json([
                 'status_code' => 200,
-                'message' => 'Please check your mail to verify account!!!'
+                'message' => 'Kiểm tra hộp thư email để xác minh!!!'
             ]);
         }
     }
@@ -87,14 +87,14 @@ class UsersApiController extends Controller
         if($data_check) {
             if(auth()->user()->email_verified_at == '') {
                 return response()->json([
-                    'message' => 'Could not login, please verify email',
+                    'message' => 'Bạn chưa xác minh email',
                     'status_code' => 422,
                 ]);
             }
 
             if(auth()->user()->status == 0) {
                 return response()->json([
-                    'message' => 'Account has been locked, please try again',
+                    'message' => 'Người dùng đã bị khóa, hãy liên hệ admin',
                     'status_code' => 422,
                 ]);
             }
@@ -108,7 +108,7 @@ class UsersApiController extends Controller
         } else {
             return response()->json([
                 'status_code' => 404,
-                'message' => 'Your password is incorrect, please check again'
+                'message' => 'Mật khâu không đúng, hãy kiểm tra lại'
             ]);
         }
     }
@@ -208,6 +208,40 @@ class UsersApiController extends Controller
             'data' => null,
             'status_code' => 404,
             'message' => 'Something errors, please check again'
+        ]);
+    }
+
+    public function change_password(Request $request) {
+        $auth = auth()->user();
+        $validator = Validator::make($request->all(), [
+            'old_password' => ['bail','required', function($attr,$value,$fail) use($auth) {
+                if(!Hash::check($value, $auth->password)) {
+                    $fail('Password is incorrect');
+                }
+            }],
+            'new_password' => 'bail|required|min:6',
+            'confirm_new_password' => 'bail|required|same:new_password',
+        ]);
+
+        if($validator->fails()) {
+            return response()->json([
+                'message' => $validator->errors()->all(),
+                'status_code' => 401,
+            ]);
+        }
+
+        $user = User::find($auth->id);
+        if($user) {
+            $user->password = Hash::make($request->new_password);
+            $user->save();
+            return response()->json([
+                'message' => 'Update password successfully',
+                'status_code' => 200
+            ]);
+        }
+        return response()->json([
+            'message' => 'Cannot find user',
+            'status_code' => 401,
         ]);
     }
 

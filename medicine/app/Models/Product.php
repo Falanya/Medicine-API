@@ -22,4 +22,8 @@ class Product extends Model
     public function img_details() {
         return $this->hasMany(ImgProduct::class, 'product_id', 'id')->orderBy('sort_order','ASC')->where('status', 1);
     }
+
+    public function comments() {
+        return $this->hasMany(Comment::class,'product_id','id');
+    }
 }

@@ -5,13 +5,16 @@ foreach($details->details as $item) {
 }
 ?>
 <div class="row wrapper border-bottom white-bg page-heading">
-    <div class="col-lg-10">
+    <div class="col-lg-12">
         <h2>
             Đơn hàng {{ $details->tracking_number }}
             @if($details->status == 1)
             <span><small class="text-danger">Đã duyệt</small></span>
             @elseif($details->status == 2)
             <span><small class="text-danger">Đang vận chuyển</small></span>
+            @elseif($details->status == 0)
+            <span><small class="text-danger">Chưa xác minh</small></span>
+
             @elseif($details->status == 3)
             <span><small class="text-danger">Đã hoàn thành</small></span>
             @elseif($details->status == 4)
@@ -34,6 +37,8 @@ foreach($details->details as $item) {
 <div class="m-t-md">
     @if($details->status == 1)
     <a onclick="" href="{{ route('dashboard.orders.change-status', [$details->tracking_number,'status'=>2]) }}" class="btn btn-primary button-shipping">Vận chuyển</a>
+    <a onclick="" href="{{ route('dashboard.orders.change-status', [$details->tracking_number,'status'=>4]) }}" class="btn btn-primary bg-danger button-cancel">Hủy đơn</a>
+    @elseif($details->status == 0)
     <a onclick="" href="{{ route('dashboard.orders.change-status', [$details->tracking_number,'status'=>4]) }}" class="btn btn-primary bg-danger button-cancel">Hủy đơn</a>
     @elseif($details->status == 2)
     <a onclick="" href="{{ route('dashboard.orders.change-status', [$details->tracking_number,'status'=>3]) }}" class="btn btn-primary button-complete">Hoàn thành</a>

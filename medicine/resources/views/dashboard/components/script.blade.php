@@ -43,6 +43,59 @@
 <!-- slick carousel-->
 <script src="{{ asset('js/plugins/slick/slick.min.js') }}"></script>
 
+
+
+{{-- <script>
+    var ctx = document.getElementById('users-chart').getContext('2d');
+    var usersChart = new Chart(ctx,{
+        type:'bar',
+        data:{
+            labels: {!! json_encode($labels) !!},
+            datasets: {!! json_encode($datasets) !!}
+        },
+    });
+</script> --}}
+
+{{-- <script>
+    var ctx = document.getElementById('users-chart').getContext('2d');
+    var usersChart = new Chart(ctx,{
+        type:'bar',
+        data:{
+            labels: {!! json_encode($users_chart['labels']) !!},
+            datasets: {!! json_encode($users_chart['datasets']) !!}
+        },
+    });
+
+    var ctx = document.getElementById('orders-chart').getContext('2d');
+    var usersChart = new Chart(ctx,{
+        type:'bar',
+        data:{
+            labels: {!! json_encode($orders_chart['labels']) !!},
+            datasets: {!! json_encode($orders_chart['datasets']) !!}
+        },
+    });
+
+    var ctx = document.getElementById('income-chart').getContext('2d');
+    var usersChart = new Chart(ctx,{
+        type:'bar',
+        data:{
+            labels: {!! json_encode($income_chart['labels']) !!},
+            datasets: {!! json_encode($income_chart['datasets']) !!}
+        },
+    });
+</script> --}}
+
+
+
+
+
+
+
+
+
+
+
+
 <script>
     $(document).ready(function () {
         $('.product-images').slick({

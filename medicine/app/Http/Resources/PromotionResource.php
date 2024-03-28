@@ -23,7 +23,7 @@ class PromotionResource extends JsonResource
             'discount_amount' => number_format($this->discount_amount),
             'min_amount' => number_format($this->min_amount),
             'type' => $this->type,
-            'status' => $this->status == 1 ? 'Show' : 'Hidden',
+            'status' => $this->status,
             'starts_at' => $this->starts_at,
             'expires_at' => $this->expires_at,
         ]);

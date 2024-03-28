@@ -119,7 +119,19 @@
                             <div class="table-responsive">
                                 <div class="ibox-title">
                                     <div class="ibox-tools">
-                                        <button id="saveOrdersBtn" class="btn btn-primary">Lưu thứ tự hiển thị</button>
+                                        <button id="saveOrdersBtn" class="btn btn-primary" {{ $details->img_details->count() == 0 ? 'disabled' : '' }}>Lưu thứ tự hiển thị</button>
+                                        <div class="col-sm-5">
+                                            <form action="{{ route('dashboard.products.update-img-details', $details->id) }}" method="post" enctype="multipart/form-data">
+                                                @csrf
+                                                <div class="input-group">
+                                                    <input name="images[]" type="file" placeholder="Các hình chi tiết" class="input-m form-control" multiple>
+                                                    <span class="input-group-btn">
+                                                        <button type="submit" class="btn btn-primary">Lưu hình ảnh</button>
+                                                    </span>
+                                                </div>
+                                            </form>
+
+                                        </div>
                                     </div>
                                 </div>
                                 <table class="table table-bordered table-stripped">

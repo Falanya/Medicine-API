@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('product_id')->references('id')->on('products');
             $table->integer('quantity');
             $table->double('price');
-            $table->tinyInteger('object_status')->default(1);
+            $table->tinyInteger('status')->default(0);
             $table->timestamps();
         });
     }

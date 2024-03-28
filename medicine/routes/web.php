@@ -9,6 +9,7 @@ use App\Http\Controllers\Dashboard\OrdersController as DashboardOrdersController
 use App\Http\Controllers\Dashboard\UsersController as DashboardUsersController;
 use App\Http\Controllers\Dashboard\ProductsController as DashboardProductsController;
 use App\Http\Controllers\Dashboard\PromotionController as DasboardPromotionController;
+use App\Http\Controllers\Dashboard\ChatsController as DasboardChatsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
@@ -153,11 +154,20 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'admin'], function() {
         Route::post('/post-edit-product/{id}', [DashboardProductsController::class,'post_edit_product'])->name('dashboard.products.post-edit-product');
         Route::post('/post-edit-product-type/{id}', [DashboardProductsController::class,'post_edit_product_type'])->name('dashboard.products.post-edit-product-type');
 
+        Route::post('/update-img-details/{id}', [DashboardProductsController::class,'update_img_details'])->name('dashboard.products.update-img-details');
         Route::post('/update-sort-order-img-details', [DashboardProductsController::class,'update_sort_order_img_details']);
         Route::put('/update-status-type/{id}', [DashboardProductsController::class,'update_status_type']);
         Route::put('/update-status-product/{id}', [DashboardProductsController::class, 'update_status_product']);
     });
     Route::group(['prefix' => 'promotions'], function() {
         Route::get('/index', [DasboardPromotionController::class, 'index'])->name('dashboard.promotions.index');
+
+        Route::get('/create', [DasboardPromotionController::class, 'create'])->name('dashboard.promotions.create');
+        Route::post('/post-create', [DasboardPromotionController::class, 'post_create'])->name('dashboard.promotions.post-create');
+        Route::get('/edit/{id}', [DasboardPromotionController::class,'edit'])->name('dashboard.promotions.edit');
+        Route::post('/post-edit/{id}', [DasboardPromotionController::class,'post_edit'])->name('dashboard.promotions.post-edit');
+    });
+    Route::group(['prefix' => 'chats'], function() {
+        Route::get('/inbox', [DasboardChatsController::class, 'index'])->name('dashboard.chats.index');
     });
 });

@@ -16,144 +16,99 @@
 </div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>Basic Table</h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#">Config option 1</a>
-                            </li>
-                            <li><a href="#">Config option 2</a>
-                            </li>
-                        </ul>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
+    <div class="ibox-content m-b-sm border-bottom">
+        <form action="" method="get">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label" for="order_id">Code voucher</label>
+                        <input type="text" name="code" value="{{ request()->code }}" placeholder="Code"
+                            class="form-control">
                     </div>
                 </div>
-                <div class="ibox-content">
-
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Username</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Larry</td>
-                                <td>the Bird</td>
-                                <td>@twitter</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>Striped Table </h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#">Config option 1</a>
-                            </li>
-                            <li><a href="#">Config option 2</a>
-                            </li>
-                        </ul>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label" for="status">Tên voucher</label>
+                        <input type="text" name="name" value="{{ request()->name }}" placeholder="Tên voucher"
+                            class="form-control">
                     </div>
                 </div>
-                <div class="ibox-content">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label" for="customer">Loại</label>
+                        <select name="type" id="input" class="form-control">
+                            <option value="">Chọn loại</option>
+                            <option value="fixed" {{ request()->type == 'fixed' ? 'selected' : '' }}>Fixed</option>
+                            <option value="percent" {{ request()->type == 'percent' ? 'selected' : '' }}>Percent</option>
+                        </select>
 
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Data</th>
-                                <th>User</th>
-                                <th>Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td><span class="line">5,3,2,-1,-3,-2,2,3,5,2</span></td>
-                                <td>Samantha</td>
-                                <td class="text-navy"> <i class="fa fa-level-up"></i> 40% </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td><span class="line">5,3,9,6,5,9,7,3,5,2</span></td>
-                                <td>Jacob</td>
-                                <td class="text-warning"> <i class="fa fa-level-down"></i> -20% </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td><span class="line">1,6,3,9,5,9,5,3,9,6,4</span></td>
-                                <td>Damien</td>
-                                <td class="text-navy"> <i class="fa fa-level-up"></i> 26% </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    </div>
                 </div>
             </div>
-        </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label" for="date_added">Ngày bắt đầu</label>
+                        <input type="date" name="starts_at" class="form-control" value="{{ request()->starts_at }}">
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label" for="date_modified">Ngày hết hạn</label>
+                        <input type="date" name="expires_at" class="form-control" value="{{ request()->expires_at }}">
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label" for="amount">Trạng thái</label>
+                        <select name="status" id="input" class="form-control">
+                            <option value="">Chọn trạng thái</option>
+                            <option value="hidden" {{ request()->status == 'hidden' ? 'selected' : '' }}>Ẩn</option>
+                            <option value="show" {{ request()->status == 'show' ? 'selected' : ''}}>Hiện</option>
+                            <option value="expired" {{ request()->status == 'expired' ? 'selected' : ''}}>Hết hạn</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label" for="amount">Số tiền giảm</label>
+                        <select name="discount_amount" id="input" class="form-control">
+                            <option value="">Chọn mức tiền</option>
+                            <option value="0_100000" {{ request()->discount_amount == '0_100000' ? 'selected' : '' }}>0 - 100,000</option>
+                            <option value="100000_500000" {{ request()->discount_amount == '100000_500000' ? 'selected' : '' }}>100,000 - 500,000</option>
+                            <option value="500000_1000000" {{ request()->discount_amount == '500000_1000000' ? 'selected' : '' }}>500,000 - 1,000,000</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label" for="amount">Số tiền tối thiểu để giảm</label>
+                        <select name="min_amount" id="input" class="form-control">
+                            <option value="">Chọn mức tiền</option>
+                            <option value="0_100000" {{ request()->min_amount == '0_100000' ? 'selected' : '' }}>0 - 100,000</option>
+                            <option value="100000_500000" {{ request()->min_amount == '100000_500000' ? 'selected' : '' }}>100,000 - 500,000</option>
+                            <option value="500000_1000000" {{ request()->min_amount == '500000_1000000' ? 'selected' : '' }}>500,000 - 1,000,000</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="control-label" for="amount" style="color: white">Tìm kiếm</label>
+                        <button type="submit" class="btn btn-primary bg-primary form-control">Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
-                    <h5>Border Table </h5>
+                    <h5>Danh sách voucher</h5>
                     <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#">Config option 1</a>
-                            </li>
-                            <li><a href="#">Config option 2</a>
-                            </li>
-                        </ul>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
+                        <a href="{{ route('dashboard.promotions.create') }}" class="btn btn-primary bg-primary">Tạo voucher mới</a>
                     </div>
                 </div>
                 <div class="ibox-content">
@@ -161,198 +116,42 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>First Name</th>
-                                <th>Last Name</th>
-                                <th>Username</th>
+                                <th>Code</th>
+                                <th>Name</th>
+                                <th>Số tiền giảm</th>
+                                <th>Số tiền tối thiểu</th>
+                                <th>Loại</th>
+                                <th>Trạng thái</th>
+                                <th>Ngày bắt đầu</th>
+                                <th>Ngày hết hạn</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Larry</td>
-                                <td>the Bird</td>
-                                <td>@twitter</td>
-                            </tr>
+                            @foreach($promotions as $item)
+                                <tr>
+                                    <td>{{ $item->code }}</td>
+                                    <td>{{ $item->name }}</td>
+                                    @if($item->type == 'percent')
+                                    <td>{{ $item->discount_amount }}%</td>
+                                    @elseif($item->type == 'fixed')
+                                    <td>{{ number_format($item->discount_amount) }}</td>
+                                    @endif
+                                    <td>{{ number_format($item->min_amount) }}</td>
+                                    <td>{{ $item->type }}</td>
+                                    <td>{{ $item->status }}</td>
+                                    <td>{{ $item->starts_at }}</td>
+                                    <td>{{ $item->expires_at }}</td>
+                                    <td class="text-center"><a class="btn btn-primary bg-primary" href="{{ route('dashboard.promotions.edit', $item->id) }}"><i class="fa fa-edit"></i></a></td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
-
+                    <div class="text-center">
+                        {{ $promotions->appends(request()->query())->links('pagination::bootstrap-4') }}
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-6">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>Hover Table </h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#">Config option 1</a>
-                            </li>
-                            <li><a href="#">Config option 2</a>
-                            </li>
-                        </ul>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="ibox-content">
-
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Data</th>
-                                <th>User</th>
-                                <th>Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td><span class="pie">0.52,1.041</span></td>
-                                <td>Samantha</td>
-                                <td class="text-navy"> <i class="fa fa-level-up"></i> 40% </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td><span class="pie">226,134</span></td>
-                                <td>Jacob</td>
-                                <td class="text-warning"> <i class="fa fa-level-down"></i> -20% </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td><span class="pie">0.52/1.561</span></td>
-                                <td>Damien</td>
-                                <td class="text-navy"> <i class="fa fa-level-up"></i> 26% </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>Custom responsive table </h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-wrench"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a href="#">Config option 1</a>
-                            </li>
-                            <li><a href="#">Config option 2</a>
-                            </li>
-                        </ul>
-                        <a class="close-link">
-                            <i class="fa fa-times"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="ibox-content">
-                    <div class="row">
-                        <div class="col-sm-5 m-b-xs"><select
-                                class="input-sm form-control input-s-sm inline">
-                                <option value="0">Option 1</option>
-                                <option value="1">Option 2</option>
-                                <option value="2">Option 3</option>
-                                <option value="3">Option 4</option>
-                            </select>
-                        </div>
-                        <div class="col-sm-4 m-b-xs">
-                            <div data-toggle="buttons" class="btn-group">
-                                <label class="btn btn-sm btn-white"> <input type="radio" id="option1"
-                                        name="options"> Day </label>
-                                <label class="btn btn-sm btn-white active"> <input type="radio" id="option2"
-                                        name="options"> Week </label>
-                                <label class="btn btn-sm btn-white"> <input type="radio" id="option3"
-                                        name="options"> Month </label>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="input-group"><input type="text" placeholder="Search"
-                                    class="input-sm form-control"> <span class="input-group-btn">
-                                    <button type="button" class="btn btn-sm btn-primary"> Go!</button>
-                                </span></div>
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-
-                                    <th></th>
-                                    <th>Project </th>
-                                    <th>Completed </th>
-                                    <th>Task</th>
-                                    <th>Date</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><input type="checkbox" checked class="i-checks" name="input[]"></td>
-                                    <td>Project<small>This is example of project</small></td>
-                                    <td><span class="pie">0.52/1.561</span></td>
-                                    <td>20%</td>
-                                    <td>Jul 14, 2013</td>
-                                    <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" class="i-checks" name="input[]"></td>
-                                    <td>Alpha project</td>
-                                    <td><span class="pie">6,9</span></td>
-                                    <td>40%</td>
-                                    <td>Jul 16, 2013</td>
-                                    <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" class="i-checks" name="input[]"></td>
-                                    <td>Betha project</td>
-                                    <td><span class="pie">3,1</span></td>
-                                    <td>75%</td>
-                                    <td>Jul 18, 2013</td>
-                                    <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td><input type="checkbox" class="i-checks" name="input[]"></td>
-                                    <td>Gamma project</td>
-                                    <td><span class="pie">4,9</span></td>
-                                    <td>18%</td>
-                                    <td>Jul 22, 2013</td>
-                                    <td><a href="#"><i class="fa fa-check text-navy"></i></a></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
     </div>
 </div>

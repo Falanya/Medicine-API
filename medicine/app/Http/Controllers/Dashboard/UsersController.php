@@ -97,7 +97,7 @@ class UsersController extends Controller
         $user = User::find($id);
         if($id != $auth->id) {
             if($user) {
-                if($user->role_id != 3) {
+                if($user->role_id != 3 && $auth->role_id > $user->role_id) {
                     if($user->status == 1) {
                         $user->status = 0;
                         $user->tokens()->delete();
@@ -107,11 +107,11 @@ class UsersController extends Controller
                     $user->save();
                     return response()->json(['message' => 'Cập nhật trạng thái người dùng thành công', 'success' => true]);
                 }
-                return response()->json(['message' => 'Không thể cập nhật trạng thái quản trị viên', 'success' => false]);
+                return response()->json(['message' => 'Bạn không đủ quyền hạn', 'success' => false]);
             }
             return response()->json(['message' => 'Không tìm thấy người dùng', 'success' => false]);
         }
-        return response()->json(['message' => 'Không thể cập nhật tài khoản đang đăng nhập', 'success' => false]);
+        return response()->json(['message' => 'Không thể cập nhật trạng thái của bạn', 'success' => false]);
     }
 
 }

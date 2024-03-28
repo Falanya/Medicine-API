@@ -47,7 +47,7 @@
                         <span>Verified</span>
                         @elseif ($order->status == 2)
                         <span>Completed</span>
-                        @elseif ($prder->status == 3)
+                        @elseif ($order->status == 3)
                         <span>Cancelled</span>
                         @endif
                     </td>

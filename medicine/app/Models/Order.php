@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
     use HasFactory;
-    protected $appends = ['totalPrice','discountPrice'];
+    protected $appends = ['totalPrice','discountPrice','statusVerify'];
     protected $table = 'orders';
     protected $fillable = ['tracking_number','user_id','address_id','note', 'promotion_code','status', 'token'];
 
@@ -68,6 +69,13 @@ class Order extends Model
             }
         }
         return $discount;
+    }
+
+    public function getStatusVerifyAttribute(){
+        $past = Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at);
+        $now = Carbon::now('Asia/Ho_Chi_Minh');
+        $message = '(Created ' . $past->diffForHumans($now) . ')';
+        return  $message;
     }
 
 }

@@ -261,4 +261,23 @@ class ProductsController extends Controller
         }
         return response()->json(['success'=> false, 'message'=> 'Không tìm thấy loại sản phẩm']);
     }
+
+    public function update_img_details($id, Request $request) {
+        $product = Product::find($id);
+        if($product) {
+            if($request->hasFile('images')) {
+                foreach($request->file('images') as $image) {
+                    $imageName = Str::random(32).".".$image->getClientOriginalExtension();
+                    $image->storeAs('images/products', $imageName, 'public');
+                    ImgProduct::create([
+                        'img' => $imageName,
+                        'product_id' => $product->id,
+                    ]);
+                }
+                return redirect()->back()->with('success','Thêm hình ảnh chi tiết thành công');
+            }
+            return redirect()->back()->with('error','Không tìm thấy file');
+        }
+        return redirect()->back()->with('error','Không tìm thấy sản phẩm');
+    }
 }

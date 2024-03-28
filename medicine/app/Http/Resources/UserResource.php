@@ -19,6 +19,7 @@ class UserResource extends JsonResource
             'fullname' => $this->fullname,
             'email'=> $this->email,
             'gender' => $this->gender,
+            'phone' => $this->phone,
             'birthday' => $this->birthday,
             'role_id' => $this->role_id == 1 ? 'Member' : 'Admin',
             'favorites' => FavoriteResource::collection($this->favorites),
